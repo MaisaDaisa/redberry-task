@@ -4,8 +4,14 @@ import CtaL from "@/components/GlobalComponents/CtaL";
 import { CtaLType } from "@/components/GlobalComponents/CtaL";
 import FilterDisplay from "@/components/ListingPage/Filter/FilterDisplay";
 import ListingCard from "@/components/ListingPage/ListingCard";
+import { useEffect } from "react";
+
+console.log(import.meta.env.VITE_TOKEN);
 
 const ListingPage = () => {
+	useEffect(() => {
+		return console.log("ListingPage unmounted");
+	}, []);
 	return (
 		<Main>
 			<div className="flex justify-between items-center">
@@ -16,7 +22,56 @@ const ListingPage = () => {
 				</div>
 			</div>
 			<FilterDisplay />
-			<div className="mt-8 pb-[300px] flex items-center justify-center gap-20 flex-wrap">
+			<div className="mt-8 pb-[300px] flex items-center justify-center gap-5 flex-wrap">
+				<ListingCard id={2} />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
+				<ListingCard />
 				<ListingCard />
 			</div>
 		</Main>

@@ -9,7 +9,7 @@ type FilterDisplayTextProps = {
 const FilterDisplayText = ({ text, setState }: FilterDisplayTextProps) => {
 	return (
 		<div className="flex py-[6px] px-[10px] gap-1 rounded-full border border-primary-gray-border">
-			<p className="main-text-sm-80">{text}</p>
+			<p className="main-text-sm-80 select-none">{text}</p>
 			<img
 				className="cursor-pointer"
 				src={xDelete}
