@@ -1,8 +1,8 @@
 import { ReactNode } from "react";
 
 interface AddListPageSectionWrapperProps {
-	title: string;
-	children?: ReactNode;
+	title?: string;
+	children: ReactNode;
 }
 
 const AddListPageSectionWrapper = ({
@@ -11,7 +11,7 @@ const AddListPageSectionWrapper = ({
 }: AddListPageSectionWrapperProps) => {
 	return (
 		<div className="flex flex-col items-start gap-[22px] w-full self-stretch">
-			<h3 className="secondary-text">{title}</h3>
+			{title && <h2 className="secondary-text">{title}</h2>}
 			<div className="grid grid-cols-2 gap-5 w-full">{children}</div>
 		</div>
 	);

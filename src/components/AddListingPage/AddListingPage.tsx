@@ -9,6 +9,9 @@ import { region, city } from "@/api/apiTypes";
 import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
 import { InputFieldType } from "@/components/GlobalComponents/InputField";
 import FileUploader from "@/components/GlobalComponents/FileUploader";
+import { CtaTypes } from "@/components/GlobalComponents/Cta";
+import Cta from "@/components/GlobalComponents/Cta";
+import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
 
 // Importing Dummy Data
 import { agents } from "@/api/DummyData";
@@ -61,7 +64,7 @@ const AddListingPage = () => {
 		<div className="flex flex-col items-center">
 			{/* Due to this section having different gaps and size margins it is not reused as a component for later use please use AddListPageSectionWrapper component */}
 			<h1 className="main-text-3xl-100">ლისტინგის დამატება</h1>
-			<div className="mt-[61px] flex flex-col items-center gap-20 w-[790px]">
+			<InputSectionWrapper>
 				<div className="flex flex-col gap-y-2 flex-wrap self-start ">
 					<h3 className="secondary-text">გარიგების ტიპი</h3>
 					<div className="flex flex-row gap-x-8 ">
@@ -184,7 +187,19 @@ const AddListingPage = () => {
 						parentStateSetter={setAgent}
 					/>
 				</AddListPageSectionWrapper>
-			</div>
+				<div className="mt-[90px] flex flex-row justify-end gap-[15px] w-full">
+					<Cta
+						type={CtaTypes.secondary}
+						ctaText="გაუქმება"
+						onClickHandler={() => {}}
+					/>
+					<Cta
+						type={CtaTypes.primary}
+						ctaText="დაამატე ლისტინგი"
+						onClickHandler={() => {}}
+					/>
+				</div>
+			</InputSectionWrapper>
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import Filters from "@/components/ListingPage/Filter/Filters";
 import CtaL from "@/components/GlobalComponents/CtaL";
-import { CtaLType } from "@/components/GlobalComponents/CtaL";
+import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import FilterDisplay from "@/components/ListingPage/Filter/FilterDisplay";
 import ListingCard from "@/components/ListingPage/ListingCard";
 import { useEffect } from "react";
@@ -27,12 +27,12 @@ const ListingPage = () => {
 				<div className="flex items-center justify-center gap-4">
 					<CtaL
 						ctaText="ლისტინგის დამატება"
-						type={CtaLType.primary}
+						type={CtaTypes.primary}
 						onClickHandler={handleAddListing}
 					/>
 					<CtaL
 						ctaText="აგენტის დამატება"
-						type={CtaLType.secondary}
+						type={CtaTypes.secondary}
 						onClickHandler={handleAddAgent}
 					/>
 				</div>

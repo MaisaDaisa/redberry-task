@@ -1,30 +1,22 @@
-export enum CtaLType {
-	primary = "primary",
-	secondary = "secondary",
-}
+import Cta from "@/components/GlobalComponents/Cta";
+import { CtaTypes } from "@/components/GlobalComponents/Cta";
 
 interface CtaLProps {
 	ctaText: string;
-	type?: CtaLType;
+	type?: CtaTypes;
 	onClickHandler: () => any;
 }
 
 const CtaL = ({
 	ctaText,
-	type = CtaLType.primary,
+	type = CtaTypes.primary,
 	onClickHandler,
 }: CtaLProps) => {
 	return (
-		<div
-			className={`transition-all duration-300 cursor-pointer inline-flex px-[10px] py-4 justify-center items-center gap-[2px] flex-shrink-0 rounded-[10px] ${
-				type === CtaLType.primary
-					? "bg-primary-orange hover:bg-primary-orange-hover"
-					: "border border-primary-orange group hover:bg-primary-orange"
-			}`}
-			onClick={() => onClickHandler()}>
+		<Cta ctaText={ctaText} onClickHandler={onClickHandler} type={type}>
 			<svg
 				className={`transition-all duration-300 ${
-					type === CtaLType.primary
+					type === CtaTypes.primary
 						? "fill-primary-white"
 						: "fill-primary-orange group-hover:fill-primary-white"
 				}`}
@@ -40,17 +32,7 @@ const CtaL = ({
 					/>
 				</g>
 			</svg>
-
-			<p
-				className={`main-text-customCLR ${
-					type === CtaLType.primary
-						? "text-primary-white"
-						: "text-primary-orange group-hover:text-primary-white"
-				}
-				`}>
-				{ctaText}
-			</p>
-		</div>
+		</Cta>
 	);
 };
 
