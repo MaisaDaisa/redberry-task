@@ -1,8 +1,3 @@
-import React from "react";
-import plusOrange from "@/../public/svg/plus-orange.svg";
-import plusWhite from "@/../public/svg/plus-white.svg";
-import Image from "next/image";
-
 export enum CtaLType {
 	primary = "primary",
 	secondary = "secondary",
@@ -11,16 +6,22 @@ export enum CtaLType {
 interface CtaLProps {
 	ctaText: string;
 	type?: CtaLType;
+	onClickHandler: () => any;
 }
 
-const CtaL = ({ ctaText, type = CtaLType.primary }: CtaLProps) => {
+const CtaL = ({
+	ctaText,
+	type = CtaLType.primary,
+	onClickHandler,
+}: CtaLProps) => {
 	return (
 		<div
 			className={`transition-all duration-300 cursor-pointer inline-flex px-[10px] py-4 justify-center items-center gap-[2px] flex-shrink-0 rounded-[10px] ${
 				type === CtaLType.primary
 					? "bg-primary-orange hover:bg-primary-orange-hover"
 					: "border border-primary-orange group hover:bg-primary-orange"
-			}`}>
+			}`}
+			onClick={() => onClickHandler()}>
 			<svg
 				className={`transition-all duration-300 ${
 					type === CtaLType.primary

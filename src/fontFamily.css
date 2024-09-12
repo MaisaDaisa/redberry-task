@@ -1,3 +1,5 @@
+/* FiraGo font family */
+
 @font-face {
     font-family: FiraGo;
     src: url('/src/assets/fonts/ttf/firago-latin-900-normal.ttf');
@@ -50,4 +52,12 @@
     font-family: FiraGo;
     src: url('/src/assets/fonts/ttf/firago-latin-100-normal.ttf');
     font-weight: 100;
+}
+
+/* Helvetica Neue font family */
+
+@font-face {
+    font-family:"Helvetica Neue";
+    src: url("/src/assets/fonts/HelveticaNeue/HelveticaNeueMedium.otf");
+    font-weight: 500;
 }

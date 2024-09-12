@@ -1,4 +1,3 @@
-import React from "react";
 import FilterDisplayText from "@/components/ListingPage/Filter/FilterDisplayText";
 
 const FilterDisplay = () => {
