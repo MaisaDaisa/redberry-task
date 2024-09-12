@@ -7,7 +7,7 @@ interface MainProps {
 
 const Main = ({ marginTop = "77px", children }: MainProps) => {
 	return (
-		<main className="mx-globalPx" style={{ marginTop: marginTop }}>
+		<main className="mx-globalPx pb-[300px]" style={{ marginTop: marginTop }}>
 			{children}
 		</main>
 	);

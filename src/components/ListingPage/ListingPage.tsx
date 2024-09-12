@@ -38,7 +38,7 @@ const ListingPage = () => {
 				</div>
 			</div>
 			<FilterDisplay />
-			<div className="mt-8 pb-[300px] flex items-center justify-center gap-5 flex-wrap">
+			<div className="mt-8 flex items-center justify-center gap-5 flex-wrap">
 				<ListingCard id={2} />
 				<ListingCard />
 				<ListingCard />

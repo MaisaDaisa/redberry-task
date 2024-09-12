@@ -6,10 +6,17 @@ export enum CheckerState {
 	EMPTY,
 }
 
+export enum InputFieldType {
+	TEXT = "text",
+	TEXTAREA = "textarea",
+}
+
 interface InputFieldProps {
+	type?: InputFieldType;
 	title: string;
 	required?: boolean;
 	stateSetter: (value: string) => void;
+	customStyles?: string;
 	checker?:
 		| false
 		| {
@@ -20,26 +27,50 @@ interface InputFieldProps {
 }
 
 const InputField = ({
+	type = InputFieldType.TEXT,
 	title,
 	required = false,
 	checker = false,
 	stateSetter,
+	customStyles = "",
 }: InputFieldProps) => {
 	return (
-		<TitleH4Component title={title} required={required}>
-			<input
-				id="input_1"
-				type="text"
-				className={`input-field rounded-md h-[42px] border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
-                    ${
-											checker && checker.checkerState === CheckerState.INVALID
-												? "border-red-500"
-												: " "
-										}`}
-				onChange={(e) => {
-					stateSetter(e.target.value);
-				}}
-			/>
+		<TitleH4Component
+			title={title}
+			required={required}
+			customStyles={customStyles}>
+			{type === InputFieldType.TEXT ? (
+				<input
+					id="input_1"
+					type="text"
+					className={`input-field rounded-md h-[42px] border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
+						${
+							checker && checker.checkerState === CheckerState.INVALID
+								? "border-red-500"
+								: ""
+						} 
+					`}
+					onChange={(e) => {
+						stateSetter(e.target.value);
+					}}
+				/>
+			) : type === InputFieldType.TEXTAREA ? (
+				<textarea
+					id="input_1"
+					rows={5}
+					className={`input-field rounded-md border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
+						${
+							checker && checker.checkerState === CheckerState.INVALID
+								? "border-red-500"
+								: ""
+						} 
+						${customStyles}`}
+					onChange={(e) => {
+						stateSetter(e.target.value);
+					}}
+				/>
+			) : null}
+
 			{checker && (
 				<div className="flex flex-row gap-[7px] mt-1 items-center">
 					<svg
@@ -70,7 +101,9 @@ const InputField = ({
 								? "!text-invalid-red"
 								: "!text-valid-green"
 						}`}>
-						{checker.checkerText}
+						{checker.checkerState === CheckerState.INVALID
+							? checker.checkerTextOnError
+							: checker.checkerText}
 					</p>
 				</div>
 			)}

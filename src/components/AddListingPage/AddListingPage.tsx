@@ -6,6 +6,12 @@ import { CheckerState } from "@/components/GlobalComponents/InputField";
 import DropDownSelect from "../GlobalComponents/DropDownSelect";
 import { getRegions, getCities } from "@/api/getRequests";
 import { region, city } from "@/api/apiTypes";
+import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
+import { InputFieldType } from "@/components/GlobalComponents/InputField";
+import FileUploader from "@/components/GlobalComponents/FileUploader";
+
+// Importing Dummy Data
+import { agents } from "@/api/DummyData";
 
 const AddListingPage = () => {
 	const [cities, setCities] = useState<city[] | null>(null);
@@ -16,6 +22,7 @@ const AddListingPage = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [address, setAddress] = useState("");
 	const [zipCode, setZipCode] = useState("");
+	const [agent, setAgent] = useState("");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -52,6 +59,7 @@ const AddListingPage = () => {
 		""
 	) : (
 		<div className="flex flex-col items-center">
+			{/* Due to this section having different gaps and size margins it is not reused as a component for later use please use AddListPageSectionWrapper component */}
 			<h1 className="main-text-3xl-100">ლისტინგის დამატება</h1>
 			<div className="mt-[61px] flex flex-col items-center gap-20 w-[790px]">
 				<div className="flex flex-col gap-y-2 flex-wrap self-start ">
@@ -79,49 +87,103 @@ const AddListingPage = () => {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col items-start gap-[22px] w-full self-stretch">
-					<h3 className="secondary-text">მდებარეობა</h3>
-					<div className="grid grid-cols-2 gap-5 w-full">
-						<InputField
-							title="მისამართი"
+				<AddListPageSectionWrapper title="მდებარეობა">
+					<InputField
+						title="მისამართი"
+						required={true}
+						stateSetter={setAddress}
+						checker={{
+							checkerText: "მინიმუმ ორი სიმბოლო",
+							checkerState: CheckerState.INVALID,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					<InputField
+						title="საფოსტო ინდექსი"
+						required={true}
+						stateSetter={setZipCode}
+						checker={{
+							checkerText: "მხოლოდ რიცხვები",
+							checkerState: CheckerState.EMPTY,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					{regions && (
+						<DropDownSelect
+							items={regions}
+							title="რეგიონი"
 							required={true}
-							stateSetter={setAddress}
-							checker={{
-								checkerText: "მინიმუმ ორი სიმბოლო",
-								checkerState: CheckerState.INVALID,
-								checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
-							}}
+							parentStateSetter={setChosenRegion}
 						/>
-						<InputField
-							title="საფოსტო ინდექსი"
+					)}
+					{filteredCities && (
+						<DropDownSelect
+							// we pass in the key of the first city in the filteredCities array because the region_id is always unique and forces the component to rerender
+							key={filteredCities[0].region_id}
+							items={filteredCities}
+							title="ქალაქი"
 							required={true}
-							stateSetter={setZipCode}
-							checker={{
-								checkerText: "მხოლოდ რიცხვები",
-								checkerState: CheckerState.EMPTY,
-								checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
-							}}
+							parentStateSetter={setChosenCity}
 						/>
-						{regions && (
-							<DropDownSelect
-								items={regions}
-								title="რეგიონი"
-								required={true}
-								parentStateSetter={setChosenRegion}
-							/>
-						)}
-						{filteredCities && (
-							<DropDownSelect
-								// we pass in the key of the first city in the filteredCities array because the region_id is always unique and forces the component to rerender
-								key={filteredCities[0].region_id}
-								items={filteredCities}
-								title="ქალაქი"
-								required={true}
-								parentStateSetter={setChosenCity}
-							/>
-						)}
-					</div>
-				</div>
+					)}
+				</AddListPageSectionWrapper>
+				<AddListPageSectionWrapper title="მიწოდება">
+					<InputField
+						title="ფასი"
+						required={true}
+						stateSetter={setAddress}
+						checker={{
+							checkerText: "მხოლოდ რიცხვები",
+							checkerState: CheckerState.INVALID,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					<InputField
+						title="ფართობი"
+						required={true}
+						stateSetter={setAddress}
+						checker={{
+							checkerText: "მხოლოდ რიცხვები",
+							checkerState: CheckerState.INVALID,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					<InputField
+						title="საძინებლის რაოდენობა"
+						required={true}
+						stateSetter={setAddress}
+						checker={{
+							checkerText: "მხოლოდ რიცხვები",
+							checkerState: CheckerState.INVALID,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					<InputField
+						title="აღწერა"
+						required={true}
+						stateSetter={setAddress}
+						type={InputFieldType.TEXTAREA}
+						customStyles="col-span-2"
+						checker={{
+							checkerText: "მინიმუმ ორი სიმბოლო",
+							checkerState: CheckerState.INVALID,
+							checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
+						}}
+					/>
+					<FileUploader
+						title="ატვირთეთ ფოტო"
+						customStyles="col-span-2"
+						required={true}
+					/>
+				</AddListPageSectionWrapper>
+				<AddListPageSectionWrapper title="აგენტი">
+					<DropDownSelect
+						title="აირჩიე"
+						required={true}
+						items={agents}
+						parentStateSetter={setAgent}
+					/>
+				</AddListPageSectionWrapper>
 			</div>
 		</div>
 	);

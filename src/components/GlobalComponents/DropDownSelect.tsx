@@ -18,7 +18,7 @@ const DropDownSelect = ({
 	required = false,
 	parentStateSetter,
 }: DropDownSelectProps) => {
-	const [selected, setSelected] = useState(items[0]?.name || "");
+	const [selected, setSelected] = useState(items[0] || "");
 	const [toggleCombo, setToggleCombo] = useState(false);
 
 	useEffect(() => {
@@ -26,7 +26,7 @@ const DropDownSelect = ({
 	}, []);
 
 	const handleSelectedItem = (item: any) => {
-		setSelected(item.name);
+		setSelected(item);
 		setToggleCombo(false);
 		parentStateSetter(item);
 	};
@@ -39,7 +39,7 @@ const DropDownSelect = ({
 					className={`border rounded-t-md border-primary-gray-border cursor-pointer p-[10px] flex justify-between ${
 						!toggleCombo ? "rounded-b-md" : "border-b-0"
 					}`}>
-					<span className="main-text-sm-100-400">{selected}</span>
+					<span className="main-text-sm-100-400">{selected.name}</span>
 					<img
 						src={arrowIcon}
 						alt="arrow"
@@ -55,13 +55,15 @@ const DropDownSelect = ({
 							<li
 								key={item.id}
 								onClick={() => handleSelectedItem(item)}
-								className="p-[10px] hover:bg-blue-100 cursor-pointer main-text-sm-100-400 border-primary-gray-border border-b-[1px]">
+								className="p-[10px] hover:bg-blue-100 cursor-pointer bg-primary-white main-text-sm-100-400 border-primary-gray-border border-b-[1px]">
 								{item.name}
 							</li>
 						))}
 					</ul>
 				)}
 			</div>
+			{/* Hidden input to store the selected value for forms*/}
+			<input type="hidden" value={selected.name} id={selected.id} />
 		</TitleH4Component>
 	);
 };
