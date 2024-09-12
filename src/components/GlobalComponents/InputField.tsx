@@ -1,4 +1,4 @@
-import React from "react";
+import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
 
 export enum CheckerState {
 	VALID,
@@ -26,14 +26,11 @@ const InputField = ({
 	stateSetter,
 }: InputFieldProps) => {
 	return (
-		<div className="flex flex-col justify-start items-start max-w-[384px]">
-			<h4 className="main-text-sm-100">
-				{title} {required ? "*" : ""}
-			</h4>
+		<TitleH4Component title={title} required={required}>
 			<input
 				id="input_1"
 				type="text"
-				className={`input-field rounded-md h-[42px] border border-primary-gray-border mt-[5px] w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
+				className={`input-field rounded-md h-[42px] border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
                     ${
 											checker && checker.checkerState === CheckerState.INVALID
 												? "border-red-500"
@@ -77,7 +74,7 @@ const InputField = ({
 					</p>
 				</div>
 			)}
-		</div>
+		</TitleH4Component>
 	);
 };
 

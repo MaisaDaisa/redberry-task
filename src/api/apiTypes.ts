@@ -1,30 +1,29 @@
-export interface agentGetMany {
+export type agentGetMany = {
 	id: number;
 	name: string;
 	surname: string;
 	avatar: string;
-}
+};
 
-export interface agentPost {
+export type agentPost = {
 	id: number;
 	name: string;
 	email: string;
 	phone: string;
 	avatar: string;
-}
+};
 
-export interface region {
+export type region = {
 	id: number;
 	name: string;
-}
-export interface city {
+};
+export type city = {
 	id: number;
 	name: string;
 	region_id: number;
-	region: region;
-}
+};
 
-export interface realEstateMany {
+export type realEstateMany = {
 	id: number;
 	address: string;
 	zip_code: `${number}${number}${number}${number}`;
@@ -35,9 +34,9 @@ export interface realEstateMany {
 	image: string;
 	city_id: number;
 	city: city;
-}
+};
 
-export interface realEstatePost {
+export type realEstatePost = {
 	price: number;
 	zip_code: `${number}${number}${number}${number}`;
 	description: string;
@@ -48,9 +47,9 @@ export interface realEstatePost {
 	bedrooms: number;
 	is_rental: 1 | 0;
 	image: string;
-}
+};
 
-export interface realEstateOne {
+export type realEstateOne = {
 	id: number;
 	address: string;
 	zip_code: `${number}${number}${number}${number}`;
@@ -65,4 +64,4 @@ export interface realEstateOne {
 	city: city;
 	agent_id: number;
 	agent: agentPost;
-}
+};
