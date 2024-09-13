@@ -17,9 +17,13 @@ const FileUploader = ({
 }: FileUploaderProps) => {
 	const [file, setFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
+	// I understand that this is not necessary and was not stated in the requirements, however I added this to give the user feedback
+	const [dorpRejected, setDropRejected] = useState(false);
 
 	// Invoke once the file is dropped
 	const onDropHandler = useCallback((acceptedFiles: File[]) => {
+		// Drop may have rejected prior
+		setDropRejected(false);
 		const file = acceptedFiles[0];
 		setFile(file);
 
@@ -30,15 +34,23 @@ const FileUploader = ({
 		reader.readAsDataURL(file);
 	}, []);
 
+	const onDropRejectedHandler = useCallback(() => {
+		setDropRejected(true);
+	}, []);
+
 	const handleDelete = () => {
 		setPreview(null);
 		setFile(null);
 	};
 
+	const maxSize = 1048576; // 1MB
+
 	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		onDrop: onDropHandler,
+		onDropAccepted: onDropHandler,
 		accept: { "image/*": [".jpg", ".jpeg", ".png"] },
 		disabled: !!preview, // Disable if preview is present
+		maxSize: maxSize,
+		onDropRejected: onDropRejectedHandler,
 	});
 
 	return (
@@ -48,7 +60,9 @@ const FileUploader = ({
 			required={required}>
 			<div
 				{...getRootProps()}
-				className={`group flex justify-center items-center h-[120px] border border-dashed border-primary-text-100 rounded-lg w-full select-none ${
+				className={`group flex justify-center items-center h-[120px] border border-dashed ${
+					!dorpRejected ? "border-primary-text-100" : "border-invalid-red"
+				} rounded-lg w-full select-none ${
 					preview ? "cursor-not-allowed" : "cursor-pointer"
 				}`}>
 				<input {...getInputProps()} disabled={!!preview} />
@@ -77,6 +91,15 @@ const FileUploader = ({
 						}`}
 					/>
 				)}
+			</div>
+
+			<div>
+				<p
+					className={`main-text-sm-100-400 mt-2 !text-invalid-red ${
+						!dorpRejected ? " invisible " : ""
+					}`}>
+					Please Input An Image file Under 1MB{" "}
+				</p>
 			</div>
 		</TitleH4Component>
 	);

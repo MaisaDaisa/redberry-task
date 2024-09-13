@@ -52,7 +52,7 @@ const AddAgentFullscreenPopup = ({
 				isActive ? "flex animate-fade-in-up" : "hidden"
 			}`}
 			id={"agent-adder"}>
-			<div className="w-[1009px] h-[784px] flex-shrink-0 rounded-[10px] bg-primary-white shadow-primary-shadow flex flex-col items-center pt-[87px]">
+			<div className="w-[1009px] h-[784px] flex-shrink-0 rounded-[10px] bg-primary-white shadow-primary-shadow flex flex-col items-center py-[87px]">
 				<h1 className="main-text-3xl-100">აგენტის დამატება</h1>
 				<InputSectionWrapper>
 					<AddListPageSectionWrapper>
@@ -112,7 +112,7 @@ const AddAgentFullscreenPopup = ({
 							required={true}
 						/>
 					</AddListPageSectionWrapper>
-					<div className="mt-[90px] flex flex-row justify-end gap-[15px] w-full">
+					<div className="flex flex-row justify-end gap-[15px] w-full">
 						<Cta
 							type={CtaTypes.secondary}
 							ctaText="გაუქმება"

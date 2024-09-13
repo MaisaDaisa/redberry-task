@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
-import { clear } from "console";
 
 export enum CheckerStateTypes {
 	VALID,
@@ -62,7 +61,7 @@ const InputField = ({
 				} else {
 					setCheckerState(CheckerStateTypes.INVALID);
 				}
-				// Developers may pass checkerTime as prop or it will be defaulted to 2000ms
+				// Developers may pass checkerTime in checker as prop, else it will be defaulted to 2000ms
 			}, checker.checkerTime || 2000);
 
 			// Cleanup timeout when the component unmounts or value changes

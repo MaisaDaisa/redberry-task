@@ -1,5 +1,3 @@
-import singleChoiceSelected from "@/assets/svg/singleChoiceSelected.svg";
-import singleChoiceUnselected from "@/assets/svg/singleChoiceUnselected.svg";
 import InputField from "@/components/GlobalComponents/InputField";
 import { useEffect, useState } from "react";
 import DropDownSelect from "../GlobalComponents/DropDownSelect";
@@ -11,16 +9,18 @@ import FileUploader from "@/components/GlobalComponents/FileUploader";
 import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import Cta from "@/components/GlobalComponents/Cta";
 import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
-
-// Importing Dummy Data
-import { agents } from "@/api/DummyData";
+import TwoChoice from "@/components/AddListingPage/TwoChoice";
 import {
 	minimumSymbols,
 	checkNumbers,
 	checkWordCount,
 } from "@/lib/validationChecker";
 
+// Importing Dummy Data
+import { agents } from "@/api/DummyData";
+
 const AddListingPage = () => {
+	const [towChoiceNumber, setTwoChoiceNumber] = useState<0 | 1>(0);
 	const [cities, setCities] = useState<city[] | null>(null);
 	const [filteredCities, setFilteredCities] = useState<city[] | null>(null);
 	const [regions, setRegions] = useState<region[] | null>(null);
@@ -77,28 +77,10 @@ const AddListingPage = () => {
 			<InputSectionWrapper>
 				<div className="flex flex-col gap-y-2 flex-wrap self-start ">
 					<h3 className="secondary-text">გარიგების ტიპი</h3>
-					<div className="flex flex-row gap-x-8 ">
-						<div className="flex w-[134px] flex-row justify-start flex-shrink-0 flex-nowrap gap-[7px]">
-							<img
-								src={singleChoiceSelected}
-								alt="იყიდება"
-								width="17"
-								height="17"
-								className="cursor-pointer"
-							/>
-							<p className="main-text-sm-100-400">იყიდება</p>
-						</div>
-						<div className="flex w-[134px] flex-row justify-start flex-shrink-0 flex-nowrap gap-[7px]">
-							<img
-								src={singleChoiceUnselected}
-								alt="ქირავდება"
-								width="17"
-								height="17"
-								className="cursor-pointer"
-							/>
-							<p className="main-text-sm-100-400">ქირავდება</p>
-						</div>
-					</div>
+					<TwoChoice
+						selected={towChoiceNumber}
+						setSelected={setTwoChoiceNumber}
+					/>
 				</div>
 				<AddListPageSectionWrapper title="მდებარეობა">
 					<InputField
