@@ -3,13 +3,15 @@ import CtaL from "@/components/GlobalComponents/CtaL";
 import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import FilterDisplay from "@/components/ListingPage/Filter/FilterDisplay";
 import ListingCard from "@/components/ListingPage/ListingCard";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AddAgentFullscreenPopup from "@/components/GlobalComponents/AddAgentFullscreenPopup";
 
 console.log(import.meta.env.VITE_TOKEN);
 
 const ListingPage = () => {
 	const navigate = useNavigate();
+	const [isAgentPopupActive, setIsAgentPopupActive] = useState(false);
 	useEffect(() => {
 		return console.log("ListingPage unmounted");
 	}, []);
@@ -18,7 +20,7 @@ const ListingPage = () => {
 		navigate("/add-listing");
 	};
 	const handleAddAgent = () => {
-		console.log("Add Listing");
+		setIsAgentPopupActive(true);
 	};
 	return (
 		<>
@@ -90,6 +92,10 @@ const ListingPage = () => {
 				<ListingCard />
 				<ListingCard />
 			</div>
+			<AddAgentFullscreenPopup
+				isActive={isAgentPopupActive}
+				setIsActiveState={setIsAgentPopupActive}
+			/>
 		</>
 	);
 };

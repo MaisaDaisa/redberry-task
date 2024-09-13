@@ -1,9 +1,11 @@
+import { useEffect, useState, useRef } from "react";
 import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
+import { clear } from "console";
 
-export enum CheckerState {
+export enum CheckerStateTypes {
 	VALID,
 	INVALID,
-	EMPTY,
+	NORMAL,
 }
 
 export enum InputFieldType {
@@ -14,26 +16,74 @@ export enum InputFieldType {
 interface InputFieldProps {
 	type?: InputFieldType;
 	title: string;
+	value: string;
 	required?: boolean;
 	stateSetter: (value: string) => void;
 	customStyles?: string;
 	checker?:
 		| false
 		| {
+				checkerTime?: number;
 				checkerText: string;
-				checkerState: CheckerState;
 				checkerTextOnError: string;
+				validationFunction: (value: string) => boolean;
 		  };
 }
 
 const InputField = ({
 	type = InputFieldType.TEXT,
 	title,
+	value,
 	required = false,
 	checker = false,
 	stateSetter,
 	customStyles = "",
 }: InputFieldProps) => {
+	const [checkerState, setCheckerState] = useState<CheckerStateTypes>(
+		CheckerStateTypes.NORMAL
+	);
+	const [hasInteracted, setHasInteracted] = useState(false);
+
+	// UseRef because each reusable component should have their own timeout or else they will interfere with each other
+	// P.S Spent 3 hours debugging this issue
+	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+	useEffect(() => {
+		if (checker && hasInteracted) {
+			// Clear any existing timeout before starting a new one
+			if (typingTimeoutRef.current) {
+				clearTimeout(typingTimeoutRef.current);
+			}
+
+			// Set a new timeout
+			typingTimeoutRef.current = setTimeout(() => {
+				if (checker.validationFunction(value)) {
+					setCheckerState(CheckerStateTypes.VALID);
+				} else {
+					setCheckerState(CheckerStateTypes.INVALID);
+				}
+				// Developers may pass checkerTime as prop or it will be defaulted to 2000ms
+			}, checker.checkerTime || 2000);
+
+			// Cleanup timeout when the component unmounts or value changes
+			return () => {
+				if (typingTimeoutRef.current) {
+					clearTimeout(typingTimeoutRef.current);
+				}
+			};
+		}
+	}, [value]);
+
+	// Handle input/textarea change
+	const handleChange = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
+		if (!hasInteracted) {
+			setHasInteracted(true);
+		}
+		stateSetter(e.target.value);
+	};
+
 	return (
 		<TitleH4Component
 			title={title}
@@ -43,31 +93,27 @@ const InputField = ({
 				<input
 					id="input_1"
 					type="text"
-					className={`input-field rounded-md h-[42px] border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
+					value={value}
+					className={`input-field rounded-md h-[42px] border border-primary-gray-border w-full p-[10px] main-text-100-400 
 						${
-							checker && checker.checkerState === CheckerState.INVALID
+							checker && checkerState === CheckerStateTypes.INVALID
 								? "border-red-500"
 								: ""
-						} 
-					`}
-					onChange={(e) => {
-						stateSetter(e.target.value);
-					}}
+						}`}
+					onChange={handleChange}
 				/>
 			) : type === InputFieldType.TEXTAREA ? (
 				<textarea
 					id="input_1"
 					rows={5}
-					className={`input-field rounded-md border border-primary-gray-border w-full p-[10px] main-text-100-400 focus:outline-none focus:border-primary-blue 
+					value={value}
+					className={`input-field rounded-md border border-primary-gray-border w-full p-[10px] main-text-100-400 
 						${
-							checker && checker.checkerState === CheckerState.INVALID
+							checker && checkerState === CheckerStateTypes.INVALID
 								? "border-red-500"
 								: ""
-						} 
-						${customStyles}`}
-					onChange={(e) => {
-						stateSetter(e.target.value);
-					}}
+						} `}
+					onChange={handleChange}
 				/>
 			) : null}
 
@@ -80,9 +126,9 @@ const InputField = ({
 						viewBox="0 0 12 11"
 						fill="none"
 						className={`${
-							checker.checkerState === CheckerState.EMPTY
+							checkerState === CheckerStateTypes.NORMAL
 								? "stroke-[#021526]"
-								: checker.checkerState === CheckerState.VALID
+								: checkerState === CheckerStateTypes.VALID
 								? "stroke-valid-green"
 								: "stroke-invalid-red"
 						}`}>
@@ -95,13 +141,13 @@ const InputField = ({
 					</svg>
 					<p
 						className={`main-text-sm-100-400 ${
-							checker.checkerState === CheckerState.EMPTY
+							checkerState === CheckerStateTypes.NORMAL
 								? "text-primary-text-100"
-								: checker.checkerState === CheckerState.INVALID
+								: checkerState === CheckerStateTypes.INVALID
 								? "!text-invalid-red"
 								: "!text-valid-green"
 						}`}>
-						{checker.checkerState === CheckerState.INVALID
+						{checkerState === CheckerStateTypes.INVALID
 							? checker.checkerTextOnError
 							: checker.checkerText}
 					</p>

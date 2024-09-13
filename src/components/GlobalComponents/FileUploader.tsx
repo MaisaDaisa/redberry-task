@@ -48,7 +48,7 @@ const FileUploader = ({
 			required={required}>
 			<div
 				{...getRootProps()}
-				className={`flex justify-center items-center h-[120px] border border-dashed border-primary-text-100 rounded-lg w-full ${
+				className={`group flex justify-center items-center h-[120px] border border-dashed border-primary-text-100 rounded-lg w-full select-none ${
 					preview ? "cursor-not-allowed" : "cursor-pointer"
 				}`}>
 				<input {...getInputProps()} disabled={!!preview} />
@@ -72,7 +72,7 @@ const FileUploader = ({
 					<img
 						src={plusCircle}
 						alt="plus-circle"
-						className={`w-[24px] h-[24px] scale-100 transition-transform hover:scale-125 ${
+						className={`w-[24px] h-[24px] scale-100 transition-transform group-hover:scale-125 ${
 							isDragActive ? "transform scale-125" : ""
 						}`}
 					/>
