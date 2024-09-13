@@ -1,18 +1,22 @@
 import "./App.css";
 import Header from "@/components/Header";
-import ListingPage from "@/components/ListingPage/ListingPage";
-import Main from "./components/Main";
-import AddListingPage from "./components/AddListingPage/AddListingPage";
+import MainPage from "@/Pages/MainPage/MainPage";
+import Main from "./components/MainSection";
+import AddListingPage from "./Pages/AddListingPage/AddListingPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <ListingPage />,
+		element: <MainPage />,
 	},
 	{
 		path: "/add-listing",
 		element: <AddListingPage />,
+	},
+	{
+		path: "/listing/:id",
+		element: <div></div>,
 	},
 ]);
 

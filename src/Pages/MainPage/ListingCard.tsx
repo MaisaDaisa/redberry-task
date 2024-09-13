@@ -1,38 +1,26 @@
-import LocationIcon from "./../../assets/svg/location-marker.svg";
-import Bed from "./../../assets/svg/bed.svg";
-import Size from "./../../assets/svg/Size.svg";
-import ZipCodeIcon from "./../../assets/svg/ZipCode.svg";
-import imagePhoto from "./image.png";
+import LocationIcon from "@/assets/svg/location-marker.svg";
+import Bed from "@/assets/svg/bed.svg";
+import Size from "@/assets/svg/Size.svg";
+import ZipCodeIcon from "@/assets/svg/ZipCode.svg";
+import { realEstateMany } from "@/api/apiTypes";
+import { useNavigate } from "react-router-dom";
 
 interface ListingCardProps {
-	imageUrl?: string;
-	price?: number;
-	location?: string;
-	numOfBedrooms?: number;
-	areaSize?: number;
-	zipCode?: number;
-	id?: number;
+	listing: realEstateMany;
 }
 
 // ListingCard component
 
-const ListingCard = ({
-	imageUrl = imagePhoto,
-	price = 80000,
-	location = "თბილისი, ი. ჭავჭავაძის 53",
-	numOfBedrooms = 2,
-	areaSize = 55,
-	zipCode = 160,
-	id,
-}: ListingCardProps) => {
+const ListingCard = ({ listing }: ListingCardProps) => {
+	const navigate = useNavigate();
 	return (
 		<div
-			onClick={() => console.log(id)}
+			onClick={() => console.log(navigate(`/listing/${listing.id}`))}
 			className="flex cursor-pointer flex-col items-start flex-shrink-0 w-[384px] hover:shadow-primary-shadow duration-300 transition-all">
 			<div className="relative h-[307px] w-full self-stretch">
 				{/* Image container should be relative */}
 				<img
-					src={imageUrl || imagePhoto}
+					src={listing.image}
 					alt="Listing" // Ensures the image fills the container // Ensures the image covers the entire container without distortion
 					className="rounded-t-[14px] object-cover w-full h-full"
 				/>
@@ -41,7 +29,7 @@ const ListingCard = ({
 				<div className="flex flex-col items-start gap-[6px] self-stretch bg-transparent">
 					<p className="main-text-2xl-100">
 						{" "}
-						{price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₾
+						{listing.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₾
 					</p>
 					<div className="flex justify-start gap-1 self-stretch">
 						<img
@@ -51,7 +39,7 @@ const ListingCard = ({
 							height={20}
 							alt="Location marker"
 						/>
-						<p className="main-text-70">{location}</p>
+						<p className="main-text-70">{listing.address}</p>
 					</div>
 				</div>
 				<div className="flex gap-8 items-center">
@@ -63,7 +51,7 @@ const ListingCard = ({
 							height={24}
 							alt="Bed icon"
 						/>
-						<p className="main-text-70">{numOfBedrooms}</p>
+						<p className="main-text-70">{listing.bedrooms}</p>
 					</div>
 					<div className="flex items-center gap-[5px]">
 						<img
@@ -74,7 +62,7 @@ const ListingCard = ({
 							alt="Size icon"
 						/>
 						<p className="main-text-70">
-							{areaSize} მ<sup>2</sup>
+							{listing.area} მ<sup>2</sup>
 						</p>
 					</div>
 					<div className="flex items-center gap-[5px]">
@@ -85,7 +73,7 @@ const ListingCard = ({
 							height={18}
 							alt="ZipCode icon"
 						/>
-						<p className="main-text-70">{zipCode}</p>
+						<p className="main-text-70">{listing.zip_code}</p>
 					</div>
 				</div>
 			</div>

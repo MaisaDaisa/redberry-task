@@ -25,3 +25,11 @@ export const getAgents = async () => {
   return getRequest('/agents');
 };
 
+export const getAllListings = async () => {
+  return getRequest('/real-estates');
+}
+
+export const getListingById= async (id: string) => {
+  return getRequest(`/real-estates/${id}`);
+}
+

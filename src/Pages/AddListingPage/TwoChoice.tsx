@@ -1,4 +1,4 @@
-import TwoChoiceText from "@/components/AddListingPage/TwoChoiceText";
+import TwoChoiceText from "@/Pages/AddListingPage/TwoChoiceText";
 
 interface TwoChoiceProps {
 	selected: 0 | 1;

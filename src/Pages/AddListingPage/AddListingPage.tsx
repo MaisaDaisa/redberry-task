@@ -1,7 +1,7 @@
 import InputField from "@/components/GlobalComponents/InputField";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import DropDownSelect from "../GlobalComponents/DropDownSelect";
+import DropDownSelect from "../../components/GlobalComponents/DropDownSelect";
 import { getRegions, getCities, getAgents } from "@/api/getRequests";
 import { region, city, agentGetMany } from "@/api/apiTypes";
 import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
@@ -10,14 +10,14 @@ import FileUploader from "@/components/GlobalComponents/FileUploader";
 import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import Cta from "@/components/GlobalComponents/Cta";
 import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
-import TwoChoice from "@/components/AddListingPage/TwoChoice";
+import TwoChoice from "@/Pages/AddListingPage/TwoChoice";
 import plus from "@/assets/svg/plus-circle.svg";
 import {
 	minimumSymbols,
 	checkNumbers,
 	checkWordCount,
 } from "@/lib/validationChecker";
-import AddAgentFullscreenPopup from "../GlobalComponents/AddAgentFullscreenPopup";
+import AddAgentFullscreenPopup from "../../components/AddAgentFullscreenPopup";
 import { postListing } from "@/api/postRequests";
 
 // Importing Dummy Data

@@ -1,4 +1,4 @@
-import FilterDisplayText from "@/components/ListingPage/Filter/FilterDisplayText";
+import FilterDisplayText from "@/Pages/MainPage/Filter/FilterDisplayText";
 
 const FilterDisplay = () => {
 	return (

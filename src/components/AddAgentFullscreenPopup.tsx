@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
-import AddListPageSectionWrapper from "@/components/AddListingPage/AddListPageSectionWrapper";
+import AddListPageSectionWrapper from "@/Pages/AddListingPage/AddListPageSectionWrapper";
 import InputField from "@/components/GlobalComponents/InputField";
 import FileUploader from "@/components/GlobalComponents/FileUploader";
 import { CtaTypes } from "@/components/GlobalComponents/Cta";
