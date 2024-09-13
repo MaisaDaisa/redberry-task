@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DropDownSelect from "../GlobalComponents/DropDownSelect";
 import { getRegions, getCities, getAgents } from "@/api/getRequests";
-import { region, city } from "@/api/apiTypes";
+import { region, city, agentGetMany } from "@/api/apiTypes";
 import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
 import { InputFieldType } from "@/components/GlobalComponents/InputField";
 import FileUploader from "@/components/GlobalComponents/FileUploader";
@@ -18,6 +18,7 @@ import {
 	checkWordCount,
 } from "@/lib/validationChecker";
 import AddAgentFullscreenPopup from "../GlobalComponents/AddAgentFullscreenPopup";
+import { postListing } from "@/api/postRequests";
 
 // Importing Dummy Data
 // import { agents } from "@/api/DummyData";
@@ -35,13 +36,40 @@ const AddListingPage = () => {
 	const [zipCode, setZipCode] = useState("");
 	const [price, setPrice] = useState("");
 	const [area, setArea] = useState("");
-	const [file, setFile] = useState<File | null>(null);
-	const [roomCount, setRoomCount] = useState("");
+	const [image, setImage] = useState<File | null>(null);
+	const [bedroomsCount, setBedroomsCount] = useState<string>("");
 	const [description, setDescription] = useState("");
-	const [agents, setAgents] = useState([]);
-	const [agent, setAgent] = useState("");
+	const [agents, setAgents] = useState<agentGetMany[] | null>(null);
+	const [agent, setAgent] = useState<agentGetMany | null>(null);
 
 	const navigate = useNavigate();
+
+	const handleAddListing = () => {
+		if (
+			checkWordCount(description) &&
+			checkNumbers(price) &&
+			checkNumbers(area) &&
+			checkNumbers(bedroomsCount) &&
+			minimumSymbols(address) &&
+			checkNumbers(zipCode)
+		) {
+			const formData = new FormData();
+			formData.append("address", address);
+			if (image) formData.append("image", image);
+			if (chosenRegion)
+				formData.append("region_id", chosenRegion.id.toString());
+			if (chosenCity) formData.append("city_id", chosenCity.id.toString());
+			formData.append("description", description);
+			formData.append("zip_code", zipCode);
+			formData.append("price", price);
+			formData.append("area", area);
+			formData.append("bedrooms", bedroomsCount);
+			formData.append("is_rental", towChoiceNumber.toString());
+			if (agent) formData.append("agent_id", agent.id.toString());
+
+			postListing(formData);
+		}
+	};
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -62,6 +90,7 @@ const AddListingPage = () => {
 	// Fetching agents only when the addAgentPopupActive state is false
 	// This is done to ensure that the agents are fetched when loaded and also when the popup is closed,
 	// which occurs when the user adds an agent or just closes the popup
+
 	useEffect(() => {
 		const fetchAgents = async () => {
 			console.log("Fetching agents");
@@ -189,8 +218,8 @@ const AddListingPage = () => {
 					<InputField
 						title="საძინებლის რაოდენობა"
 						required={true}
-						value={roomCount}
-						stateSetter={setRoomCount}
+						value={bedroomsCount}
+						stateSetter={setBedroomsCount}
 						checker={{
 							checkerTime: 100,
 							validationFunction: checkNumbers,
@@ -213,21 +242,23 @@ const AddListingPage = () => {
 						}}
 					/>
 					<FileUploader
-						setFileState={setFile}
+						setFileState={setImage}
 						title="ატვირთეთ ფოტო"
 						customStyles="col-span-2"
 						required={true}
 					/>
 				</AddListPageSectionWrapper>
 				<AddListPageSectionWrapper title="აგენტი">
-					<DropDownSelect
-						title="აირჩიე"
-						required={true}
-						isAgents={true}
-						items={agents}
-						additionalComponent={addAgentsButton}
-						parentStateSetter={setAgent}
-					/>
+					{agents && (
+						<DropDownSelect
+							title="აირჩიე"
+							required={true}
+							isAgents={true}
+							items={agents}
+							additionalComponent={addAgentsButton}
+							parentStateSetter={setAgent}
+						/>
+					)}
 				</AddListPageSectionWrapper>
 				<div className="mt-[90px] flex flex-row justify-end gap-[15px] w-full">
 					<Cta
@@ -240,7 +271,7 @@ const AddListingPage = () => {
 					<Cta
 						type={CtaTypes.primary}
 						ctaText="დაამატე ლისტინგი"
-						onClickHandler={() => {}}
+						onClickHandler={() => handleAddListing()}
 					/>
 				</div>
 				<AddAgentFullscreenPopup

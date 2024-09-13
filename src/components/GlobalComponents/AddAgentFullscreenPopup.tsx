@@ -11,7 +11,7 @@ import { postAgents } from "@/api/postRequests";
 import {
 	minimumSymbols,
 	checkEmail,
-	checkNumbers,
+	checkPhoneNumbers,
 } from "@/lib/validationChecker";
 
 interface AddAgentFullscreenPopupProps {
@@ -29,21 +29,11 @@ const AddAgentFullscreenPopup = ({
 	const [agentPhone, setAgentPhone] = useState("");
 	const [agentProfile, setAgentProfile] = useState<File | null>(null);
 
-	useEffect(() => {
-		// Testing the values
-		console.log(agentName);
-		console.log(agentLastName);
-		console.log(agentEmail);
-		console.log(agentPhone);
-		console.log(agentProfile);
-	}, [agentName, agentLastName, agentEmail, agentPhone, agentProfile]);
-
-	// Convert file to Base64
 	const handleAddAgent = async () => {
 		if (
 			minimumSymbols(agentName) &&
 			checkEmail(agentEmail) &&
-			checkNumbers(agentPhone) &&
+			checkPhoneNumbers(agentPhone) &&
 			agentProfile
 		) {
 			const formData = new FormData();
@@ -127,7 +117,7 @@ const AddAgentFullscreenPopup = ({
 							value={agentPhone}
 							checker={{
 								checkerTime: 1000,
-								validationFunction: checkNumbers,
+								validationFunction: checkPhoneNumbers,
 								checkerText: "მხოლოდ რიცხვები",
 								checkerTextOnError: "ჩაწერეთ ვალიდური მონაცემები",
 							}}

@@ -15,6 +15,7 @@ export const postAgents = async (data: any) => {
   return postRequest('/agents', data);
 };
 
-export const postListings = async (data: any) => {
-  return postRequest('/listings', data);
+export const postListing = async (data: any) => {
+  return postRequest('/real-estates', data);
 };
+

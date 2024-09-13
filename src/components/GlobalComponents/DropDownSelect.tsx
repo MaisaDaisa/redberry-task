@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import arrowIcon from "@/assets/svg/filterarrow.svg";
 import TitleH4Component from "./TitleH4Component";
-import { useEffect } from "react";
+import { agentGetMany, city, region } from "@/api/apiTypes";
 
 interface DropDownSelectProps {
 	additionalComponent?: JSX.Element;
-	items: any[];
+	items: agentGetMany[] | city[] | region[];
 	title: string;
 	required?: boolean;
 	isAgents?: boolean;
@@ -20,14 +20,19 @@ const DropDownSelect = ({
 	required = false,
 	parentStateSetter,
 }: DropDownSelectProps) => {
-	const [selected, setSelected] = useState(items[0] || "");
+	const [selected, setSelected] = useState<agentGetMany | city | region>(
+		items[0] || ({} as agentGetMany | city | region)
+	);
 	const [toggleCombo, setToggleCombo] = useState(false);
 
 	useEffect(() => {
-		parentStateSetter(items[0]);
-	}, []);
+		if (items.length > 0) {
+			setSelected(items[0]);
+			parentStateSetter(items[0]);
+		}
+	}, [items]);
 
-	const handleSelectedItem = (item: any) => {
+	const handleSelectedItem = (item: agentGetMany | city | region) => {
 		setSelected(item);
 		setToggleCombo(false);
 		parentStateSetter(item);
@@ -42,7 +47,9 @@ const DropDownSelect = ({
 						!toggleCombo ? "rounded-b-md" : "border-b-0"
 					}`}>
 					<span className="main-text-sm-100-400">
-						{!isAgents ? selected.name : selected.name + " " + selected.surname}
+						{"surname" in selected && isAgents
+							? `${selected.name} ${selected.surname}`
+							: selected.name}
 					</span>
 					<img
 						src={arrowIcon}
@@ -60,14 +67,13 @@ const DropDownSelect = ({
 								key={item.id}
 								onClick={() => handleSelectedItem(item)}
 								className="p-[10px] hover:bg-blue-100 cursor-pointer bg-primary-white main-text-sm-100-400 border-primary-gray-border border-b-[1px]">
-								{item.name} {isAgents && `${item.surname}`}
+								{item.name} {isAgents && "surname" in item && `${item.surname}`}
 							</li>
 						))}
 					</ul>
 				)}
 			</div>
-			{/* Hidden input to store the selected value for forms*/}
-			<input type="hidden" value={selected.name} id={selected.id} />
+			<input type="hidden" value={selected.name} />
 		</TitleH4Component>
 	);
 };
