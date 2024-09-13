@@ -48,6 +48,10 @@ const FileUploader = ({
 		setFileState(null);
 	};
 
+	// Please keep in mind that this used to be a component using react dropzone
+	// after spending 4 hours trying to make it work, I decided to use the native drag and drop
+	// FUTURE-NOTE: react-dropzone is a great library, but it adds an additional path attribute to the file object which messes up the whole process somehow
+
 	return (
 		<TitleH4Component
 			title={title}
