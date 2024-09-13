@@ -40,20 +40,27 @@ const AddAgentFullscreenPopup = ({
 
 	// Convert file to Base64
 	const handleAddAgent = async () => {
-		const formData = new FormData();
-		// Creating the agent object
-		formData.append("name", agentName);
-		formData.append("surname", agentLastName);
-		formData.append("email", agentEmail);
-		formData.append("phone", agentPhone);
-		formData.append("avatar", agentProfile);
-		// Posting the agent
-		console.log(formData);
+		if (
+			minimumSymbols(agentName) &&
+			checkEmail(agentEmail) &&
+			checkNumbers(agentPhone) &&
+			agentProfile
+		) {
+			const formData = new FormData();
+			// Creating the agent object
+			formData.append("name", agentName);
+			formData.append("surname", agentLastName);
+			formData.append("email", agentEmail);
+			formData.append("phone", agentPhone);
+			formData.append("avatar", agentProfile);
+			// Posting the agent
+			console.log(formData);
 
-		await postAgents(formData);
+			await postAgents(formData);
 
-		// Closing the popup
-		setIsActiveState(false);
+			// Closing the popup
+			setIsActiveState(false);
+		}
 	};
 
 	useEffect(() => {

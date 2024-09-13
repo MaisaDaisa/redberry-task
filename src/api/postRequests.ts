@@ -1,5 +1,4 @@
 import { axiosInstance } from "@/api/apiConstants";
-import { agentPost } from "@/api/apiTypes";
 
 
 export const postRequest = async (url: string, data: any) => {
