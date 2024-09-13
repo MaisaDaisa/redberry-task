@@ -21,3 +21,7 @@ export const getCities = async (): Promise<city[]> => {
   return getRequest('/cities');
 };
 
+export const getAgents = async () => {
+  return getRequest('/agents');
+};
+

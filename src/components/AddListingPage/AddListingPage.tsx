@@ -1,7 +1,8 @@
 import InputField from "@/components/GlobalComponents/InputField";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import DropDownSelect from "../GlobalComponents/DropDownSelect";
-import { getRegions, getCities } from "@/api/getRequests";
+import { getRegions, getCities, getAgents } from "@/api/getRequests";
 import { region, city } from "@/api/apiTypes";
 import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
 import { InputFieldType } from "@/components/GlobalComponents/InputField";
@@ -10,16 +11,19 @@ import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import Cta from "@/components/GlobalComponents/Cta";
 import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
 import TwoChoice from "@/components/AddListingPage/TwoChoice";
+import plus from "@/assets/svg/plus-circle.svg";
 import {
 	minimumSymbols,
 	checkNumbers,
 	checkWordCount,
 } from "@/lib/validationChecker";
+import AddAgentFullscreenPopup from "../GlobalComponents/AddAgentFullscreenPopup";
 
 // Importing Dummy Data
-import { agents } from "@/api/DummyData";
+// import { agents } from "@/api/DummyData";
 
 const AddListingPage = () => {
+	const [addAgentPopupActive, setAddAgentPopupActive] = useState(false);
 	const [towChoiceNumber, setTwoChoiceNumber] = useState<0 | 1>(0);
 	const [cities, setCities] = useState<city[] | null>(null);
 	const [filteredCities, setFilteredCities] = useState<city[] | null>(null);
@@ -31,9 +35,13 @@ const AddListingPage = () => {
 	const [zipCode, setZipCode] = useState("");
 	const [price, setPrice] = useState("");
 	const [area, setArea] = useState("");
+	const [file, setFile] = useState<File | null>(null);
 	const [roomCount, setRoomCount] = useState("");
 	const [description, setDescription] = useState("");
+	const [agents, setAgents] = useState([]);
 	const [agent, setAgent] = useState("");
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -51,6 +59,25 @@ const AddListingPage = () => {
 		fetchData();
 	}, []);
 
+	// Fetching agents only when the addAgentPopupActive state is false
+	// This is done to ensure that the agents are fetched when loaded and also when the popup is closed,
+	// which occurs when the user adds an agent or just closes the popup
+	useEffect(() => {
+		const fetchAgents = async () => {
+			console.log("Fetching agents");
+			try {
+				const agentsResponse = await getAgents();
+				setAgents(agentsResponse);
+			} catch (error) {
+				console.error("Failed to fetch agents:", error);
+			}
+		};
+		if (!addAgentPopupActive) {
+			fetchAgents();
+		}
+	}, [addAgentPopupActive]);
+
+	// Filtering cities based on the chosen region
 	useEffect(() => {
 		if (chosenRegion !== null) {
 			if (cities !== null) {
@@ -63,16 +90,24 @@ const AddListingPage = () => {
 	}, [chosenRegion]);
 
 	useEffect(() => {
-		console.log("Chosen city:", chosenCity);
-	}, [chosenCity]);
+		console.log("Chosen agent:", agent);
+	}, [agent]);
+
+	// This component is used to add agents to the dropdown select
+	const addAgentsButton = (
+		<li
+			key={0}
+			onClick={() => setAddAgentPopupActive(true)}
+			className="p-[10px] hover:bg-blue-100 cursor-pointer bg-primary-white main-text-sm-100-400 border-primary-gray-border border-b-[1px] flex flex-row justify-start items-center gap-2">
+			<img src={plus} alt="add-button" width={20} height={20} />{" "}
+			<p>დაამატე აგენტი</p>
+		</li>
+	);
 
 	return isLoading ? (
 		""
 	) : (
 		<div className="flex flex-col items-center">
-			{/* Due to this section having different gaps and size margins it is not
-			reused as a component for later use please use AddListPageSectionWrapper
-			component */}
 			<h1 className="main-text-3xl-100">ლისტინგის დამატება</h1>
 			<InputSectionWrapper>
 				<div className="flex flex-col gap-y-2 flex-wrap self-start ">
@@ -178,6 +213,7 @@ const AddListingPage = () => {
 						}}
 					/>
 					<FileUploader
+						setFileState={setFile}
 						title="ატვირთეთ ფოტო"
 						customStyles="col-span-2"
 						required={true}
@@ -187,7 +223,9 @@ const AddListingPage = () => {
 					<DropDownSelect
 						title="აირჩიე"
 						required={true}
+						isAgents={true}
 						items={agents}
+						additionalComponent={addAgentsButton}
 						parentStateSetter={setAgent}
 					/>
 				</AddListPageSectionWrapper>
@@ -195,7 +233,9 @@ const AddListingPage = () => {
 					<Cta
 						type={CtaTypes.secondary}
 						ctaText="გაუქმება"
-						onClickHandler={() => {}}
+						onClickHandler={() => {
+							navigate("/");
+						}}
 					/>
 					<Cta
 						type={CtaTypes.primary}
@@ -203,6 +243,10 @@ const AddListingPage = () => {
 						onClickHandler={() => {}}
 					/>
 				</div>
+				<AddAgentFullscreenPopup
+					isActive={addAgentPopupActive}
+					setIsActiveState={setAddAgentPopupActive}
+				/>
 			</InputSectionWrapper>
 		</div>
 	);

@@ -74,7 +74,7 @@ const AddAgentFullscreenPopup = ({
 
 	return (
 		<section
-			className={`absolute w-full h-dvh bg-blur backdrop-blur-[5px] z-20 top-0 left-0 items-center justify-center ${
+			className={`fixed w-full h-dvh bg-blur backdrop-blur-[5px] z-20 top-0 left-0 items-center justify-center ${
 				isActive ? "flex animate-fade-in-up" : "hidden"
 			}`}
 			id={"agent-adder"}>

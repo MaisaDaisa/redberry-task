@@ -8,10 +8,12 @@ interface DropDownSelectProps {
 	items: any[];
 	title: string;
 	required?: boolean;
+	isAgents?: boolean;
 	parentStateSetter: (value: any) => void;
 }
 
 const DropDownSelect = ({
+	isAgents = false,
 	additionalComponent,
 	items,
 	title,
@@ -39,7 +41,9 @@ const DropDownSelect = ({
 					className={`border rounded-t-md border-primary-gray-border cursor-pointer p-[10px] flex justify-between ${
 						!toggleCombo ? "rounded-b-md" : "border-b-0"
 					}`}>
-					<span className="main-text-sm-100-400">{selected.name}</span>
+					<span className="main-text-sm-100-400">
+						{!isAgents ? selected.name : selected.name + " " + selected.surname}
+					</span>
 					<img
 						src={arrowIcon}
 						alt="arrow"
@@ -56,7 +60,7 @@ const DropDownSelect = ({
 								key={item.id}
 								onClick={() => handleSelectedItem(item)}
 								className="p-[10px] hover:bg-blue-100 cursor-pointer bg-primary-white main-text-sm-100-400 border-primary-gray-border border-b-[1px]">
-								{item.name}
+								{item.name} {isAgents && `${item.surname}`}
 							</li>
 						))}
 					</ul>
