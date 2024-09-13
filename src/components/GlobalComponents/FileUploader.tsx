@@ -1,57 +1,52 @@
 import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
-import { useState, useCallback } from "react";
+import { useState, useRef } from "react";
 import plusCircle from "@/assets/svg/plus-circle.svg";
 import trashCan from "@/assets/svg/trashCan.svg";
-import { useDropzone } from "react-dropzone";
 
 interface FileUploaderProps {
 	title: string;
 	customStyles?: string;
 	required: boolean;
+	setFileState: (file: File | null) => void;
 }
 
 const FileUploader = ({
 	title = "",
 	customStyles = "",
+	setFileState,
 	required = false,
 }: FileUploaderProps) => {
-	const [file, setFile] = useState<File | null>(null);
 	const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
-	// I understand that this is not necessary and was not stated in the requirements, however I added this to give the user feedback
-	const [dorpRejected, setDropRejected] = useState(false);
+	const [dropRejected, setDropRejected] = useState(false);
+	const inputRef = useRef<HTMLInputElement | null>(null);
 
-	// Invoke once the file is dropped
-	const onDropHandler = useCallback((acceptedFiles: File[]) => {
-		// Drop may have rejected prior
+	const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
+	};
+
+	const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+		event.preventDefault();
 		setDropRejected(false);
-		const file = acceptedFiles[0];
-		setFile(file);
+		const file = event.dataTransfer.files[0];
 
-		const reader = new FileReader();
-		reader.onload = () => {
-			setPreview(reader.result);
-		};
-		reader.readAsDataURL(file);
-	}, []);
+		if (file && file.size <= 1048576) {
+			// 1MB
+			setFileState(file);
 
-	const onDropRejectedHandler = useCallback(() => {
-		setDropRejected(true);
-	}, []);
+			const reader = new FileReader();
+			reader.onload = () => {
+				setPreview(reader.result);
+			};
+			reader.readAsDataURL(file);
+		} else {
+			setDropRejected(true);
+		}
+	};
 
 	const handleDelete = () => {
 		setPreview(null);
-		setFile(null);
+		setFileState(null);
 	};
-
-	const maxSize = 1048576; // 1MB
-
-	const { getRootProps, getInputProps, isDragActive } = useDropzone({
-		onDropAccepted: onDropHandler,
-		accept: { "image/*": [".jpg", ".jpeg", ".png"] },
-		disabled: !!preview, // Disable if preview is present
-		maxSize: maxSize,
-		onDropRejected: onDropRejectedHandler,
-	});
 
 	return (
 		<TitleH4Component
@@ -59,13 +54,34 @@ const FileUploader = ({
 			customStyles={customStyles}
 			required={required}>
 			<div
-				{...getRootProps()}
+				onDragOver={handleDragOver}
+				onDrop={handleDrop}
+				onClick={() => inputRef.current?.click()}
 				className={`group flex justify-center items-center h-[120px] border border-dashed ${
-					!dorpRejected ? "border-primary-text-100" : "border-invalid-red"
+					!dropRejected ? "border-primary-text-100" : "border-invalid-red"
 				} rounded-lg w-full select-none ${
-					preview ? "cursor-not-allowed" : "cursor-pointer"
-				}`}>
-				<input {...getInputProps()} disabled={!!preview} />
+					preview ? "cursor-default" : "cursor-pointer"
+				}`}
+				aria-label="File upload area"
+				role="button">
+				<input
+					type="file"
+					disabled={!!preview}
+					onChange={(event) => {
+						const file = event.target.files ? event.target.files[0] : null;
+						if (file) {
+							setFileState(file);
+							const reader = new FileReader();
+							reader.onload = () => {
+								setPreview(reader.result);
+							};
+							reader.readAsDataURL(file);
+						}
+					}}
+					hidden
+					accept="image/png, image/jpeg"
+					ref={inputRef}
+				/>
 				{preview ? (
 					<div className="relative flex flex-col items-end justify-end">
 						<img
@@ -86,9 +102,7 @@ const FileUploader = ({
 					<img
 						src={plusCircle}
 						alt="plus-circle"
-						className={`w-[24px] h-[24px] scale-100 transition-transform group-hover:scale-125 ${
-							isDragActive ? "transform scale-125" : ""
-						}`}
+						className={`w-[24px] h-[24px] scale-100 transition-transform group-hover:scale-125`}
 					/>
 				)}
 			</div>
@@ -96,9 +110,9 @@ const FileUploader = ({
 			<div>
 				<p
 					className={`main-text-sm-100-400 mt-2 !text-invalid-red ${
-						!dorpRejected ? " invisible " : ""
+						!dropRejected ? "invisible" : ""
 					}`}>
-					Please Input An Image file Under 1MB{" "}
+					Please input an image file under 1MB
 				</p>
 			</div>
 		</TitleH4Component>

@@ -5,6 +5,7 @@ import InputField from "@/components/GlobalComponents/InputField";
 import FileUploader from "@/components/GlobalComponents/FileUploader";
 import { CtaTypes } from "@/components/GlobalComponents/Cta";
 import Cta from "@/components/GlobalComponents/Cta";
+import { postAgents } from "@/api/postRequests";
 
 // Importing CheckerFunctions
 import {
@@ -26,7 +27,7 @@ const AddAgentFullscreenPopup = ({
 	const [agentLastName, setAgentLastName] = useState("");
 	const [agentEmail, setAgentEmail] = useState("");
 	const [agentPhone, setAgentPhone] = useState("");
-	const [agentProfile, setAgentProfile] = useState("");
+	const [agentProfile, setAgentProfile] = useState<File | null>(null);
 
 	useEffect(() => {
 		// Testing the values
@@ -36,6 +37,24 @@ const AddAgentFullscreenPopup = ({
 		console.log(agentPhone);
 		console.log(agentProfile);
 	}, [agentName, agentLastName, agentEmail, agentPhone, agentProfile]);
+
+	// Convert file to Base64
+	const handleAddAgent = async () => {
+		const formData = new FormData();
+		// Creating the agent object
+		formData.append("name", agentName);
+		formData.append("surname", agentLastName);
+		formData.append("email", agentEmail);
+		formData.append("phone", agentPhone);
+		formData.append("avatar", agentProfile);
+		// Posting the agent
+		console.log(formData);
+
+		await postAgents(formData);
+
+		// Closing the popup
+		setIsActiveState(false);
+	};
 
 	useEffect(() => {
 		// Disable scrolling when the popup is active
@@ -107,6 +126,7 @@ const AddAgentFullscreenPopup = ({
 							}}
 						/>
 						<FileUploader
+							setFileState={setAgentProfile}
 							title="ატვირთეთ ფოტო"
 							customStyles="col-span-2"
 							required={true}
@@ -120,8 +140,8 @@ const AddAgentFullscreenPopup = ({
 						/>
 						<Cta
 							type={CtaTypes.primary}
-							ctaText="დაამატე ლისტინგი"
-							onClickHandler={() => {}}
+							ctaText="დაამატე აგენტი"
+							onClickHandler={handleAddAgent}
 						/>
 					</div>
 				</InputSectionWrapper>

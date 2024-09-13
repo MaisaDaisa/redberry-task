@@ -7,7 +7,7 @@ export const checkEmail = (value : string, emailDomain : string = "@redberry.ge"
 };
 
 export const checkNumbers = (value : string) => {
-    return !isNaN(Number(value));
+    return !isNaN(Number(value)) && value.length === 9 && value.startsWith("5"); 
 };
 
 export const checkWordCount = (value : string, wordCount : number = 5) => {

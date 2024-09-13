@@ -6,11 +6,11 @@ export type agentGetMany = {
 };
 
 export type agentPost = {
-	id: number;
 	name: string;
+	surname: string;
 	email: string;
 	phone: string;
-	avatar: string;
+	avatar: string | File | null;
 };
 
 export type region = {
