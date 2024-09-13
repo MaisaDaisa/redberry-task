@@ -49,11 +49,20 @@
 }
 
 .main-text-3xl-100 { 
-  color: thme('colors.primary-text-100');
+  color: theme('colors.primary-text-100');
   font-family: FiraGO;
   font-size: 32px;
   font-style: normal;
   font-weight: 500;
+  line-height: normal;
+}
+
+.main-text-5xl-100 {
+  color: theme('colors.primary-text-100');
+  font-family: FiraGO;
+  font-size: 48px;
+  font-style: normal;
+  font-weight: 700;
   line-height: normal;
 }
 
@@ -101,6 +110,26 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
+  line-height: normal;
+}
+
+/* gray-text */
+
+.gray-text {
+  color: theme('colors.gray-text-color');
+  font-family: FiraGO;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.gray-text-2xl {
+  color: theme('colors.gray-text-color');
+  font-family: FiraGO;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
   line-height: normal;
 }
 

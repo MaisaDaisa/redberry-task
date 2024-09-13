@@ -4,6 +4,7 @@ import MainPage from "@/Pages/MainPage/MainPage";
 import Main from "./components/MainSection";
 import AddListingPage from "./Pages/AddListingPage/AddListingPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ListingPage from "@/Pages/ListingPage/ListingPage";
 
 const router = createBrowserRouter([
 	{
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/listing/:id",
-		element: <div></div>,
+		element: <ListingPage />,
 	},
 ]);
 
