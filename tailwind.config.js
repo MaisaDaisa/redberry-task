@@ -20,8 +20,11 @@ export default {
 				"invalid-red": "#F93B1D",
 			},
 			spacing: {
-				//can be changed later by devs
-				globalPx: "162px",
+				/*
+				can be changed later by Devs keep in mind the design states 162px,
+				however the slider makes the main page smaller 
+				*/
+				globalPx: "150px",
 			},
 			boxShadow: {
 				"primary-shadow": "5px 5px 12px 0px rgba(2, 21, 38, 0.08)",

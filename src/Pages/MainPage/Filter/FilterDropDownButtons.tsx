@@ -4,7 +4,8 @@ import React, { useState } from "react";
 
 interface FilterDropDownButtonsProps {
 	filterText: string;
-	active?: boolean;
+	isActive?: boolean;
+	handleSetActive: () => void;
 	children: React.ReactNode;
 	dropDownTitle?: string;
 	onConfirm?: () => void;
@@ -13,19 +14,18 @@ interface FilterDropDownButtonsProps {
 const FilterDropDownButtons = ({
 	onConfirm,
 	filterText,
-	active = false,
+	isActive = false,
+	handleSetActive,
 	children,
 	dropDownTitle,
 }: FilterDropDownButtonsProps) => {
-	const [isActive, setIsActive] = useState(active);
-
 	return (
 		<div className="relative">
 			<div
 				className={`relative transition-all duration-300 flex justify-center items-center px-2 py-[14px] gap-1 cursor-pointer ${
 					isActive ? "rounded-[6px] bg-secondary-gray-background" : ""
 				}`}
-				onClick={() => setIsActive(!isActive)}>
+				onClick={handleSetActive}>
 				<p className="main-text select-none">{filterText}</p>
 				<img
 					src={arrowIcon}

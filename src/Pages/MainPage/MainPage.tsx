@@ -19,6 +19,7 @@ const ListingPage = () => {
 	const [listings, setListings] = useState<realEstateMany[] | null>(null);
 	const regionsData = useRef<region[]>([]);
 	const [selectedRegionIDs, setSelectedRegionIDs] = useState<number[]>([]);
+	const [activeFilters, setActiveFilters] = useState<number>(0);
 
 	useEffect(() => {
 		const fetchListings = async () => {
@@ -34,6 +35,16 @@ const ListingPage = () => {
 		fetchListings();
 	}, []);
 
+	const filterListings = () => {};
+
+	const handleSetActiveFilter = (filterNumber: number) => {
+		if (activeFilters === filterNumber) {
+			setActiveFilters(0);
+		} else {
+			setActiveFilters(filterNumber);
+		}
+	};
+
 	const handleMultiChoiceRegionClick = (id: number) => {
 		if (selectedRegionIDs.includes(id)) {
 			setSelectedRegionIDs(
@@ -43,10 +54,6 @@ const ListingPage = () => {
 			setSelectedRegionIDs([...selectedRegionIDs, id]);
 		}
 	};
-
-	useEffect(() => {
-		console.log(listings);
-	}, [listings]);
 
 	const handleAddListing = () => {
 		navigate("/add-listing");
@@ -58,9 +65,16 @@ const ListingPage = () => {
 		<>
 			<div className="flex justify-between items-center">
 				<div className="flex p-[6px] items-center gap-6 border rounded-[10px] border-main-primary-gray-border w-auto">
+					{/* 
+					 Very Simple Logic:
+
+					 Every Filter has its own Number 
+					 */}
 					<FilterDropDownButtons
 						filterText="რეგიონი"
-						dropDownTitle="რეგიონის მიხედვით">
+						dropDownTitle="რეგიონის მიხედვით"
+						isActive={activeFilters === 1}
+						handleSetActive={() => handleSetActiveFilter(1)}>
 						<div className="flex  items-end gap-y-4 gap-x-[50px] content-end flex-wrap w-[678px]">
 							{regionsData.current.map((region) => (
 								<CheckBoxWithText
@@ -74,17 +88,23 @@ const ListingPage = () => {
 					</FilterDropDownButtons>
 					<FilterDropDownButtons
 						filterText="საფასო კატეგორია"
-						dropDownTitle="ფასის მიხედვით">
+						dropDownTitle="ფასის მიხედვით"
+						isActive={activeFilters === 2}
+						handleSetActive={() => handleSetActiveFilter(2)}>
 						<RangePicker postFixType={PostFixTypesEnum.GEL} />
 					</FilterDropDownButtons>
 					<FilterDropDownButtons
 						filterText="ფართობი"
-						dropDownTitle="ფართობის მიხედვით">
+						dropDownTitle="ფართობის მიხედვით"
+						isActive={activeFilters === 3}
+						handleSetActive={() => handleSetActiveFilter(3)}>
 						<RangePicker postFixType={PostFixTypesEnum.areaSize} />
 					</FilterDropDownButtons>
 					<FilterDropDownButtons
 						filterText="საძინებლების რაოდენობა"
-						dropDownTitle="საძინებლების რაოდენობა">
+						dropDownTitle="საძინებლების რაოდენობა"
+						isActive={activeFilters === 4}
+						handleSetActive={() => handleSetActiveFilter(4)}>
 						<input
 							type="text"
 							className="h-[42px] p-[10px] w-[42px] self-start main-text-sm-40-400 text-center border border-gary-text-color rounded-md outline-none"
