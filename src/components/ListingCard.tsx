@@ -16,7 +16,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 	return (
 		<div
 			onClick={() => console.log(navigate(`/listing/${listing.id}`))}
-			className="flex cursor-pointer flex-col items-start flex-shrink-0 w-[384px] hover:shadow-primary-shadow duration-300 transition-all">
+			className="flex cursor-pointer flex-col items-start flex-shrink-0 w-[384px] h-[] hover:shadow-primary-shadow duration-300 transition-all">
 			<div className="relative h-[307px] w-full self-stretch">
 				{/* Image container should be relative */}
 				<img
@@ -33,10 +33,8 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 					</p>
 					<div className="flex justify-start gap-1 self-stretch">
 						<img
-							className="flex-shrink-0"
+							className="flex-shrink-0 w-5 h-5"
 							src={LocationIcon}
-							width={20}
-							height={20}
 							alt="Location marker"
 						/>
 						<p className="main-text-70">{listing.address}</p>
@@ -44,21 +42,13 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 				</div>
 				<div className="flex gap-8 items-center">
 					<div className="flex items-center gap-[5px]">
-						<img
-							className="flex-shrink-0"
-							src={Bed}
-							width={24}
-							height={24}
-							alt="Bed icon"
-						/>
+						<img className="flex-shrink-0 w-6 h-6" src={Bed} alt="Bed icon" />
 						<p className="main-text-70">{listing.bedrooms}</p>
 					</div>
 					<div className="flex items-center gap-[5px]">
 						<img
-							className="flex-shrink-0"
+							className="flex-shrink-0 w-[18px] h-[18px]"
 							src={Size}
-							width={18}
-							height={18}
 							alt="Size icon"
 						/>
 						<p className="main-text-70">
@@ -67,10 +57,8 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 					</div>
 					<div className="flex items-center gap-[5px]">
 						<img
-							className="flex-shrink-0"
+							className="flex-shrink-0 w-4 h-4"
 							src={ZipCodeIcon}
-							width={16}
-							height={18}
 							alt="ZipCode icon"
 						/>
 						<p className="main-text-70">{listing.zip_code}</p>

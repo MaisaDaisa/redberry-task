@@ -17,7 +17,6 @@ import { formatDate } from "@/lib/formatData";
 const ListingPage = () => {
 	const { id } = useParams();
 	const [isLoading, setIsLoading] = useState(true);
-	const [error, setError] = useState<string | null>(null);
 	const [recommendedListings, setRecommendedListings] = useState<
 		realEstateMany[] | null
 	>(null);
@@ -36,7 +35,7 @@ const ListingPage = () => {
 					setSpecificListing(specificListingResponse);
 				}
 			} catch (error) {
-				setError("Failed to load data.");
+				console.error("Error fetching data:", error);
 			} finally {
 				setIsLoading(false);
 			}
@@ -59,11 +58,7 @@ const ListingPage = () => {
 	let listingDate = new Date(specificListing?.created_at ?? "");
 
 	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-
-	if (error) {
-		return <div>{error}</div>;
+		return <div></div>;
 	}
 
 	return (
@@ -80,7 +75,7 @@ const ListingPage = () => {
 			<div className="mt-[29px] flex flex-row justify-start gap-[68px]">
 				<div className="flex flex-col items-end relative">
 					<div className="absolute top-[41px] left-[41px] rounded-[20px] bg-primary-text-50 w-[142px] h-[41px] p-[6xp] flex justify-center items-center">
-						<p className="white-text-xl-500">
+						<p className="white-text-xl-500 select-none">
 							{specificListing?.is_rental ? "ქირავდება" : "იყიდება"}
 						</p>
 					</div>
@@ -101,23 +96,31 @@ const ListingPage = () => {
 						</h2>
 						<div className="flex flex-col gap-4">
 							<div className="flex flex-row items-center gap-1">
-								<img src={locationIcon} alt="icon" width={22} height={22} />
+								<div className="w-[22px] h-[22px] flex items-center justify-center">
+									<img src={locationIcon} alt="icon" />
+								</div>
 								<p className="gray-text-2xl">{specificListing?.address}</p>
 							</div>
 							<div className="flex flex-row items-center gap-1">
-								<img src={sizeIcon} alt="icon" width={22} height={22} />
+								<div className="w-[22px] h-[22px] flex items-center justify-center">
+									<img src={sizeIcon} alt="icon" />
+								</div>
 								<p className="gray-text-2xl">
 									ფართობი {specificListing?.area} მ<sup>2</sup>
 								</p>
 							</div>
 							<div className="flex flex-row items-center gap-1">
-								<img src={bedIcon} alt="icon" width={22} height={22} />
+								<div className="w-[22px] h-[22px] flex items-center justify-center">
+									<img src={bedIcon} alt="icon" />
+								</div>
 								<p className="gray-text-2xl">
 									საძინებელი {specificListing?.bedrooms}
 								</p>
 							</div>
 							<div className="flex flex-row items-center gap-1">
-								<img src={zipCodeIcon} alt="icon" width={22} height={22} />
+								<div className="w-[22px] h-[22px] flex items-center justify-center">
+									<img src={zipCodeIcon} alt="icon" />
+								</div>
 								<p className="gray-text-2xl">
 									საფოსტო ინდექსი {specificListing?.zip_code}
 								</p>

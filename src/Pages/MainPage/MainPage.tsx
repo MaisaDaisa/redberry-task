@@ -56,11 +56,11 @@ const ListingPage = () => {
 				</div>
 			</div>
 			<FilterDisplay />
-			<div className="mt-8 flex items-center justify-center gap-5 flex-wrap">
+			<div className="mt-8 flex items-center justify-center gap-5 flex-wrap pb-[300px]">
 				{listings &&
-					listings.map((listing) => (
-						<ListingCard key={listing.id} listing={listing} />
-					))}
+					[...listings, ...listings, ...listings, ...listings].map(
+						(listing) => <ListingCard key={listing.id} listing={listing} />
+					)}
 			</div>
 			<AddAgentFullscreenPopup
 				isActive={isAgentPopupActive}
