@@ -1,14 +1,21 @@
+import Cta, { CtaTypes } from "@/components/Cta";
 import arrowIcon from "../../../assets/svg/filterarrow.svg";
 import React, { useState } from "react";
 
 interface FilterDropDownButtonsProps {
 	filterText: string;
 	active?: boolean;
+	children: React.ReactNode;
+	dropDownTitle?: string;
+	onConfirm?: () => void;
 }
 
 const FilterDropDownButtons = ({
+	onConfirm,
 	filterText,
 	active = false,
+	children,
+	dropDownTitle,
 }: FilterDropDownButtonsProps) => {
 	const [isActive, setIsActive] = useState(active);
 
@@ -32,11 +39,22 @@ const FilterDropDownButtons = ({
 			{
 				// Dropdown content with fade-in effect
 				<div
-					className={`absolute z-10 w-[600px] translate-y-4 h-[100px] p-6 bg-primary-white self-start justify-self-start border border-primary-gray-border rounded-[10px] shadow-primary-shadow flex flex-col items-start transition-opacity transform duration-500 ease-in-out ${
-						isActive ? "opacity-100" : "opacity-0 pointer-events-none"
-					}`}>
-					<p className="main-text">რეგიონის მიხედვით</p>
-					<div className="flex items-end gap-y-4 gap-x-[50px] content-end"></div>
+					className={`
+						absolute z-10  translate-y-4  p-6 bg-primary-white self-start justify-self-start 
+						border border-primary-gray-border rounded-[10px] 
+						shadow-primary-shadow flex flex-col items-end gap-8
+						transition-opacity transform duration-500 ease-in-out 
+						${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+					<p className="main-text self-start">{dropDownTitle}</p>
+					{/* Children here as dropdown content this will better to avoid prop drilling */}
+					{children}
+					<div className="w-[234px] flex flex-row justify-end">
+						<Cta
+							ctaText="არჩევა"
+							type={CtaTypes.primary}
+							onClickHandler={() => onConfirm}
+						/>
+					</div>
 				</div>
 			}
 		</div>

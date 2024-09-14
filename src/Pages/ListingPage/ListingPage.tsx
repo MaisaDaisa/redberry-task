@@ -12,7 +12,7 @@ import ListingCard from "@/components/ListingCard";
 import { getAllListings, getListingById } from "@/api/getRequests";
 import { realEstateMany, realEstateOne } from "@/api/apiTypes";
 import { checkNumbers } from "@/lib/validationChecker";
-import { formatDate } from "@/lib/formatData";
+import { formatDate, formatPriceWithCommas } from "@/lib/formatData";
 import FullScreenBlur from "@/components/Layout/FullScreenBlur";
 import { deleteListing } from "@/api/deleteRequests";
 
@@ -122,7 +122,9 @@ const ListingPage = () => {
 				<div className="pt-[30px] flex flex-col gap-10 w-[503px] h-[714px]">
 					<div className="flex flex-col items-start gap-6">
 						<h2 className="main-text-5xl-100">
-							{specificListing?.price.toLocaleString().replace(/,/g, ", ")} ₾
+							{specificListing?.price &&
+								formatPriceWithCommas(specificListing?.price)}{" "}
+							₾
 						</h2>
 						<div className="flex flex-col gap-4">
 							<div className="flex flex-row items-center gap-1">

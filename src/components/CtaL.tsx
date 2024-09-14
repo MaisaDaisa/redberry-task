@@ -17,15 +17,14 @@ const CtaL = ({
 			ctaText={ctaText}
 			onClickHandler={onClickHandler}
 			type={type}
-			textClass="main-text-customCLR">
+			textClass="main-text-customCLR"
+			customPaddings="px-4 py-[10px] h-[47px]">
 			<svg
-				className={`transition-all duration-300 ${
+				className={`transition-all duration-300 w-[22px] h-[22px] ${
 					type === CtaTypes.primary
 						? "fill-primary-white"
 						: "fill-primary-orange group-hover:fill-primary-white"
 				}`}
-				width="22"
-				height="23"
 				viewBox="0 0 22 23"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg">

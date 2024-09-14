@@ -12,6 +12,7 @@ interface CtaProps {
 	onClickHandler: () => any;
 	children?: React.ReactNode;
 	textClass?: string;
+	customPaddings?: string;
 }
 
 const Cta = ({
@@ -20,6 +21,7 @@ const Cta = ({
 	onClickHandler,
 	children = "",
 	textClass = "main-text-sm-100-500-customCLR",
+	customPaddings = "px-[14px] py-2",
 }: CtaProps) => {
 	let buttonStyle = "";
 	let textStyle = "";
@@ -48,12 +50,12 @@ const Cta = ({
 	}
 
 	return (
-		<div
-			className={`transition-all duration-300 cursor-pointer inline-flex px-[10px] py-4 justify-center items-center gap-[2px] flex-shrink-0 rounded-[10px] select-none ${buttonStyle}`}
+		<button
+			className={`transition-all duration-300 cursor-pointer inline-flex ${customPaddings} justify-center items-center gap-[2px] flex-shrink-0 rounded-[10px] select-none ${buttonStyle}`}
 			onClick={() => onClickHandler()}>
 			{children}
 			<p className={`${textClass} text-nowrap ${textStyle}`}>{ctaText}</p>
-		</div>
+		</button>
 	);
 };
 

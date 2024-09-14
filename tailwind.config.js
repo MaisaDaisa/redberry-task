@@ -10,6 +10,7 @@ export default {
 				"primary-text-80": "rgba(2, 21, 38, 0.80)",
 				"primary-text-70": "rgba(2, 21, 38, 0.70)",
 				"primary-text-50": "rgba(2, 21, 38, 0.50)",
+				"primary-text-40": "rgba(2, 21, 38, 0.40)",
 				"gray-text-color": "#808A93",
 				"secondary-text-100": "#1A1A1F",
 				"primary-orange": "#F93B1D",
