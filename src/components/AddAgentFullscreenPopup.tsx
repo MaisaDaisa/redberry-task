@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
+import InputSectionWrapper from "@/components/InputSectionWrapper";
 import AddListPageSectionWrapper from "@/Pages/AddListingPage/AddListPageSectionWrapper";
-import InputField from "@/components/GlobalComponents/InputField";
-import FileUploader from "@/components/GlobalComponents/FileUploader";
-import { CtaTypes } from "@/components/GlobalComponents/Cta";
-import Cta from "@/components/GlobalComponents/Cta";
+import InputField from "@/components/InputField";
+import FileUploader from "@/components/FileUploader";
+import { CtaTypes } from "@/components/Cta";
+import Cta from "@/components/Cta";
 import { postAgents } from "@/api/postRequests";
 
 // Importing CheckerFunctions
@@ -17,11 +17,13 @@ import {
 interface AddAgentFullscreenPopupProps {
 	isActive: boolean;
 	setIsActiveState: (state: boolean) => void;
+	invokeOnSend?: () => void;
 }
 
 const AddAgentFullscreenPopup = ({
 	isActive,
 	setIsActiveState,
+	invokeOnSend,
 }: AddAgentFullscreenPopupProps) => {
 	const [agentName, setAgentName] = useState("");
 	const [agentLastName, setAgentLastName] = useState("");
@@ -47,6 +49,7 @@ const AddAgentFullscreenPopup = ({
 			console.log(formData);
 
 			await postAgents(formData);
+			invokeOnSend && invokeOnSend();
 
 			// Closing the popup
 			setIsActiveState(false);

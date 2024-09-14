@@ -1,15 +1,15 @@
-import InputField from "@/components/GlobalComponents/InputField";
+import InputField from "@/components/InputField";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
-import DropDownSelect from "../../components/GlobalComponents/DropDownSelect";
+import { useEffect, useRef, useState } from "react";
+import DropDownSelect from "../../components/DropDownSelect";
 import { getRegions, getCities, getAgents } from "@/api/getRequests";
-import { region, city, agentGetMany } from "@/api/apiTypes";
+import { region, cityGet, agentGetMany } from "@/api/apiTypes";
 import AddListPageSectionWrapper from "./AddListPageSectionWrapper";
-import { InputFieldType } from "@/components/GlobalComponents/InputField";
-import FileUploader from "@/components/GlobalComponents/FileUploader";
-import { CtaTypes } from "@/components/GlobalComponents/Cta";
-import Cta from "@/components/GlobalComponents/Cta";
-import InputSectionWrapper from "@/components/GlobalComponents/InputSectionWrapper";
+import { InputFieldType } from "@/components/InputField";
+import FileUploader from "@/components/FileUploader";
+import { CtaTypes } from "@/components/Cta";
+import Cta from "@/components/Cta";
+import InputSectionWrapper from "@/components/InputSectionWrapper";
 import TwoChoice from "@/Pages/AddListingPage/TwoChoice";
 import plus from "@/assets/svg/plus-circle.svg";
 import {
@@ -20,17 +20,16 @@ import {
 import AddAgentFullscreenPopup from "../../components/AddAgentFullscreenPopup";
 import { postListing } from "@/api/postRequests";
 
-// Importing Dummy Data
-// import { agents } from "@/api/DummyData";
-
 const AddListingPage = () => {
 	const [addAgentPopupActive, setAddAgentPopupActive] = useState(false);
 	const [towChoiceNumber, setTwoChoiceNumber] = useState<0 | 1>(0);
-	const [cities, setCities] = useState<city[] | null>(null);
-	const [filteredCities, setFilteredCities] = useState<city[] | null>(null);
+	// cities never contribute to the rendering of the component
+	const cities = useRef<cityGet[] | null>(null);
+	// filteredCities are used to render the dropdown select
+	const [filteredCities, setFilteredCities] = useState<cityGet[] | null>(null);
 	const [regions, setRegions] = useState<region[] | null>(null);
 	const [chosenRegion, setChosenRegion] = useState<region | null>(null);
-	const [chosenCity, setChosenCity] = useState<city | null>(null);
+	const [chosenCity, setChosenCity] = useState<cityGet | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const [address, setAddress] = useState("");
 	const [zipCode, setZipCode] = useState("");
@@ -71,15 +70,26 @@ const AddListingPage = () => {
 		}
 	};
 
+	const fetchAgents = async () => {
+		console.log("Fetching agents");
+		try {
+			const agentsResponse = await getAgents();
+			setAgents(agentsResponse);
+		} catch (error) {
+			console.error("Failed to fetch agents:", error);
+		}
+	};
+
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const regionResponse = await getRegions();
 				const cityResponse = await getCities();
 				setRegions(regionResponse);
-				setCities(cityResponse);
+				cities.current = cityResponse;
 				setChosenRegion(regionResponse[0]);
 				setIsLoading(false);
+				fetchAgents();
 			} catch (error) {
 				console.error("Failed to fetch regions or cities:", error);
 			}
@@ -87,40 +97,18 @@ const AddListingPage = () => {
 		fetchData();
 	}, []);
 
-	// Fetching agents only when the addAgentPopupActive state is false
-	// This is done to ensure that the agents are fetched when loaded and also when the popup is closed,
-	// which occurs when the user adds an agent or just closes the popup
-
-	useEffect(() => {
-		const fetchAgents = async () => {
-			console.log("Fetching agents");
-			try {
-				const agentsResponse = await getAgents();
-				setAgents(agentsResponse);
-			} catch (error) {
-				console.error("Failed to fetch agents:", error);
-			}
-		};
-		if (!addAgentPopupActive) {
-			fetchAgents();
-		}
-	}, [addAgentPopupActive]);
-
 	// Filtering cities based on the chosen region
 	useEffect(() => {
 		if (chosenRegion !== null) {
-			if (cities !== null) {
-				const filteredCities = cities.filter(
+			if (cities.current !== null) {
+				// Access cities.current here
+				const filtered = cities.current.filter(
 					(city) => city.region_id === chosenRegion.id
 				);
-				setFilteredCities(filteredCities);
+				setFilteredCities(filtered);
 			}
 		}
 	}, [chosenRegion]);
-
-	useEffect(() => {
-		console.log("Chosen agent:", agent);
-	}, [agent]);
 
 	// This component is used to add agents to the dropdown select
 	const addAgentsButton = (
@@ -277,6 +265,7 @@ const AddListingPage = () => {
 				<AddAgentFullscreenPopup
 					isActive={addAgentPopupActive}
 					setIsActiveState={setAddAgentPopupActive}
+					invokeOnSend={() => fetchAgents()}
 				/>
 			</InputSectionWrapper>
 		</div>

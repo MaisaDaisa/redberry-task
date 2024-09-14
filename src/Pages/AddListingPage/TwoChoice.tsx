@@ -1,4 +1,4 @@
-import TwoChoiceText from "@/Pages/AddListingPage/TwoChoiceText";
+import Status from "@/Pages/AddListingPage/Status";
 
 interface TwoChoiceProps {
 	selected: 0 | 1;
@@ -8,14 +8,14 @@ interface TwoChoiceProps {
 const TwoChoice = ({ selected, setSelected }: TwoChoiceProps) => {
 	return (
 		<div className="flex flex-row gap-x-8 ">
-			<TwoChoiceText
+			<Status
 				selected={selected}
 				index={0}
 				setSelected={setSelected}
 				key={0}
 				title="იყიდება"
 			/>
-			<TwoChoiceText
+			<Status
 				selected={selected}
 				index={1}
 				setSelected={setSelected}

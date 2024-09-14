@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
+import TitleH4Component from "@/components/TitleH4Component";
 
 export enum CheckerStateTypes {
 	VALID,

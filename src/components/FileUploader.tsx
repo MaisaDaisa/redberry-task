@@ -1,4 +1,4 @@
-import TitleH4Component from "@/components/GlobalComponents/TitleH4Component";
+import TitleH4Component from "@/components/TitleH4Component";
 import { useState, useRef } from "react";
 import plusCircle from "@/assets/svg/plus-circle.svg";
 import trashCan from "@/assets/svg/trashCan.svg";

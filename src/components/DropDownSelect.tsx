@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import arrowIcon from "@/assets/svg/filterarrow.svg";
 import TitleH4Component from "./TitleH4Component";
-import { agentGetMany, city, region } from "@/api/apiTypes";
+import { agentGetMany, cityGet, region } from "@/api/apiTypes";
 
 interface DropDownSelectProps {
 	additionalComponent?: JSX.Element;
-	items: agentGetMany[] | city[] | region[];
+	items: agentGetMany[] | cityGet[] | region[];
 	title: string;
 	required?: boolean;
 	isAgents?: boolean;
@@ -20,8 +20,8 @@ const DropDownSelect = ({
 	required = false,
 	parentStateSetter,
 }: DropDownSelectProps) => {
-	const [selected, setSelected] = useState<agentGetMany | city | region>(
-		items[0] || ({} as agentGetMany | city | region)
+	const [selected, setSelected] = useState<agentGetMany | cityGet | region>(
+		items[0] || ({} as agentGetMany | cityGet | region)
 	);
 	const [toggleCombo, setToggleCombo] = useState(false);
 
@@ -32,7 +32,7 @@ const DropDownSelect = ({
 		}
 	}, [items]);
 
-	const handleSelectedItem = (item: agentGetMany | city | region) => {
+	const handleSelectedItem = (item: agentGetMany | cityGet | region) => {
 		setSelected(item);
 		setToggleCombo(false);
 		parentStateSetter(item);

@@ -10,18 +10,30 @@ export type agentPost = {
 	surname: string;
 	email: string;
 	phone: string;
-	avatar: string | File | null;
+	avatar: string;
 };
 
 export type region = {
 	id: number;
 	name: string;
 };
-export type city = {
+export type cityPost = {
 	id: number;
 	name: string;
 	region_id: number;
 };
+
+export type cityGet = {
+	id: number;
+	name: string;
+	region_id: number;
+	region: {
+        id: number,
+        name: string
+      }
+};
+
+
 
 export type realEstateMany = {
 	id: number;
@@ -33,7 +45,7 @@ export type realEstateMany = {
 	is_rental: 1 | 0;
 	image: string;
 	city_id: number;
-	city: city;
+	city: cityGet;
 };
 
 export type realEstatePost = {
@@ -61,7 +73,14 @@ export type realEstateOne = {
 	city_id: number;
 	description: string;
 	created_at: string;
-	city: city;
+	city: cityGet;
 	agent_id: number;
-	agent: agentPost;
+	agent: {
+		id: number;
+		name: string;
+		surname: string;
+		email: string;
+		phone: string;
+		avatar: string;
+	};
 };

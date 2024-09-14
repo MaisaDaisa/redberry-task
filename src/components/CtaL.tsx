@@ -1,5 +1,5 @@
-import Cta from "@/components/GlobalComponents/Cta";
-import { CtaTypes } from "@/components/GlobalComponents/Cta";
+import Cta from "@/components/Cta";
+import { CtaTypes } from "@/components/Cta";
 
 interface CtaLProps {
 	ctaText: string;
@@ -13,7 +13,11 @@ const CtaL = ({
 	onClickHandler,
 }: CtaLProps) => {
 	return (
-		<Cta ctaText={ctaText} onClickHandler={onClickHandler} type={type}>
+		<Cta
+			ctaText={ctaText}
+			onClickHandler={onClickHandler}
+			type={type}
+			textClass="main-text-customCLR">
 			<svg
 				className={`transition-all duration-300 ${
 					type === CtaTypes.primary

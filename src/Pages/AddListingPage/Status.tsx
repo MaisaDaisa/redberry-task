@@ -8,7 +8,7 @@ interface TwoChoiceTextProps {
 	title: string;
 }
 
-const TwoChoiceText = ({
+const Status = ({
 	selected,
 	index,
 	setSelected,
@@ -30,4 +30,4 @@ const TwoChoiceText = ({
 	);
 };
 
-export default TwoChoiceText;
+export default Status;

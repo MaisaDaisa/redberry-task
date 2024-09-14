@@ -1,5 +1,5 @@
 import { axiosInstance } from '@/api/apiConstants';
-import { region, city } from "./apiTypes";
+import { region, cityGet } from "./apiTypes";
 
 
 export const getRequest = async (url: string) => {
@@ -17,7 +17,7 @@ export const getRegions = async (): Promise<region[]> => {
   return getRequest('/regions');
 };
 
-export const getCities = async (): Promise<city[]> => {
+export const getCities = async (): Promise<cityGet[]> => {
   return getRequest('/cities');
 };
 

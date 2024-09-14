@@ -1,7 +1,7 @@
 import "./App.css";
-import Header from "@/components/Header";
+import Header from "@/components/Layout/Header";
 import MainPage from "@/Pages/MainPage/MainPage";
-import Main from "./components/MainSection";
+import Main from "./components/Layout/MainSection";
 import AddListingPage from "./Pages/AddListingPage/AddListingPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ListingPage from "@/Pages/ListingPage/ListingPage";

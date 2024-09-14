@@ -11,6 +11,23 @@
 
 /* Main/Primary Text Fonts Configuration */
 
+.main-text-xs-100-500-customCLR {
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+.main-text-sm-100-500-customCLR {
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
 .main-text { 
   color: theme('colors.primary-text-100');
   text-align: center;
@@ -113,7 +130,49 @@
   line-height: normal;
 }
 
+/* White Text */
+
+.white-text-xs-500 {
+  color: theme('colors.primary-white');
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.48px;
+}
+
+.white-text-xl-500 {
+  color: theme('colors.primary-white');
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.8px;
+}
+
 /* gray-text */
+.gray-text-xs-500 {
+  color: theme('colors.gray-text-color');
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.gray-text-sm-400 {
+  color: theme('colors.gray-text-color');
+  font-family: FiraGO;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .gray-text {
   color: theme('colors.gray-text-color');

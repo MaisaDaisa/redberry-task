@@ -1,8 +1,8 @@
 import Filters from "@/Pages/MainPage/Filter/Filters";
-import CtaL from "@/components/GlobalComponents/CtaL";
-import { CtaTypes } from "@/components/GlobalComponents/Cta";
+import CtaL from "@/components/CtaL";
+import { CtaTypes } from "@/components/Cta";
 import FilterDisplay from "@/Pages/MainPage/Filter/FilterDisplay";
-import ListingCard from "@/Pages/MainPage/ListingCard";
+import ListingCard from "@/components/ListingCard";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddAgentFullscreenPopup from "@/components/AddAgentFullscreenPopup";
