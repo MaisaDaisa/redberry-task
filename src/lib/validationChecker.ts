@@ -15,5 +15,13 @@ export const checkPhoneNumbers = (value : string) => {
 };
 
 export const checkWordCount = (value : string, wordCount : number = 5) => {
-    return value.split(" ").length >= wordCount;
+    const words = value.split(" ");
+    /* 
+    NOTE: If the user presses space at the last word, the last element of the array 
+    will be an empty string at will trick the function if not checked.
+    */
+   console.log(words);
+    if (words.length >= wordCount + Number(words.at(-1) === "")) {
+        return true;
+    }
 }

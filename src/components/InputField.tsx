@@ -104,9 +104,8 @@ const InputField = ({
 			) : type === InputFieldType.TEXTAREA ? (
 				<textarea
 					id="input_1"
-					rows={5}
 					value={value}
-					className={`input-field rounded-md border border-primary-gray-border w-full p-[10px] main-text-100-400 
+					className={`input-field rounded-md border h-[135px] border-primary-gray-border w-full p-[10px] main-text-100-400 resize-none
 						${
 							checker && checkerState === CheckerStateTypes.INVALID
 								? "border-red-500"

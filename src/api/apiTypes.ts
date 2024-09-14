@@ -38,7 +38,7 @@ export type cityGet = {
 export type realEstateMany = {
 	id: number;
 	address: string;
-	zip_code: `${number}${number}${number}${number}`;
+	zip_code: number;
 	price: number;
 	area: number;
 	bedrooms: number;
@@ -50,7 +50,7 @@ export type realEstateMany = {
 
 export type realEstatePost = {
 	price: number;
-	zip_code: `${number}${number}${number}${number}`;
+	zip_code: number;
 	description: string;
 	area: number;
 	city_id: number;
@@ -64,7 +64,7 @@ export type realEstatePost = {
 export type realEstateOne = {
 	id: number;
 	address: string;
-	zip_code: `${number}${number}${number}${number}`;
+	zip_code: number;
 	price: number;
 	area: number;
 	bedrooms: number;
