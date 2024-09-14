@@ -13,22 +13,30 @@ import { getAllListings, getListingById } from "@/api/getRequests";
 import { realEstateMany, realEstateOne } from "@/api/apiTypes";
 import { checkNumbers } from "@/lib/validationChecker";
 import { formatDate } from "@/lib/formatData";
+import FullScreenBlur from "@/components/Layout/FullScreenBlur";
+import { deleteListing } from "@/api/deleteRequests";
 
 const ListingPage = () => {
 	const { id } = useParams();
 	const [isLoading, setIsLoading] = useState(true);
+	const [displayDeleteListing, setDisplayDeleteListing] = useState(false);
 	const [recommendedListings, setRecommendedListings] = useState<
 		realEstateMany[] | null
 	>(null);
 	const [specificListing, setSpecificListing] = useState<realEstateOne | null>(
 		null
 	);
+	const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
 				const recommendedListingsResponse = await getAllListings();
-				setRecommendedListings(recommendedListingsResponse);
+				setRecommendedListings([
+					...recommendedListingsResponse,
+					...recommendedListingsResponse,
+					...recommendedListingsResponse,
+				]);
 
 				if (id && checkNumbers(id)) {
 					const specificListingResponse = await getListingById(id);
@@ -50,7 +58,7 @@ const ListingPage = () => {
 	}, [navigate]);
 
 	const handleDeleteListing = useCallback(() => {
-		// Implement the delete listing logic here
+		if (id) deleteListing(id.toString()).then(() => navigate("/"));
 	}, []);
 
 	let agent = specificListing?.agent;
@@ -60,6 +68,28 @@ const ListingPage = () => {
 	if (isLoading) {
 		return <div></div>;
 	}
+
+	// Constants for the carousel
+	// Width of each carousel item plus the gap between them
+	const carouselItemWidth = 404;
+	// Maximum number of items in the carousel
+	const carouselMaxItems = recommendedListings?.length || 0;
+	// Number to increment the index by
+	const increment = 4;
+
+	// Function to handle left click, decrease index
+	const handleCarouselLeft = () => {
+		setCurrentCarouselIndex((prevIndex) =>
+			prevIndex > 0 ? prevIndex - increment : carouselMaxItems - increment
+		);
+	};
+
+	// Function to handle right click, increase index
+	const handleCarouselRight = () => {
+		setCurrentCarouselIndex((prevIndex) =>
+			prevIndex < carouselMaxItems - increment ? prevIndex + increment : 0
+		);
+	};
 
 	return (
 		<div className="mt-16 flex flex-col items-start w-full">
@@ -99,7 +129,9 @@ const ListingPage = () => {
 								<div className="w-[22px] h-[22px] flex items-center justify-center">
 									<img src={locationIcon} alt="icon" />
 								</div>
-								<p className="gray-text-2xl">{specificListing?.address}</p>
+								<p className="gray-text-2xl">
+									{specificListing?.city.name}, {specificListing?.address}
+								</p>
 							</div>
 							<div className="flex flex-row items-center gap-1">
 								<div className="w-[22px] h-[22px] flex items-center justify-center">
@@ -163,7 +195,7 @@ const ListingPage = () => {
 							<Cta
 								ctaText="ლისტინგის წაშლა"
 								type={CtaTypes.gray}
-								onClickHandler={handleDeleteListing}
+								onClickHandler={() => setDisplayDeleteListing(true)}
 							/>
 						</div>
 					</div>
@@ -171,24 +203,78 @@ const ListingPage = () => {
 			</div>
 			<div className="mt-[53px] w-full">
 				<h2 className="main-text-3xl-100">ბინები მსგავს ლოკაციაზე</h2>
-				<div className="relative mt-[52px] flex flex-row items-center justify-start w-full">
+				<div className="relative mt-[52px] flex items-center w-full">
+					{/* Left Arrow */}
 					<img
 						src={arrowLeft}
-						alt=""
+						alt="go-left"
 						className="absolute -left-[65px] z-10 cursor-pointer"
+						onClick={handleCarouselLeft}
 					/>
-					<div className="flex flex-row gap-5">
-						{recommendedListings?.map((listing) => (
-							<ListingCard listing={listing} key={listing.id} />
-						))}
+
+					{/* Carousel Container */}
+					<div className="overflow-hidden w-full">
+						<div
+							className="flex gap-5 transition-transform duration-500 ease-in-out"
+							style={{
+								width: `${carouselItemWidth * carouselMaxItems}px`,
+								transform: `translateX(-${
+									currentCarouselIndex * carouselItemWidth
+								}px)`,
+							}}>
+							{recommendedListings?.map((listing) => (
+								<ListingCard listing={listing} />
+							))}
+						</div>
 					</div>
+
+					{/* Right Arrow */}
 					<img
 						src={arrowLeft}
-						alt=""
-						className="absolute justify-self-end -right-[65px] rotate-180 z-10 cursor-pointer"
+						alt="go-right"
+						className="absolute -right-[65px] rotate-180 z-10 cursor-pointer"
+						onClick={handleCarouselRight}
 					/>
 				</div>
 			</div>
+			{/* Hidden Section of the page that will be displayed as a popup */}
+			<FullScreenBlur isActive={displayDeleteListing}>
+				<div className="w-[623px] h-[222px] flex-shrink-0 rounded-[20px] relative bg-primary-white shadow-primary-shadow flex justify-center items-center">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="47"
+						height="47"
+						viewBox="0 0 47 47"
+						fill="none"
+						className="absolute top-[6px] right-[13px] cursor-pointer"
+						onClick={() => setDisplayDeleteListing(false)}>
+						<path
+							d="M23.5011 23.4999L29.0401 29.0389M17.9622 29.0389L23.5011 23.4999L17.9622 29.0389ZM29.0401 17.9609L23.5011 23.4999L29.0401 17.9609ZM23.5011 23.4999L17.9622 17.9609L23.5011 23.4999Z"
+							stroke="#2D3648"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					<div className="flex flex-col items-center">
+						<h4 className="main-text-xl-100-400">გსურთ წაშალოთ ლისტინგი?</h4>
+						<div className="flex flex-row gap-[15px] mt-[35px]">
+							<Cta
+								textClass="main-text-customCLR"
+								ctaText="გაუქმება"
+								type={CtaTypes.secondary}
+								onClickHandler={handleDeleteListing}
+							/>
+							<Cta
+								textClass="main-text-customCLR"
+								ctaText="დადასტურება"
+								type={CtaTypes.primary}
+								onClickHandler={() => handleDeleteListing()}
+							/>
+						</div>
+					</div>
+				</div>
+			</FullScreenBlur>
 		</div>
 	);
 };

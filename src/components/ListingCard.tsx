@@ -4,6 +4,7 @@ import Size from "@/assets/svg/Size.svg";
 import ZipCodeIcon from "@/assets/svg/ZipCode.svg";
 import { realEstateMany } from "@/api/apiTypes";
 import { useNavigate } from "react-router-dom";
+import Tag from "./Tag";
 
 interface ListingCardProps {
 	listing: realEstateMany;
@@ -18,10 +19,13 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 			onClick={() => console.log(navigate(`/listing/${listing.id}`))}
 			className="flex cursor-pointer flex-col items-start flex-shrink-0 w-[384px] h-[] hover:shadow-primary-shadow duration-300 transition-all">
 			<div className="relative h-[307px] w-full self-stretch">
-				{/* Image container should be relative */}
+				<Tag
+					text={listing.is_rental === 1 ? "ქირავდება" : "იყიდება"}
+					customClass="absolute top-[23px] left-[23px]"
+				/>
 				<img
 					src={listing.image}
-					alt="Listing" // Ensures the image fills the container // Ensures the image covers the entire container without distortion
+					alt="Listing"
 					className="rounded-t-[14px] object-cover w-full h-full"
 				/>
 			</div>
@@ -37,7 +41,9 @@ const ListingCard = ({ listing }: ListingCardProps) => {
 							src={LocationIcon}
 							alt="Location marker"
 						/>
-						<p className="main-text-70">{listing.address}</p>
+						<p className="main-text-70">
+							{listing.city.name}, {listing.address}
+						</p>
 					</div>
 				</div>
 				<div className="flex gap-8 items-center">

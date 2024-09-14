@@ -13,6 +13,7 @@ import {
 	checkEmail,
 	checkPhoneNumbers,
 } from "@/lib/validationChecker";
+import FullScreenBlur from "./Layout/FullScreenBlur";
 
 interface AddAgentFullscreenPopupProps {
 	isActive: boolean;
@@ -66,11 +67,7 @@ const AddAgentFullscreenPopup = ({
 	}, [isActive]);
 
 	return (
-		<section
-			className={`fixed w-full h-dvh bg-blur backdrop-blur-[5px] z-20 top-0 left-0 items-center justify-center ${
-				isActive ? "flex animate-fade-in-up" : "hidden"
-			}`}
-			id={"agent-adder"}>
+		<FullScreenBlur isActive={isActive}>
 			<div className="w-[1009px] h-[784px] flex-shrink-0 rounded-[10px] bg-primary-white shadow-primary-shadow flex flex-col items-center py-[87px]">
 				<h1 className="main-text-3xl-100">აგენტის დამატება</h1>
 				<InputSectionWrapper>
@@ -146,7 +143,7 @@ const AddAgentFullscreenPopup = ({
 					</div>
 				</InputSectionWrapper>
 			</div>
-		</section>
+		</FullScreenBlur>
 	);
 };
 

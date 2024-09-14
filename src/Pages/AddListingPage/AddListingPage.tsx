@@ -66,7 +66,7 @@ const AddListingPage = () => {
 			formData.append("is_rental", towChoiceNumber.toString());
 			if (agent) formData.append("agent_id", agent.id.toString());
 
-			postListing(formData);
+			postListing(formData).then(() => navigate("/"));
 		}
 	};
 
