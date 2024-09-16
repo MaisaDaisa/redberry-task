@@ -56,7 +56,7 @@ export type realEstatePost = {
   agent_id: number
   bedrooms: number
   is_rental: 1 | 0
-  image: string
+  image: File
 }
 
 export type realEstateOne = {

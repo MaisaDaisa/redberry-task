@@ -15,7 +15,7 @@ const CtaL = ({
   return (
     <Cta
       ctaText={ctaText}
-      onClickHandler={() => onClickHandler}
+      onClickHandler={onClickHandler}
       type={type}
       textClass="main-text-customCLR"
       customPaddings="px-4 py-[10px] h-[47px]"

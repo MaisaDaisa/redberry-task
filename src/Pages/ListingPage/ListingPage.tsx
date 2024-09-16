@@ -31,17 +31,20 @@ const ListingPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const recommendedListingsResponse = await getAllListings()
-        setRecommendedListings([
-          ...recommendedListingsResponse,
-          ...recommendedListingsResponse,
-          ...recommendedListingsResponse,
-        ])
-
+        // Fetch the specific listing by id
         if (id && checkNumbers(id)) {
           const specificListingResponse = await getListingById(id)
           setSpecificListing(specificListingResponse)
         }
+
+        // Fetch all listings and filter the ones that are in the same region
+        const recommendedListingsResponse: realEstateMany[] =
+          await getAllListings()
+        const recommendedListings = recommendedListingsResponse.filter(
+          (listing) =>
+            listing.city.region_id === specificListing?.city.region_id
+        )
+        setRecommendedListings(recommendedListings)
       } catch (error) {
         console.error('Error fetching data:', error)
       } finally {
@@ -247,7 +250,7 @@ const ListingPage = () => {
       >
         <div
           className="relative flex h-[222px] w-[623px] flex-shrink-0 items-center justify-center rounded-[20px] bg-primary-white shadow-primary-shadow"
-          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

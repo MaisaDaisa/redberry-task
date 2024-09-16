@@ -41,14 +41,14 @@ const InputField = ({
   const [checkerState, setCheckerState] = useState<CheckerStateTypes>(
     CheckerStateTypes.NORMAL
   )
-  const [hasInteracted, setHasInteracted] = useState(false)
+  const [hasInteracted, setHasInteracted] = useState(value !== '')
 
   // UseRef because each reusable component should have their own timeout or else they will interfere with each other
   // P.S Spent 3 hours debugging this issue
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    if (checker && hasInteracted) {
+    if (checker && (hasInteracted || value !== '')) {
       // Clear any existing timeout before starting a new one
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current)
@@ -67,9 +67,16 @@ const InputField = ({
       // Cleanup timeout when the component unmounts or value changes
       return () => {
         if (typingTimeoutRef.current) {
+          setCheckerState(CheckerStateTypes.NORMAL)
           clearTimeout(typingTimeoutRef.current)
         }
       }
+    }
+  }, [value, hasInteracted])
+
+  useEffect(() => {
+    if (value === '') {
+      setCheckerState(CheckerStateTypes.NORMAL)
     }
   }, [value])
 

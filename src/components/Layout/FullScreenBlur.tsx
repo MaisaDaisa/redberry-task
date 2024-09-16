@@ -24,9 +24,9 @@ const FullScreenBlur = ({
       className={`bg-blur fixed left-0 top-0 z-20 h-dvh w-full items-center justify-center backdrop-blur-[5px] ${
         isActive ? 'flex animate-fade-in-up' : 'hidden'
       }`}
-      onClick={() => setActiveState(false)}
+      onMouseDown={() => setActiveState(false)}
     >
-      {/* NOTE: KEEP IN MIND! that the children require event.stopPropagation() to prevent the parent from closing when clicked  */}
+      {/* NOTE: KEEP IN MIND! that the children require onMouseDown event.stopPropagation() to prevent the parent from closing when clicked  */}
       {children}
     </section>
   )

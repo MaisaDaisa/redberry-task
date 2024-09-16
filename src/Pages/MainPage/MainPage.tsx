@@ -98,26 +98,34 @@ const ListingPage = () => {
           selectedRegions.some((region) => region.id === listing.city.region.id)
 
         // Filter by Bedrooms
-        const bedroomMatch =
-          numberOfBedrooms === '0' ||
-          listing.bedrooms === parseInt(numberOfBedrooms)
+        const bedroomMatch = numberOfBedrooms !== '0'
+        listing.bedrooms === parseInt(numberOfBedrooms)
 
         // Filter by Price
         const minPriceMatch =
-          minPrice === '' || listing.price >= parseInt(minPrice)
+          minPrice !== '' && listing.price >= parseInt(minPrice)
         const maxPriceMatch =
-          maxPrice === '' || listing.price <= parseInt(maxPrice)
+          maxPrice !== '' && listing.price <= parseInt(maxPrice)
 
-        const priceMatch = minPriceMatch && maxPriceMatch
+        const priceMatch = minPriceMatch || maxPriceMatch
 
         // Filter by Area
-        const minAreaMatch = minArea === '' || listing.area >= parseInt(minArea)
-        const maxAreaMatch = maxArea === '' || listing.area <= parseInt(maxArea)
+        const minAreaMatch = minArea !== '' && listing.area >= parseInt(minArea)
+        const maxAreaMatch = maxArea !== '' && listing.area <= parseInt(maxArea)
 
-        const areaMatch = minAreaMatch && maxAreaMatch
+        const areaMatch = minAreaMatch || maxAreaMatch
 
-        // Return listings that satisfy **all** active filters
-        return priceMatch || areaMatch || regionMatch || bedroomMatch
+        console.log(
+          `Region: ${regionMatch}, Bedrooms: ${bedroomMatch}, Price: ${priceMatch}, Area: ${areaMatch}`
+        )
+        /*
+
+        გაფილტვრის შედეგად დაბრუნდება მხოლოდ ის
+        ლისტინგები, რომლებიც დააკმაყოფილებს ერთ-ერთ კრიტერიუმს მაინც
+
+        */
+        // Return listings that satisfy at least one of the conditions
+        return regionMatch || bedroomMatch || priceMatch || areaMatch
       })
 
       setFilteredListings(NewData)
