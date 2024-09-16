@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 interface FullScreenBlurProps {
   isActive: boolean
@@ -11,6 +11,14 @@ const FullScreenBlur = ({
   isActive,
   setActiveState,
 }: FullScreenBlurProps) => {
+  useEffect(() => {
+    // Disable scrolling when the popup is active
+    if (isActive) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'auto'
+    }
+  }, [isActive])
   return (
     <section
       className={`bg-blur fixed left-0 top-0 z-20 h-dvh w-full items-center justify-center backdrop-blur-[5px] ${
@@ -18,6 +26,7 @@ const FullScreenBlur = ({
       }`}
       onClick={() => setActiveState(false)}
     >
+      {/* NOTE: KEEP IN MIND! that the children require event.stopPropagation() to prevent the parent from closing when clicked  */}
       {children}
     </section>
   )

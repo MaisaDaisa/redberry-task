@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import FilterConfirmButton from '../FilterConfirmButton'
-import { checkNumbers } from '@/lib/validationChecker'
+import { checkOneNumber } from '@/lib/validationChecker'
 
 interface FilterDropDownBedroomsProps {
   valueState: string
@@ -12,7 +12,7 @@ const FilterDropDownBedrooms = memo(
     const [localValue, setLocalValue] = useState(valueState)
 
     const handleSetNumberOfBedrooms = (value: string) => {
-      if (checkNumbers(value) || value === '') {
+      if (checkOneNumber(value) || value === '') {
         setLocalValue(value)
       }
     }

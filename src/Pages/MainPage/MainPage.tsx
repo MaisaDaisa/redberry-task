@@ -1,6 +1,5 @@
 import CtaL from '@/components/CtaL'
 import { CtaTypes } from '@/components/Cta'
-import ListingCard from '@/components/ListingCard'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
@@ -10,24 +9,28 @@ import FilterDropDownButtons from '@/Pages/MainPage/Filter/FilterDropDownButtons
 import RangePicker, { PostFixTypesEnum } from '@/components/RangePicker'
 import FilterDropDownRegion from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownRegion'
 import FilterDropDownBedrooms from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownBedrooms'
-
+import DisplayListings from '@/Pages/MainPage/DisplayListings'
 import FilterDisplayText from '@/Pages/MainPage/Filter/FilterDisplayText'
 
 const ListingPage = () => {
   const navigate = useNavigate()
+  // Agent Popup Control
   const [isAgentPopupActive, setIsAgentPopupActive] = useState(false)
-  const [listings, setListings] = useState<realEstateMany[]>([])
+  // Listing Control
+  const listings = useRef<realEstateMany[]>([])
   const [filteredListings, setFilteredListings] = useState<realEstateMany[]>([])
 
   // Regions
   const regionsData = useRef<region[]>([])
   const [selectedRegions, setSelectedRegions] = useState<region[]>([])
-  // Dropdown Filters State
+  // Dropdown Filters State, 0 means no filter is active
   const [activeFilters, setActiveFilters] = useState<number>(0)
   // Filters Data
   const [numberOfBedrooms, setNumberOfBedrooms] = useState<string>('0')
+  // Price
   const [minPrice, setMinPrice] = useState<string>('')
   const [maxPrice, setMaxPrice] = useState<string>('')
+  // Area
   const [minArea, setMinArea] = useState<string>('')
   const [maxArea, setMaxArea] = useState<string>('')
   // FilterBy
@@ -35,11 +38,11 @@ const ListingPage = () => {
   useEffect(() => {
     const fetchListings = async () => {
       try {
-        // Listings
+        // Get Listings
         const AllListings: realEstateMany[] = await getAllListings()
-        setListings(AllListings)
+        listings.current = AllListings
         setFilteredListings(AllListings)
-        // Regions
+        // Get Regions
         const regionsResponse: region[] = await getRegions()
         regionsData.current = regionsResponse
       } catch (error) {
@@ -47,6 +50,10 @@ const ListingPage = () => {
       }
     }
     fetchListings()
+  }, [])
+
+  const handleActivateAgentPopup = useCallback(() => {
+    setIsAgentPopupActive(true)
   }, [])
 
   const handleSetActiveFilter = useCallback(
@@ -68,9 +75,8 @@ const ListingPage = () => {
     setMaxPrice('')
     setMinArea('')
     setMaxArea('')
-
     // Reset Filtered Listings to include all listings
-    setFilteredListings(listings)
+    setFilteredListings(listings.current)
   }
 
   const filterListings = () => {
@@ -82,33 +88,38 @@ const ListingPage = () => {
       minArea === '' &&
       maxArea === ''
     ) {
-      // If no filters are applied
-      setFilteredListings(listings)
+      // If no filters are applied, return all listings
+      setFilteredListings(listings.current)
     } else {
-      const NewData = listings.filter((listing) => {
-        // Please Keep in mind that this is a very simple filter logic and i know, that
-        // the filtering logic should be done on the backend and not on the client side especially if the data is large
+      const NewData = listings.current.filter((listing) => {
+        // Filter by Regions
+        const regionMatch =
+          selectedRegions.length !== 0 &&
+          selectedRegions.some((region) => region.id === listing.city.region.id)
 
-        // NOTE:
-        // გაფილტვრის შედეგად დაბრუნდება მხოლოდ ის ლისტინგები,
-        // რომლებიც დააკმაყოფილებს ერთ-ერთ კრიტერიუმს მაინც
-        return (
-          // Filter by Regions (if any regions are selected)
-          (selectedRegions.length === 0 ||
-            selectedRegions.some(
-              (region) => region.id === listing.city.region.id
-            )) &&
-          // Filter by Bedrooms (if a bedroom filter is selected)
-          (numberOfBedrooms === '0' ||
-            listing.bedrooms === parseInt(numberOfBedrooms)) &&
-          // Filter by Price (if price filters are selected)
-          (minPrice === '' || listing.price >= parseInt(minPrice)) &&
-          (maxPrice === '' || listing.price <= parseInt(maxPrice)) &&
-          // Filter by Area (if area filters are selected)
-          (minArea === '' || listing.area >= parseInt(minArea)) &&
-          (maxArea === '' || listing.area <= parseInt(maxArea))
-        )
+        // Filter by Bedrooms
+        const bedroomMatch =
+          numberOfBedrooms === '0' ||
+          listing.bedrooms === parseInt(numberOfBedrooms)
+
+        // Filter by Price
+        const minPriceMatch =
+          minPrice === '' || listing.price >= parseInt(minPrice)
+        const maxPriceMatch =
+          maxPrice === '' || listing.price <= parseInt(maxPrice)
+
+        const priceMatch = minPriceMatch && maxPriceMatch
+
+        // Filter by Area
+        const minAreaMatch = minArea === '' || listing.area >= parseInt(minArea)
+        const maxAreaMatch = maxArea === '' || listing.area <= parseInt(maxArea)
+
+        const areaMatch = minAreaMatch && maxAreaMatch
+
+        // Return listings that satisfy **all** active filters
+        return priceMatch || areaMatch || regionMatch || bedroomMatch
       })
+
       setFilteredListings(NewData)
     }
   }
@@ -122,16 +133,9 @@ const ListingPage = () => {
       <div className="flex items-center justify-between">
         <div className="border-main-primary-gray-border flex w-auto items-center gap-6 rounded-[10px] border p-[6px]">
           {/* 
-
-		Very Simple Logic:
-
-		Every Filter has its own Number if number of active filter is equal to the number of the filter
-		then the dropdown will be active otherwise it will be inactive
-
-		TODO: This Logic can be improved by having a state for each filter and then toggling the state
-		But it is not heavy on the Device to render this simple Element
-			
-		*/}
+            NOTE: This Logic can be improved by having a state for each filter and then toggling the state
+            But it is not heavy on the Device to render this simple Element    
+		    */}
           <>
             <FilterDropDownButtons
               filterText="რეგიონი"
@@ -197,7 +201,7 @@ const ListingPage = () => {
           <CtaL
             ctaText="აგენტის დამატება"
             type={CtaTypes.secondary}
-            onClickHandler={() => setIsAgentPopupActive(true)}
+            onClickHandler={() => handleActivateAgentPopup()}
           />
         </div>
       </div>
@@ -271,11 +275,10 @@ const ListingPage = () => {
           გასუფთავება
         </p>
       </div>
-      <div className="justify-left mt-8 flex flex-wrap items-center gap-5 pb-[300px]">
-        {filteredListings.map((listing) => (
-          <ListingCard key={listing.id} listing={listing} />
-        ))}
-      </div>
+      {/* Display Listings here */}
+      <DisplayListings filteredListings={filteredListings} />
+
+      {/* Invisible component hidden by default until state updated */}
       <AddAgentFullscreenPopup
         isActive={isAgentPopupActive}
         setIsActiveState={setIsAgentPopupActive}

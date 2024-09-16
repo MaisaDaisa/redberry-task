@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import InputSectionWrapper from '@/components/InputSectionWrapper'
 import AddListPageSectionWrapper from '@/Pages/AddListingPage/AddListPageSectionWrapper'
 import InputField from '@/components/InputField'
@@ -39,32 +39,21 @@ const AddAgentFullscreenPopup = ({
       checkPhoneNumbers(agentPhone) &&
       agentProfile
     ) {
-      const formData = new FormData()
-      // Creating the agent object
-      formData.append('name', agentName)
-      formData.append('surname', agentLastName)
-      formData.append('email', agentEmail)
-      formData.append('phone', agentPhone)
-      formData.append('avatar', agentProfile)
-      // Posting the agent
-      console.log(formData)
-
+      const formData = {
+        name: agentName,
+        surname: agentLastName,
+        email: agentEmail,
+        phone: agentPhone,
+        avatar: agentProfile,
+      }
       await postAgents(formData)
-      invokeOnSend && invokeOnSend()
+      // Invoking the callback function to update the list
 
+      invokeOnSend && invokeOnSend()
       // Closing the popup
       setIsActiveState(false)
     }
   }
-
-  useEffect(() => {
-    // Disable scrolling when the popup is active
-    if (isActive) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'auto'
-    }
-  }, [isActive])
 
   return (
     <FullScreenBlur isActive={isActive} setActiveState={setIsActiveState}>
@@ -76,7 +65,6 @@ const AddAgentFullscreenPopup = ({
         <InputSectionWrapper>
           <AddListPageSectionWrapper>
             <InputField
-              key={111}
               title="სახელი"
               value={agentName}
               required={true}
@@ -89,7 +77,6 @@ const AddAgentFullscreenPopup = ({
               }}
             />
             <InputField
-              key={222}
               title="გვარი"
               required={false}
               value={agentLastName}

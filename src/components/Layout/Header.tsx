@@ -1,15 +1,15 @@
-import redberryLogo from "@/assets/redberryLogo.png";
+import redberryLogo from '@/assets/img/redberryLogo.png'
 
 const Header = () => {
-	return (
-		<header className="flex justify-start px-globalPx py-[38px] border border-primary-gray-border">
-			<div>
-				<a href="/">
-					<img src={redberryLogo} alt="Logo" width={150} height={24} />
-				</a>
-			</div>
-		</header>
-	);
-};
+  return (
+    <header className="flex justify-start border border-primary-gray-border px-globalPx py-[38px]">
+      <div>
+        <a href="/">
+          <img src={redberryLogo} alt="Logo" className="h-6 w-[150px]" />
+        </a>
+      </div>
+    </header>
+  )
+}
 
-export default Header;
+export default Header

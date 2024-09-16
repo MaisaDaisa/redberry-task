@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, memo } from 'react'
 import CheckBoxWithText from '@/components/CheckBoxWithText'
 import { region } from '@/api/apiTypes'
 import FilterConfirmButton from '@/Pages/MainPage/Filter/FilterConfirmButton'
@@ -9,46 +9,54 @@ interface FilterDropDownRegionProps {
   setParentRegions: (regions: region[]) => void
 }
 
-const FilterDropDownRegion = ({
-  selectedRegions,
-  regionsData,
-  setParentRegions,
-}: FilterDropDownRegionProps) => {
-  const [localSelectedRegions, setLocalSelectedRegions] =
-    useState<region[]>(selectedRegions)
+const FilterDropDownRegion = memo(
+  ({
+    selectedRegions,
+    regionsData,
+    setParentRegions,
+  }: FilterDropDownRegionProps) => {
+    const [localSelectedRegions, setLocalSelectedRegions] =
+      useState<region[]>(selectedRegions)
 
-  const handleMultiChoiceRegionClick = useCallback(
-    (regionValue: region) => {
-      if (localSelectedRegions.includes(regionValue)) {
-        setLocalSelectedRegions(
-          localSelectedRegions.filter((region) => region !== regionValue)
-        )
-      } else {
-        setLocalSelectedRegions([...localSelectedRegions, regionValue])
-      }
-    },
-    [localSelectedRegions]
-  )
+    const handleMultiChoiceRegionClick = useCallback(
+      (regionValue: region) => {
+        if (localSelectedRegions.includes(regionValue)) {
+          setLocalSelectedRegions(
+            localSelectedRegions.filter((region) => region !== regionValue)
+          )
+        } else {
+          setLocalSelectedRegions([...localSelectedRegions, regionValue])
+        }
+      },
+      [localSelectedRegions]
+    )
 
-  return (
-    <>
-      <div className="flex w-[678px] flex-wrap content-end items-end gap-x-[50px] gap-y-4">
-        {regionsData.map((region) => (
-          <CheckBoxWithText
-            isChecked={localSelectedRegions.includes(region)}
-            key={region.id}
-            text={region.name}
-            onClickHandler={() => handleMultiChoiceRegionClick(region)}
-          />
-        ))}
-      </div>
-      <FilterConfirmButton
-        onConfirm={() => {
-          setParentRegions(localSelectedRegions)
-        }}
-      />
-    </>
-  )
-}
+    return (
+      <>
+        <div className="flex w-[678px] flex-wrap content-end items-end gap-x-[50px] gap-y-4">
+          {regionsData.map((region) => (
+            <CheckBoxWithText
+              isChecked={localSelectedRegions.includes(region)}
+              key={region.id}
+              text={region.name}
+              onClickHandler={() => handleMultiChoiceRegionClick(region)}
+            />
+          ))}
+        </div>
+        <FilterConfirmButton
+          onConfirm={() => {
+            setParentRegions(localSelectedRegions)
+          }}
+        />
+      </>
+    )
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.selectedRegions === nextProps.selectedRegions &&
+      prevProps.regionsData === nextProps.regionsData
+    )
+  }
+)
 
 export default FilterDropDownRegion

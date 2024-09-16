@@ -1,0 +1,129 @@
+@import url("./fontFamily.css");
+
+@layer utilities {
+
+    /*
+      Instead of using the default Tailwind classes, we can use our custom classes
+      please keep the classes sorted by the :
+      1) font-size
+      2) Opacity
+      3) ont-weight 
+      4) Custom Color
+    */
+  
+    /* XS */
+    .main-text-xs-100-400 {
+      @apply text-xs text-primary-text-100 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-xs-40-400 {
+      @apply text-xs text-primary-text-40 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-xs-100-500-customCLR {
+      @apply text-xs font-firaGO font-medium leading-normal text-center;
+    }
+  
+    /* SM */
+    .main-text-sm-40-400 {
+      @apply text-sm text-primary-text-40 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-sm-40-400-customCLR {
+      @apply text-sm text-center font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-sm-100 {
+      @apply text-sm text-primary-text-100 text-center font-firaGO font-medium leading-normal;
+    }
+  
+    .main-text-sm-100-400 {
+      @apply text-sm text-primary-text-100 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-sm-100-400-customCLR {
+      @apply text-sm  text-center font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-sm-80 {
+      @apply text-sm text-primary-text-80 text-center font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-sm-100-500-customCLR {
+      @apply text-sm  text-center font-firaGO font-medium leading-normal;
+    }
+  
+    /* Base */
+    .main-text {
+      @apply text-base text-primary-text-100 text-center font-firaGO font-medium leading-normal;
+    }
+  
+    .main-text-70 {
+      @apply text-base text-primary-text-70 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-100-400 {
+      @apply text-base text-primary-text-100 font-firaGO font-normal leading-normal;
+    }
+  
+    .main-text-customCLR {
+      @apply text-base  text-center font-firaGO font-medium leading-normal;
+    }
+  
+    /* LG */
+  
+  
+  
+    /* XL */
+    .main-text-xl-100-400 {
+      @apply text-xl text-primary-text-100 font-firaGO font-normal leading-normal;
+    }
+  
+    /* 2XL */
+    .main-text-2xl-100 {
+      @apply text-2xl text-primary-text-100 font-firaGO font-bold leading-normal;
+    }
+  
+  
+    .main-text-3xl-100 {
+      @apply text-3xl text-primary-text-100 font-firaGO font-medium leading-normal;
+    }
+  
+    .main-text-5xl-100 {
+      @apply text-5xl text-primary-text-100 font-firaGO font-bold leading-normal;
+    }
+  
+    .white-text-xs-500 {
+      @apply text-xs text-primary-white text-center font-firaGO font-medium leading-normal tracking-wider;
+    }
+  
+  
+  
+    /* White Text */
+    .white-text-xl-500 {
+      @apply text-xl text-primary-white text-center font-firaGO font-medium leading-normal tracking-widest;
+    }
+  
+  
+  
+    /* Gray Text */
+    .gray-text-xs-500 {
+      @apply text-xs text-gray-text-color text-center font-firaGO font-medium leading-normal;
+    }
+  
+    .gray-text-sm-400 {
+      @apply text-sm text-gray-text-color font-firaGO font-normal leading-normal;
+    }
+  
+    .gray-text {
+      @apply text-base text-gray-text-color font-firaGO font-normal leading-normal;
+    }
+  
+    .gray-text-2xl {
+      @apply text-2xl text-gray-text-color font-firaGO font-normal leading-normal;
+    }
+  
+    .secondary-text {
+      @apply text-base text-secondary-text-100 font-helvetica font-medium leading-normal uppercase;
+    }
+  }
