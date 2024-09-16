@@ -46,6 +46,14 @@
   font-weight: 400;
   line-height: normal;
 }
+.main-text-sm-40-400-customCLR {
+  text-align: center;
+  font-family: FiraGO;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
 
 .main-text-sm-100{
   color: theme('colors.primary-text-100');
