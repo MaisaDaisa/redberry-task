@@ -271,7 +271,7 @@ const ListingPage = () => {
           გასუფთავება
         </p>
       </div>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-5 pb-[300px]">
+      <div className="justify-left mt-8 flex flex-wrap items-center gap-5 pb-[300px]">
         {filteredListings.map((listing) => (
           <ListingCard key={listing.id} listing={listing} />
         ))}

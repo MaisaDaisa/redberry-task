@@ -140,10 +140,10 @@ const RangePicker = ({
               {(postFixType === PostFixTypesEnum.GEL
                 ? numberInputsForGel
                 : numberInputsForArea
-              ).map((number) => (
+              ).map((number, index) => (
                 <p
                   className="main-text-sm-100-400 cursor-pointer"
-                  key={number}
+                  key={inputField.id + index}
                   onClick={() => {
                     if (inputField.id === InputEnums.from) {
                       setLocalMinValue(number.toString())

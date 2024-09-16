@@ -91,7 +91,6 @@ const InputField = ({
     >
       {type === InputFieldType.TEXT ? (
         <input
-          id="input_1"
           type="text"
           value={value}
           className={`input-field main-text-100-400 h-[42px] w-full rounded-md border border-primary-gray-border p-[10px] outline-none ${
@@ -103,7 +102,6 @@ const InputField = ({
         />
       ) : type === InputFieldType.TEXTAREA ? (
         <textarea
-          id="input_1"
           value={value}
           className={`input-field main-text-100-400 h-[135px] w-full resize-none rounded-md border border-primary-gray-border p-[10px] outline-none ${
             checker && checkerState === CheckerStateTypes.INVALID
