@@ -26,7 +26,8 @@ const RangePicker = ({
   const [localMinValue, setLocalMinValue] = useState(minValueState)
   const [localMaxValue, setLocalMaxValue] = useState(maxValueState)
 
-  // According to the design, these values are these
+  // DESIGN MISGUIDANCE: The design shows that the values for the Area size is 50000 for all the inputs
+  // According to the design, these values are as such:
   const numberInputsForGel = [50000, 100000, 150000, 200000, 300000]
   const numberInputsForArea = [50000, 50000, 50000, 50000, 50000]
 

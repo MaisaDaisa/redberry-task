@@ -45,6 +45,11 @@ const AddListingPage = () => {
 
   const navigate = useNavigate()
 
+  const deleteAndGoHome = useCallback(() => {
+    localStorage.removeItem('listingInputs')
+    navigate('/')
+  }, [])
+
   const handleAddListing = () => {
     if (
       checkWordCount(description) &&
@@ -68,8 +73,7 @@ const AddListingPage = () => {
       if (agent) formData.append('agent_id', agent.id.toString())
 
       postListing(formData).then(() => {
-        localStorage.removeItem('listingInputs')
-        navigate('/')
+        deleteAndGoHome()
       })
     }
   }
@@ -307,9 +311,7 @@ const AddListingPage = () => {
           <Cta
             type={CtaTypes.secondary}
             ctaText="გაუქმება"
-            onClickHandler={() => {
-              navigate('/')
-            }}
+            onClickHandler={() => deleteAndGoHome()}
           />
           <Cta
             type={CtaTypes.primary}
