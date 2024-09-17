@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import arrowIcon from '@/assets/svg/filterarrow.svg'
 import TitleH4Component from './TitleH4Component'
 import { agentGetMany, cityGet, region } from '@/api/apiTypes'
@@ -25,6 +25,7 @@ const DropDownSelect = ({
   const [selected, setSelected] = useState<agentGetMany | cityGet | region>(
     selectedValue! || items[0]
   )
+  // State to toggle the dropdown to active or inactive
   const [toggleCombo, setToggleCombo] = useState(false)
 
   const handleSelectedItem = (item: agentGetMany | cityGet | region) => {

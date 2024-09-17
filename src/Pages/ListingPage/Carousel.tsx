@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import ListingCard from '@/components/ListingCard'
 import arrowLeft from '@/assets/svg/arrowLeft.svg'
 import { realEstateMany } from '@/api/apiTypes'

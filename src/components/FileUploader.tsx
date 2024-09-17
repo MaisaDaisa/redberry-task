@@ -1,5 +1,5 @@
 import TitleH4Component from '@/components/TitleH4Component'
-import { useState, useRef } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import plusCircle from '@/assets/svg/plus-circle.svg'
 import trashCan from '@/assets/svg/trashCan.svg'
 
@@ -20,11 +20,14 @@ const FileUploader = ({
   const [dropRejected, setDropRejected] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
 
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-  }
+  const handleDragOver = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault()
+    },
+    []
+  )
 
-  const uploadFile = (file: File) => {
+  const uploadFile = useCallback((file: File) => {
     if (file && file.size <= 1048576) {
       // 1MB
       setDropRejected(false)
@@ -38,29 +41,36 @@ const FileUploader = ({
     } else {
       setDropRejected(true)
     }
-  }
+  }, [])
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null
-    uploadFile(file!)
-  }
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files ? event.target.files[0] : null
+      uploadFile(file!)
+    },
+    []
+  )
 
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    // Prevent the default behavior of the browser when a file is dropped
     event.preventDefault()
     const file = event.dataTransfer.files[0]
     uploadFile(file)
-  }
+  }, [])
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setPreview(null)
     setFileState(null)
     inputRef.current!.value = ''
-  }
+  }, [])
 
-  // Please keep in mind that this used to be a component using react dropzone
-  // after spending 4 hours trying to make it work, I decided to use the native drag and drop
+  // Please keep in mind that this used to be a component that used react dropzone library.
+  // after spending 4 hours trying to make it work, I decided to use the native drag and drop after
+  // finding a stupid reason why it didn't work.
+
   // FUTURE-NOTE: react-dropzone is a great library, but it adds an additional path attribute
-  // to the file object which messes up the whole process somehow RIP to my 4 hours
+  // to the file object which is not present in File type by default, thus messes up the whole process of submitting files.
+  // RIP my 4 hours
 
   return (
     <TitleH4Component
@@ -102,7 +112,7 @@ const FileUploader = ({
               alt="delete"
               width={14}
               height={14}
-              className="absolute translate-x-[3px] translate-y-[3px] cursor-pointer"
+              className="absolute translate-x-[3px] translate-y-[3px] cursor-pointer transition-transform hover:scale-125"
               onClick={handleDelete}
             />
           </div>

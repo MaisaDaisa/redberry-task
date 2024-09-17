@@ -19,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     // Page for viewing a specific listing
-    path: '/listing/:id',
+    path: '/listing/:idParam',
     element: <ListingPage />,
   },
 ])

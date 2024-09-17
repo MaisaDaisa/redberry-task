@@ -35,8 +35,9 @@ const AddAgentFullscreenPopup = ({
 
   useBeforeUnload(
     useCallback(() => {
-      // Saving the data to the local storage
-      // Not saving the profile picture
+      // Saving the data to the local storage when page is unloaded
+      // NOTE: Not saving the profile picture because localstorage
+      // can only be 5MB per app per browser and is not recommended in general
       localStorage.agentInputs = JSON.stringify({
         agentName: agentName,
         agentLastName: agentLastName,
@@ -108,9 +109,10 @@ const AddAgentFullscreenPopup = ({
                 validationFunction: minimumSymbols,
               }}
             />
+            {/*DESIGN MISGUIDANCE:  Keep in mind by documentation this field is required but it is not required by the design */}
             <InputField
               title="გვარი"
-              required={false}
+              required={true}
               value={agentLastName}
               stateSetter={setAgentLastName}
               checker={{
@@ -132,9 +134,10 @@ const AddAgentFullscreenPopup = ({
                 checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
               }}
             />
+            {/*DESIGN MISGUIDANCE:  Keep in mind by documentation this field is required but it is not required by the design */}
             <InputField
               title="ტელეფონის ნომერი"
-              required={false}
+              required={true}
               stateSetter={setAgentPhone}
               value={agentPhone}
               checker={{

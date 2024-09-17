@@ -26,7 +26,11 @@ const FullScreenBlur = ({
       }`}
       onMouseDown={() => setActiveState(false)}
     >
-      {/* NOTE: KEEP IN MIND! that the children require onMouseDown event.stopPropagation() to prevent the parent from closing when clicked  */}
+      {/* 
+      NOTE: KEEP IN MIND! that the children require onMouseDown event.stopPropagation() 
+      to prevent the parent from closing when children is clicked  
+      This can be solved by implementing useEffect and Ref to child, however it makes component load slower by 2ms
+      */}
       {children}
     </section>
   )
