@@ -17,7 +17,7 @@ const ListingCard = ({ listing }: ListingCardProps) => {
   return (
     <article
       onClick={() => console.log(navigate(`/listing/${listing.id}`))}
-      className="flex h-[] w-[384px] flex-shrink-0 cursor-pointer flex-col items-start transition-all duration-300 hover:shadow-primary-shadow"
+      className="flex w-[384px] flex-shrink-0 cursor-pointer flex-col items-start transition-all duration-300 hover:shadow-primary-shadow"
     >
       <div className="relative h-[307px] w-full self-stretch">
         <Tag
