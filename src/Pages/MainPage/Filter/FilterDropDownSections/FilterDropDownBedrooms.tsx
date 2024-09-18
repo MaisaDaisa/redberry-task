@@ -3,17 +3,20 @@ import FilterConfirmButton from '../FilterConfirmButton'
 import { checkOneNumber } from '@/lib/validationChecker'
 
 interface FilterDropDownBedroomsProps {
-  valueState: string
-  setValueState: (value: string) => void
+  firstValue: string
+  setParentValue: (value: string) => void
 }
 
 const FilterDropDownBedrooms = memo(
-  ({ valueState, setValueState }: FilterDropDownBedroomsProps) => {
-    const [localValue, setLocalValue] = useState(valueState)
+  ({ firstValue, setParentValue }: FilterDropDownBedroomsProps) => {
+    const [localValue, setLocalValue] = useState(firstValue)
 
     const handleSetNumberOfBedrooms = (value: string) => {
-      if (checkOneNumber(value) || value === '') {
-        setLocalValue(value)
+      const lastChar = value.slice(-1)
+      if (checkOneNumber(lastChar) || value !== '') {
+        setLocalValue(lastChar)
+      } else {
+        setLocalValue('0')
       }
     }
 
@@ -25,10 +28,11 @@ const FilterDropDownBedrooms = memo(
           onChange={(e) => handleSetNumberOfBedrooms(e.target.value)}
           className="main-text-sm-40-400 border-gary-text-color h-[42px] w-[42px] self-start rounded-md border p-[10px] text-center outline-none"
         />
-        <FilterConfirmButton onConfirm={() => setValueState(localValue)} />
+        <FilterConfirmButton onConfirm={() => setParentValue(localValue)} />
       </>
     )
-  }
+  },
+  (prevProps, nextProps) => prevProps.firstValue === nextProps.firstValue
 )
 
 export default FilterDropDownBedrooms

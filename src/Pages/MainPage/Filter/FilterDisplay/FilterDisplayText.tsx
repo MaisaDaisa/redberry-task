@@ -1,5 +1,5 @@
 import React from 'react'
-import xDelete from '../../../assets/svg/x-delete.svg'
+import xDelete from '@/assets/svg/x-delete.svg'
 
 type FilterDisplayTextProps = {
   text: string

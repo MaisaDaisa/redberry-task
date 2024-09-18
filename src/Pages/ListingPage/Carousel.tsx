@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import ListingCard from '@/components/ListingCard'
 import arrowLeft from '@/assets/svg/arrowLeft.svg'
 import { realEstateMany } from '@/api/apiTypes'
@@ -9,36 +9,36 @@ interface CarouselProps {
 
 const Carousel = ({ recommendedListings }: CarouselProps) => {
   const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0)
-  // Constants for the carousel
-  // Width of each carousel item plus the gap between them
-  const carouselItemWidth = 404
-  // Maximum number of items in the carousel
-  const carouselMaxItems = recommendedListings?.length || 0
-  // Number to increment the index by
-  const increment = 4
 
-  // Function to handle left click, decrease index
+  // Constants for the carousel
+  const carouselItemWidth = 404 // Width of each carousel item plus gap
+  const carouselMaxItems = recommendedListings?.length || 0
+  const increment = 4 // Number to increment by
+
+  // Function to handle left click (decrease index)
   const handleCarouselLeft = () => {
     setCurrentCarouselIndex((prevIndex) =>
       prevIndex > 0 ? prevIndex - increment : carouselMaxItems - increment
     )
   }
 
-  // Function to handle right click, increase index
-  const handleCarouselRight = useCallback(() => {
+  // Function to handle right click (increase index)
+  const handleCarouselRight = () => {
     setCurrentCarouselIndex((prevIndex) =>
       prevIndex < carouselMaxItems - increment ? prevIndex + increment : 0
     )
-  }, [carouselMaxItems])
+  }
 
   if (recommendedListings.length === 0) return null
+
   return (
-    <div className="h- mt-[53px] w-full">
+    <div className="mt-[53px] w-full">
       <h2 className="main-text-3xl-100">ბინები მსგავს ლოკაციაზე</h2>
       <div className="relative mt-[52px] flex w-full items-center">
         {/* Left Arrow */}
         <img
           src={arrowLeft}
+          key={'left'}
           alt="go-left"
           className="absolute -left-[65px] z-10 cursor-pointer"
           onClick={handleCarouselLeft}
@@ -55,8 +55,11 @@ const Carousel = ({ recommendedListings }: CarouselProps) => {
               }px)`,
             }}
           >
-            {recommendedListings?.map((listing) => (
-              <ListingCard listing={listing} />
+            {/* NOTE: Keep in mind the spread operator will not work due to 
+            the limitations carouselMaxItems for testing purposes multiply 
+            the constant by the amount of times you used the spread operator */}
+            {recommendedListings.map((listing, index) => (
+              <ListingCard key={listing.id || index} listing={listing} />
             ))}
           </div>
         </div>
@@ -65,6 +68,7 @@ const Carousel = ({ recommendedListings }: CarouselProps) => {
         <img
           src={arrowLeft}
           alt="go-right"
+          key={'right'}
           className="absolute -right-[65px] z-10 rotate-180 cursor-pointer"
           onClick={handleCarouselRight}
         />

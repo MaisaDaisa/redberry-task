@@ -17,7 +17,6 @@ import {
 } from '@/lib/validationChecker'
 import AddAgentFullscreenPopup from '../../components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
-import { useBeforeUnload } from 'react-router-dom'
 import RegionCityDropDowns from './RegionCityDropDowns'
 import AgentDropdown from './AgentDropdown'
 
@@ -26,7 +25,6 @@ const AddListingPage = () => {
     setActive: (value: boolean) => void
   } | null>(null)
   // 0 for sale, 1 for rent
-  const [isLoading, setIsLoading] = useState(true)
   //
 
   // cities never contribute to the rendering of the component
@@ -53,6 +51,19 @@ const AddListingPage = () => {
   }, [])
 
   const handleAddListing = () => {
+    console.log('Adding listing')
+    console.log('Region:', chosenRegion.current)
+    console.log('City:', chosenCity.current)
+    console.log('Address:', address.current)
+    console.log('Zip code:', zipCode.current)
+    console.log('Price:', price.current)
+    console.log('Area:', area.current)
+    console.log('Bedrooms:', bedroomsCount.current)
+    console.log('Description:', description.current)
+    console.log('Agent:', agent.current)
+    console.log('Is rental:', isRental.current)
+    console.log('Image:', image.current)
+
     if (
       checkWordCount(description.current) &&
       checkNumbers(price.current) &&
@@ -76,68 +87,13 @@ const AddListingPage = () => {
       formData.append('is_rental', isRental.current.toString())
       if (agent.current)
         formData.append('agent_id', agent.current.id.toString())
+      console.log('Form data:', formData)
 
       postListing(formData).then(() => {
         deleteAndGoHome()
       })
     }
   }
-
-  useBeforeUnload(
-    useCallback(() => {
-      // Saving the data to the local storage
-      // Not saving the profile picture
-      localStorage.listingInputs = JSON.stringify({
-        address: address.current,
-        zipCode: zipCode.current,
-        price: price.current,
-        area: area.current,
-        bedroomsCount: bedroomsCount.current,
-        description: description.current,
-        agent: agent.current,
-        towChoiceNumber: isRental.current,
-        chosenRegion: chosenRegion.current,
-        chosenCity: chosenCity.current,
-      })
-    }, [
-      address,
-      zipCode,
-      price,
-      area,
-      bedroomsCount,
-      description,
-      agent,
-      isRental,
-      chosenRegion,
-      chosenCity,
-    ])
-  )
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const savedData = localStorage.listingInputs
-        if (savedData) {
-          const parsedData = JSON.parse(savedData)
-          console.log('parsedData', parsedData)
-          isRental.current = parsedData.towChoiceNumber
-          chosenRegion.current = parsedData.chosenRegion
-          address.current = parsedData.address
-          zipCode.current = parsedData.zipCode
-          price.current = parsedData.price
-          area.current = parsedData.area
-          bedroomsCount.current = parsedData.bedroomsCount
-          description.current = parsedData.description
-          agent.current = parsedData.agent
-          chosenCity.current = parsedData.chosenCity
-        }
-        setIsLoading(false)
-      } catch (error) {
-        console.error('Failed to fetch regions or cities:', error)
-      }
-    }
-    fetchData()
-  }, [])
 
   // Filtering cities based on the chosen region
 
@@ -153,9 +109,7 @@ const AddListingPage = () => {
     </li>
   )
 
-  return isLoading ? (
-    ''
-  ) : (
+  return (
     <div className="flex flex-col items-center">
       <h1 className="main-text-3xl-100">ლისტინგის დამატება</h1>
       <InputSectionWrapper>

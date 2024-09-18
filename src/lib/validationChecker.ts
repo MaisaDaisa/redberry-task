@@ -31,6 +31,5 @@ export const checkWordCount = (value: string, wordCount: number = 5) => {
     If the user presses space at the last word, the last element of the array 
     will be an empty string at will trick the function if not checked.
     */
-  console.log(words)
   return words.length >= wordCount + Number(words.at(-1) === '')
 }

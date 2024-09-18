@@ -14,8 +14,8 @@ interface AgentDropdownProps {
   chosenAgentsRef: React.MutableRefObject<agentGetMany | null>
   addAgentsButton: JSX.Element
 }
-const AgentDropdown = forwardRef(
-  ({ chosenAgentsRef, addAgentsButton, reloadAgents }: AgentDropdownProps) => {
+const AgentDropdown = forwardRef<HTMLDivElement, AgentDropdownProps>(
+  ({ chosenAgentsRef, addAgentsButton, reloadAgents }, ref) => {
     const [agents, setAgents] = useState<agentGetMany[] | null>(null)
     const [selectedAgent, setSelectedAgent] = useState<agentGetMany | null>(
       null
@@ -25,15 +25,19 @@ const AgentDropdown = forwardRef(
       try {
         const agentsResponse = await getAgents()
         setAgents(agentsResponse)
+        chosenAgentsRef.current = agentsResponse[0]
       } catch (error) {
         console.error('Failed to fetch agents:', error)
       }
     }, [])
 
-    const handleAgentChange = useCallback((agent: agentGetMany) => {
-      chosenAgentsRef.current = agent
-      setSelectedAgent(agent)
-    }, [])
+    const handleAgentChange = useCallback(
+      (agent: agentGetMany) => {
+        chosenAgentsRef.current = agent
+        setSelectedAgent(agent)
+      },
+      [chosenAgentsRef]
+    )
 
     useImperativeHandle(reloadAgents, () => {
       return { fetchAgents: fetchAgents }

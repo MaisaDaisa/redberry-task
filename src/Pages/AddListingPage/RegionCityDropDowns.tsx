@@ -16,19 +16,16 @@ const RegionCityDropDowns = memo(
     const [filteredCities, setFilteredCities] = useState<cityGet[] | null>(null)
 
     useEffect(() => {
-      let isMounted = true
-
       const fetchCities = async () => {
         try {
           const regionsData = await getRegions()
           const citiesData = await getCities()
-
-          if (isMounted) {
-            setRegions(regionsData)
-            setCities(citiesData)
-            if (regionsData.length > 0) {
-              setChosenRegion(regionsData[0])
-            }
+          setRegions(regionsData)
+          setCities(citiesData)
+          setChosenRegion(regionsData[0])
+          chosenRegionRef.current = regionsData[0]
+          if (regionsData.length > 0) {
+            setChosenRegion(regionsData[0])
           }
         } catch (error) {
           console.error('Failed to fetch regions or cities:', error)
@@ -36,10 +33,6 @@ const RegionCityDropDowns = memo(
       }
 
       fetchCities()
-
-      return () => {
-        isMounted = false
-      }
     }, [])
 
     useEffect(() => {
@@ -48,6 +41,7 @@ const RegionCityDropDowns = memo(
           (city) => city.region_id === chosenRegion.id
         )
         setFilteredCities(FilterData)
+        chosenCityRef.current = FilterData[0]
       }
     }, [chosenRegion, cities])
 

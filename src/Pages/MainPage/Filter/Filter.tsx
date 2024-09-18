@@ -1,15 +1,77 @@
-import React from 'react'
+import { MutableRefObject, useCallback, useEffect } from 'react'
 import FilterDropDownButtons from '@/Pages/MainPage/Filter/FilterDropDownButtons'
 import FilterDropDownBedrooms from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownBedrooms'
 import FilterDropDownRegion from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownRegion'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import { region } from '@/api/apiTypes'
+import { getRegions } from '@/api/getRequests'
 import RangePicker, { PostFixTypesEnum } from '@/components/RangePicker'
+import { useBeforeUnload } from 'react-router-dom'
+import { FilterType } from '@/Pages/MainPage/MainPage'
 
-const Filter = () => {
+interface FilterProps {
+  FiltersRef: MutableRefObject<FilterType>
+  onConfirm: () => void
+}
+
+const Filter = ({ FiltersRef, onConfirm }: FilterProps) => {
+  // ActiveFilter State 0 means no filter is active
   const [activeFilters, setActiveFilters] = useState<number>(0)
+  // constant region FiltersRef
   const regionsData = useRef<region[]>([])
+  // Regions
+
+  const handleSetActiveFilter = (filterNumber: number) => {
+    if (activeFilters === filterNumber) {
+      setActiveFilters(0)
+    } else {
+      setActiveFilters(filterNumber)
+    }
+  }
+
+  const handleSetMinPrice = (value: string) => {
+    FiltersRef.current.minPrice = value
+    onConfirm()
+  }
+
+  const handleSetMaxPrice = (value: string) => {
+    FiltersRef.current.maxPrice = value
+    onConfirm()
+  }
+
+  const handleSetMinArea = (value: string) => {
+    FiltersRef.current.minArea = value
+    onConfirm()
+  }
+
+  const handleSetMaxArea = (value: string) => {
+    FiltersRef.current.maxArea = value
+    onConfirm()
+  }
+
+  const handleSetNumberOfBedrooms = (value: string) => {
+    FiltersRef.current.numberOfBedrooms = value
+    onConfirm()
+  }
+
+  const handleRegionChange = (updatedRegions: region[]) => {
+    FiltersRef.current.selectedRegions = updatedRegions
+    onConfirm()
+  }
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        regionsData.current = await getRegions()
+      } catch (error) {
+        console.error('Error fetching regions:', error)
+      }
+    }
+    fetchRegions()
+  }, [])
+
   return (
-    <>
+    <div className="border-main-primary-gray-border flex w-auto items-center gap-6 rounded-[10px] border p-[6px]">
       <FilterDropDownButtons
         filterText="რეგიონი"
         dropDownTitle="რეგიონის მიხედვით"
@@ -17,9 +79,9 @@ const Filter = () => {
         handleSetActive={() => handleSetActiveFilter(1)}
       >
         <FilterDropDownRegion
-          selectedRegions={selectedRegions}
+          firstValues={FiltersRef.current.selectedRegions}
           regionsData={regionsData.current}
-          setParentRegions={setSelectedRegions}
+          setParentSelectedRegions={handleRegionChange}
         />
       </FilterDropDownButtons>
       <FilterDropDownButtons
@@ -29,10 +91,10 @@ const Filter = () => {
         handleSetActive={() => handleSetActiveFilter(2)}
       >
         <RangePicker
-          maxValueState={maxPrice}
-          minValueState={minPrice}
-          setMaxValue={setMaxPrice}
-          setMinValue={setMinPrice}
+          setParentMinValue={handleSetMinPrice}
+          setParentMaxValue={handleSetMaxPrice}
+          firstMaxValue={FiltersRef.current.maxPrice}
+          firstMinValue={FiltersRef.current.minPrice}
           postFixType={PostFixTypesEnum.GEL}
           key={'price-picker'}
         />
@@ -46,10 +108,10 @@ const Filter = () => {
         <RangePicker
           postFixType={PostFixTypesEnum.areaSize}
           key={'area-picker'}
-          maxValueState={maxArea}
-          minValueState={minArea}
-          setMaxValue={setMaxArea}
-          setMinValue={setMinArea}
+          setParentMinValue={handleSetMinArea}
+          setParentMaxValue={handleSetMaxArea}
+          firstMaxValue={FiltersRef.current.maxArea}
+          firstMinValue={FiltersRef.current.minArea}
         />
       </FilterDropDownButtons>
       <FilterDropDownButtons
@@ -59,11 +121,11 @@ const Filter = () => {
         handleSetActive={() => handleSetActiveFilter(4)}
       >
         <FilterDropDownBedrooms
-          valueState={numberOfBedrooms.toString()}
-          setValueState={setNumberOfBedrooms}
+          firstValue={FiltersRef.current.numberOfBedrooms}
+          setParentValue={handleSetNumberOfBedrooms}
         />
       </FilterDropDownButtons>
-    </>
+    </div>
   )
 }
 

@@ -1,11 +1,4 @@
-import {
-  useEffect,
-  useState,
-  useCallback,
-  memo,
-  useRef,
-  useImperativeHandle,
-} from 'react'
+import { useState, useCallback, memo, useRef, useImperativeHandle } from 'react'
 import InputSectionWrapper from '@/components/InputSectionWrapper'
 import AddListPageSectionWrapper from '@/Pages/AddListingPage/AddListPageSectionWrapper'
 import InputField from '@/components/InputField'
@@ -13,7 +6,6 @@ import FileUploader from '@/components/FileUploader'
 import { CtaTypes } from '@/components/Cta'
 import Cta from '@/components/Cta'
 import { postAgents } from '@/api/postRequests'
-import { useBeforeUnload } from 'react-router-dom'
 
 // Importing CheckerFunctions
 import {
@@ -49,31 +41,6 @@ const AddAgentFullscreenPopup = memo(
       useImperativeHandle(setActiveRef, () => {
         return { setActive: setActive }
       })
-
-      useBeforeUnload(
-        useCallback(() => {
-          // Saving the data to the local storage when page is unloaded
-          // NOTE: Not saving the profile picture because localstorage
-          // can only be 5MB per app per browser and is not recommended in general
-          localStorage.agentInputs = JSON.stringify({
-            agentName: agentName,
-            agentLastName: agentLastName,
-            agentEmail: agentEmail,
-            agentPhone: agentPhone,
-          })
-        }, [agentName, agentLastName, agentEmail, agentPhone])
-      )
-
-      useEffect(() => {
-        const savedData = localStorage.agentInputs
-        if (savedData) {
-          const parsedData = JSON.parse(savedData)
-          agentName.current = parsedData.agentName
-          agentLastName.current = parsedData.agentLastName
-          agentEmail.current = parsedData.agentEmail
-          agentPhone.current = parsedData.agentPhone
-        }
-      }, [])
 
       const handleAddAgent = async () => {
         if (

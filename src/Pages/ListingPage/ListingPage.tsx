@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import arrowLeft from '@/assets/svg/arrowLeft.svg'
 import locationIcon from '@/assets/svg/location-marker.svg'
@@ -12,35 +12,37 @@ import { getAllListings, getListingById } from '@/api/getRequests'
 import { realEstateMany, realEstateOne } from '@/api/apiTypes'
 import { checkNumbers } from '@/lib/validationChecker'
 import { formatDate, formatPriceWithCommas } from '@/lib/formatData'
-import FullScreenBlur from '@/components/Layout/FullScreenBlur'
 import Carousel from './Carousel'
 import DeleteListing from './DeleteListing'
 
 const ListingPage = () => {
+  // Fetching the id from the URL
   const { idParam } = useParams()
+
+  // State management
   const [isLoading, setIsLoading] = useState(true)
-  const [displayDeleteListing, setDisplayDeleteListing] = useState(false)
   const [recommendedListings, setRecommendedListings] = useState<
     realEstateMany[] | null
   >(null)
-  const [specificListing, setSpecificListing] = useState<realEstateOne | null>(
-    null
-  )
+  // the specific listing will not change
+  const specificListing = useRef<realEstateOne | null>(null)
+  // Ref for the delete listing popup
+  const activateDeleteListing = useRef({
+    activateDeleteListing: () => {},
+  })
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Fetch the specific listing by id
         if (idParam && checkNumbers(idParam)) {
+          // Fetch listing by id
           const specificListingResponse = await getListingById(idParam)
-          console.log(specificListingResponse) // Debugging
-          setSpecificListing(specificListingResponse)
+          specificListing.current = specificListingResponse
+          // Filter listings by region
           getAllListings().then((allCities: realEstateMany[]) => {
-            console.log(allCities) // Debugging
             if (allCities.length > 0 && specificListingResponse) {
               let recommendedListings = allCities.filter((listing) => {
-                console.log(listing)
-                console.log(specificListing)
                 return (
                   listing.city.region_id ===
                     specificListingResponse?.city.region_id &&
@@ -50,19 +52,15 @@ const ListingPage = () => {
               setRecommendedListings(recommendedListings)
             }
           })
+          // Set loading to false
+          setIsLoading(false)
         }
-
-        // Fetch all listings and filter the ones that are in the same region
       } catch (error) {
         console.error('Error fetching data:', error)
-      } finally {
-        setIsLoading(false)
       }
     }
 
-    if (specificListing === null) {
-      fetchData()
-    }
+    fetchData()
   }, [idParam, specificListing])
 
   const navigate = useNavigate()
@@ -71,10 +69,14 @@ const ListingPage = () => {
     navigate('/')
   }, [navigate])
 
-  let agent = specificListing?.agent
-  let phoneNumber = specificListing?.agent.phone
-  let listingDate = new Date(specificListing?.created_at ?? '')
+  // Deconstructing for easier access
+  let agent = specificListing.current?.agent
+  let phoneNumber = specificListing.current?.agent.phone
+  let listingDate = new Date(specificListing.current?.created_at ?? '')
 
+  // If data never gets fetched
+  // A Page not found component can be displayed here
+  // But design didnt have one
   if (isLoading) {
     return <div></div>
   }
@@ -94,11 +96,11 @@ const ListingPage = () => {
         <div className="relative flex flex-col items-end">
           <div className="absolute left-[41px] top-[41px] flex h-[41px] w-[142px] items-center justify-center rounded-[20px] bg-primary-text-50 p-[6xp]">
             <p className="white-text-xl-500 select-none">
-              {specificListing?.is_rental ? 'ქირავდება' : 'იყიდება'}
+              {specificListing.current?.is_rental ? 'ქირავდება' : 'იყიდება'}
             </p>
           </div>
           <img
-            src={specificListing?.image}
+            src={specificListing.current?.image}
             alt="listing image"
             className="h-[670px] w-[839px] rounded-t-[14px] bg-no-repeat object-cover"
           />
@@ -111,8 +113,8 @@ const ListingPage = () => {
           <div className="flex h-[714px] w-[503px] flex-col gap-10 pt-[30px]">
             <div className="flex flex-col items-start gap-6">
               <h2 className="main-text-5xl-100">
-                {specificListing?.price &&
-                  formatPriceWithCommas(specificListing?.price)}{' '}
+                {specificListing.current?.price &&
+                  formatPriceWithCommas(specificListing.current?.price)}{' '}
                 ₾
               </h2>
               <div className="flex flex-col gap-4">
@@ -121,7 +123,8 @@ const ListingPage = () => {
                     <img src={locationIcon} alt="icon" />
                   </div>
                   <p className="gray-text-2xl">
-                    {specificListing?.city.name}, {specificListing?.address}
+                    {specificListing.current?.city.name},{' '}
+                    {specificListing.current?.address}
                   </p>
                 </div>
                 <div className="flex flex-row items-center gap-1">
@@ -129,7 +132,7 @@ const ListingPage = () => {
                     <img src={sizeIcon} alt="icon" />
                   </div>
                   <p className="gray-text-2xl">
-                    ფართობი {specificListing?.area} მ<sup>2</sup>
+                    ფართობი {specificListing.current?.area} მ<sup>2</sup>
                   </p>
                 </div>
                 <div className="flex flex-row items-center gap-1">
@@ -137,7 +140,7 @@ const ListingPage = () => {
                     <img src={bedIcon} alt="icon" />
                   </div>
                   <p className="gray-text-2xl">
-                    საძინებელი {specificListing?.bedrooms}
+                    საძინებელი {specificListing.current?.bedrooms}
                   </p>
                 </div>
                 <div className="flex flex-row items-center gap-1">
@@ -145,13 +148,15 @@ const ListingPage = () => {
                     <img src={zipCodeIcon} alt="icon" />
                   </div>
                   <p className="gray-text-2xl">
-                    საფოსტო ინდექსი {specificListing?.zip_code}
+                    საფოსტო ინდექსი {specificListing.current?.zip_code}
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex flex-col gap-[50px]">
-              <p className="gray-text">{specificListing?.description}</p>
+              <p className="gray-text">
+                {specificListing.current?.description}
+              </p>
               <div className="flex flex-col items-start gap-5">
                 <div className="flex h-[172px] w-full flex-col gap-4 self-stretch rounded-lg border border-primary-gray-border px-5 py-6">
                   <div className="flex flex-row items-center gap-[14px]">
@@ -195,7 +200,9 @@ const ListingPage = () => {
                 <Cta
                   ctaText="ლისტინგის წაშლა"
                   type={CtaTypes.gray}
-                  onClickHandler={() => setDisplayDeleteListing(true)}
+                  onClickHandler={() =>
+                    activateDeleteListing.current.activateDeleteListing()
+                  }
                 />
               </div>
             </div>
@@ -207,16 +214,12 @@ const ListingPage = () => {
       ) : null}
 
       {/* Hidden Section of the page that will be displayed as a popup */}
+
       {idParam && (
-        <FullScreenBlur
-          isActive={displayDeleteListing}
-          setActiveState={setDisplayDeleteListing}
-        >
-          <DeleteListing
-            setDisplayDeleteListing={setDisplayDeleteListing}
-            id={idParam}
-          />
-        </FullScreenBlur>
+        <DeleteListing
+          id={idParam}
+          activateDeleteListingRef={activateDeleteListing}
+        />
       )}
     </div>
   )
