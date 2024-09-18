@@ -40,7 +40,7 @@ const FileUploader = ({
 
   // Function to upload the file
   const uploadFile = useCallback((file: File) => {
-    if (file && file.size <= 1048576) {
+    if (file && file.size <= 1048576 && file.type.includes('image')) {
       // 1MB is 1048576 bytes approximately
       setDropRejected(false)
       fileRef.current = file

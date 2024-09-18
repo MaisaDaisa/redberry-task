@@ -12,7 +12,7 @@ export const checkEmail = (
 
 export const checkNumbers = (value: string) => {
   // Check if the value is a number
-  return !isNaN(Number(value))
+  return !isNaN(Number(value)) && value !== ''
 }
 
 export const checkOneNumber = (value: string) => {

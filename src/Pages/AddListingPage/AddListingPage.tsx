@@ -153,7 +153,7 @@ const AddListingPage = () => {
             required={true}
             valueRef={bedroomsCount}
             checker={{
-              checkerTime: 100,
+              checkerTime: 1000,
               validationFunction: checkOneNumber,
               checkerText: 'მხოლოდ რიცხვები',
               checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',

@@ -57,6 +57,10 @@ const InputField = ({
 
       // Set a new timeout
       typingTimeoutRef.current = setTimeout(() => {
+        if (value === '') {
+          setCheckerState(CheckerStateTypes.NORMAL)
+          return
+        }
         if (checker.validationFunction(value)) {
           setCheckerState(CheckerStateTypes.VALID)
         } else {
@@ -76,11 +80,6 @@ const InputField = ({
   }, [value, hasInteracted])
 
   // Reset the checker state when the value is empty
-  useEffect(() => {
-    if (value === '') {
-      setCheckerState(CheckerStateTypes.NORMAL)
-    }
-  }, [value])
 
   // Handle input/textarea change
   const handleChange = (
