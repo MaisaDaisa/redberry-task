@@ -68,7 +68,6 @@ const AddListingPage = () => {
       formData.append('is_rental', isRental.current.toString())
       if (agent.current)
         formData.append('agent_id', agent.current.id.toString())
-      console.log('Form data:', formData)
 
       postListing(formData)
         .then(() => {
