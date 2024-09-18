@@ -4,7 +4,7 @@ import Size from '@/assets/svg/Size.svg'
 import ZipCodeIcon from '@/assets/svg/ZipCode.svg'
 import { realEstateMany } from '@/api/apiTypes'
 import { useNavigate } from 'react-router-dom'
-import Tag from './Tag'
+import Tag from '@/components/Tag'
 
 interface ListingCardProps {
   listing: realEstateMany

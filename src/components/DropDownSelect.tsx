@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import arrowIcon from '@/assets/svg/filterarrow.svg'
-import TitleH4Component from './TitleH4Component'
+import TitleH4Component from '@/components/TitleH4Component'
 import { agentGetMany, cityGet, region } from '@/api/apiTypes'
 
 interface DropDownSelectProps {
@@ -22,6 +22,7 @@ const DropDownSelect = ({
   required = false,
   parentStateSetter,
 }: DropDownSelectProps) => {
+  // State to store the selected item
   const [selected, setSelected] = useState<agentGetMany | cityGet | region>(
     selectedValue || items[0]
   )

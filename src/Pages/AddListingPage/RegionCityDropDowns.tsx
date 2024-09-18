@@ -35,6 +35,8 @@ const RegionCityDropDowns = memo(
       fetchCities()
     }, [])
 
+    // When the user changes the region, filter the cities to display
+    // only the cities that belong to the chosen region
     useEffect(() => {
       if (chosenRegion) {
         const FilterData = cities.filter(
@@ -57,6 +59,7 @@ const RegionCityDropDowns = memo(
       setChosenRegion(region)
     }, [])
 
+    // If there are no regions or cities, return null
     if (regions.length === 0 || cities.length === 0) {
       return null
     }

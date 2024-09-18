@@ -16,10 +16,13 @@ const FileUploader = ({
   fileRef,
   required = false,
 }: FileUploaderProps) => {
+  // State for the preview of the image
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
   const [dropRejected, setDropRejected] = useState(false)
+  // Ref for the input element
   const inputRef = useRef<HTMLInputElement | null>(null)
 
+  // Function to handle the drag over div Element
   const handleDragOver = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
       event.preventDefault()
@@ -27,12 +30,22 @@ const FileUploader = ({
     []
   )
 
+  // Function to handle the drop event on the div element
+  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
+    // Prevent the default behavior of the browser when a file is dropped
+    event.preventDefault()
+    const file = event.dataTransfer.files[0]
+    uploadFile(file)
+  }, [])
+
+  // Function to upload the file
   const uploadFile = useCallback((file: File) => {
     if (file && file.size <= 1048576) {
-      // 1MB
+      // 1MB is 1048576 bytes approximately
       setDropRejected(false)
       fileRef.current = file
 
+      // updating the preview of the image
       const reader = new FileReader()
       reader.onload = () => {
         setPreview(reader.result)
@@ -43,6 +56,7 @@ const FileUploader = ({
     }
   }, [])
 
+  // When User selects a file from the input element
   const handleInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files ? event.target.files[0] : null
@@ -50,13 +64,6 @@ const FileUploader = ({
     },
     []
   )
-
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    // Prevent the default behavior of the browser when a file is dropped
-    event.preventDefault()
-    const file = event.dataTransfer.files[0]
-    uploadFile(file)
-  }, [])
 
   const handleDelete = useCallback(() => {
     setPreview(null)

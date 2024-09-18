@@ -1,4 +1,4 @@
-import arrowIcon from '../../../assets/svg/filterarrow.svg'
+import arrowIcon from '@/assets/svg/filterarrow.svg'
 import React, { memo } from 'react'
 
 interface FilterDropDownButtonsProps {
@@ -39,7 +39,7 @@ const FilterDropDownButtons = memo(
             className={`absolute z-10 flex translate-y-4 transform flex-col items-end gap-8 self-start justify-self-start rounded-[10px] border border-primary-gray-border bg-primary-white p-6 shadow-primary-shadow transition-opacity duration-500 ease-in-out ${isActive ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
           >
             <p className="main-text self-start">{dropDownTitle}</p>
-            {/* Children here as dropdown content this will better to avoid prop drilling */}
+            {/* Children here as dropdown content */}
             {children}
           </div>
         }

@@ -56,8 +56,7 @@ const Carousel = ({ recommendedListings }: CarouselProps) => {
             }}
           >
             {/* NOTE: Keep in mind the spread operator will not work due to 
-            the limitations carouselMaxItems for testing purposes multiply 
-            the constant by the amount of times you used the spread operator */}
+            the carouselMaxItems limit */}
             {recommendedListings.map((listing, index) => (
               <ListingCard key={listing.id || index} listing={listing} />
             ))}

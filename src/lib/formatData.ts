@@ -11,5 +11,6 @@ export const formatDate = (date: Date) => {
 
 export const formatPriceWithCommas = (price: number) => {
   // this function adds commas and space to the price
+  // for example 1000000 -> 1, 000, 000
   return price.toLocaleString().replace(/,/g, ', ')
 }

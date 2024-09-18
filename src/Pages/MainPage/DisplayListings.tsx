@@ -1,5 +1,5 @@
 import ListingCard from '@/components/ListingCard'
-import { realEstateMany } from '@/api/apiTypes'
+import { realEstateMany, region } from '@/api/apiTypes'
 import { FilterType } from '@/Pages/MainPage/MainPage'
 import {
   forwardRef,
@@ -8,7 +8,6 @@ import {
   useImperativeHandle,
   Ref,
 } from 'react'
-import { region } from '@/api/apiTypes'
 
 export type DisplayListingsRef = {
   filterListings: () => void

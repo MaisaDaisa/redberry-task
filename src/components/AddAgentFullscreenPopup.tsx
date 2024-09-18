@@ -24,6 +24,7 @@ import FullScreenBlur from './Layout/FullScreenBlur'
 export type SetAddAgentActiveRef = {
   setActive: (value: boolean) => void
 }
+
 interface AddAgentFullscreenPopupProps {
   invokeOnSend?: () => void
 }
@@ -39,14 +40,17 @@ const AddAgentFullscreenPopup = (
   const agentPhone = useRef<string>('')
   const agentProfile = useRef<File | null>(null)
 
+  // Function to set the active state of the popup
   const setActive = useCallback((value: boolean) => {
     setIsActiveState(value)
   }, [])
 
+  // Exposing the function to the parent component
   useImperativeHandle(ref, () => {
     return { setActive: setActive }
   })
 
+  // Function to handle the adding of the agent
   const handleAddAgent = async () => {
     if (
       minimumSymbols(agentName.current) &&

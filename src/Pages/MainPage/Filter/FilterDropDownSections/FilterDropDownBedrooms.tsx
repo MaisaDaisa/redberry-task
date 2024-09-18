@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import FilterConfirmButton from '../FilterConfirmButton'
+import FilterConfirmButton from '@/Pages/MainPage/Filter/FilterConfirmButton'
 import { checkOneNumber } from '@/lib/validationChecker'
 
 interface FilterDropDownBedroomsProps {
@@ -12,6 +12,7 @@ const FilterDropDownBedrooms = memo(
     const [localValue, setLocalValue] = useState(firstValue)
 
     const handleSetNumberOfBedrooms = (value: string) => {
+      // Get last character of the input
       const lastChar = value.slice(-1)
       if (checkOneNumber(lastChar) || value !== '') {
         setLocalValue(lastChar)

@@ -23,6 +23,7 @@ const AgentDropdown = (
   { chosenAgentsRef, addAgentsButton }: AgentDropdownProps,
   ref: Ref<AgentDropdownRef>
 ) => {
+  // Agents State may change when the user adds a new agent
   const [agents, setAgents] = useState<agentGetMany[] | null>(null)
   const [selectedAgent, setSelectedAgent] = useState<agentGetMany | null>(null)
 
@@ -44,6 +45,8 @@ const AgentDropdown = (
     [chosenAgentsRef]
   )
 
+  // Expose the fetchAgents function to the parent component
+  // So when the user adds a new agent, the dropdown will be updated
   useImperativeHandle(ref, () => {
     return { fetchAgents: fetchAgents }
   })

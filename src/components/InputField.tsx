@@ -12,20 +12,20 @@ export enum InputFieldType {
   TEXTAREA = 'textarea',
 }
 
+export type CheckerType = {
+  checkerTime?: number
+  checkerText: string
+  checkerTextOnError: string
+  validationFunction: (value: string) => boolean
+}
+
 interface InputFieldProps {
   type?: InputFieldType
   title: string
   valueRef: MutableRefObject<string>
   required?: boolean
   customStyles?: string
-  checker?:
-    | false
-    | {
-        checkerTime?: number
-        checkerText: string
-        checkerTextOnError: string
-        validationFunction: (value: string) => boolean
-      }
+  checker?: false | CheckerType
 }
 
 const InputField = ({
@@ -36,9 +36,11 @@ const InputField = ({
   checker = false,
   customStyles = '',
 }: InputFieldProps) => {
+  // State for input visual feedback
   const [checkerState, setCheckerState] = useState<CheckerStateTypes>(
     CheckerStateTypes.NORMAL
   )
+  // State for the input value
   const [value, setValue] = useState(valueRef.current)
   const [hasInteracted, setHasInteracted] = useState(value !== '')
 
@@ -73,6 +75,7 @@ const InputField = ({
     }
   }, [value, hasInteracted])
 
+  // Reset the checker state when the value is empty
   useEffect(() => {
     if (value === '') {
       setCheckerState(CheckerStateTypes.NORMAL)

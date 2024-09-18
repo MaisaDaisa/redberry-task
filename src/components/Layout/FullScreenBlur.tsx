@@ -19,6 +19,7 @@ const FullScreenBlur = ({
       document.body.style.overflow = 'auto'
     }
   }, [isActive])
+
   return (
     <section
       className={`bg-blur fixed left-0 top-0 z-20 h-dvh w-full items-center justify-center backdrop-blur-[5px] ${

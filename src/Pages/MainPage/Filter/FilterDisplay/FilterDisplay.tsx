@@ -1,13 +1,12 @@
 import React, {
   useCallback,
-  useEffect,
   useState,
   forwardRef,
   useImperativeHandle,
   Ref,
 } from 'react'
-import { FilterType } from '../../MainPage'
-import FilterDisplayText from './FilterDisplayText' // Ensure this component is properly imported
+import { FilterType } from '@/Pages/MainPage/MainPage'
+import FilterDisplayText from '@/Pages/MainPage/Filter/FilterDisplay/FilterDisplayText'
 import { region } from '@/api/apiTypes'
 
 export type FilterDisplayRef = {
@@ -35,12 +34,14 @@ const FilterDisplay = (
   )
 
   const handleClear = useCallback(() => {
-    FilterRef.current.selectedRegions = []
-    FilterRef.current.minPrice = ''
-    FilterRef.current.maxPrice = ''
-    FilterRef.current.minArea = ''
-    FilterRef.current.maxArea = ''
-    FilterRef.current.numberOfBedrooms = '0'
+    FilterRef.current = {
+      selectedRegions: [],
+      minPrice: '',
+      maxPrice: '',
+      minArea: '',
+      maxArea: '',
+      numberOfBedrooms: '0',
+    }
     setSelectedRegions([])
     setMinPrice('')
     setMaxPrice('')
@@ -50,6 +51,7 @@ const FilterDisplay = (
     onClear()
   }, [])
 
+  // this practice is used so other siblings rerender the filter display
   const resetStates = useCallback(() => {
     setSelectedRegions(FilterRef.current.selectedRegions)
     setMinPrice(FilterRef.current.minPrice)
@@ -59,18 +61,10 @@ const FilterDisplay = (
     setNumberOfBedrooms(FilterRef.current.numberOfBedrooms)
   }, [FilterRef])
 
+  // Exposing the function to parent component to rerender the filter display
   useImperativeHandle(ref, () => ({
     rerenderFilterDisplay: resetStates,
   }))
-
-  useEffect(() => {
-    setSelectedRegions(FilterRef.current.selectedRegions)
-    setMinPrice(FilterRef.current.minPrice)
-    setMaxPrice(FilterRef.current.maxPrice)
-    setMinArea(FilterRef.current.minArea)
-    setMaxArea(FilterRef.current.maxArea)
-    setNumberOfBedrooms(FilterRef.current.numberOfBedrooms)
-  }, [FilterRef])
 
   return (
     <div className="mt-4 inline-flex h-[29px] items-center justify-center gap-4">

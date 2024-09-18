@@ -25,14 +25,17 @@ const DeleteListing = (
 ) => {
   const [displayDeleteListing, setDisplayDeleteListing] = useState(false)
 
+  // Function to activate the delete listing popup
   const activateDeleteListing = useCallback(() => {
     setDisplayDeleteListing(true)
   }, [])
 
+  // Exposing the function to parent component to activate the delete listing popup
   useImperativeHandle(ref, () => {
     return { activateDeleteListing: activateDeleteListing }
   })
 
+  // Function to delete the listing
   const handleDeleteListing = useCallback(() => {
     if (id) deleteListing(id.toString()).then(() => navigate('/'))
   }, [])

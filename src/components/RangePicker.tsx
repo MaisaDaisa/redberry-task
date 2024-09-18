@@ -1,5 +1,5 @@
 import { formatPriceWithCommas } from '@/lib/formatData'
-import React, { memo, useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useState } from 'react'
 import { checkNumbers } from '@/lib/validationChecker'
 import FilterConfirmButton from '@/Pages/MainPage/Filter/FilterConfirmButton'
 
@@ -23,7 +23,9 @@ const RangePicker = memo(
     setParentMinValue,
     setParentMaxValue,
   }: RangePickerProps) => {
+    // State for visual feedback
     const [invalidInput, setInvalidInput] = useState(false)
+    // State for local input value
     const [localMinValue, setLocalMinValue] = useState(firstMinValue)
     const [localMaxValue, setLocalMaxValue] = useState(firstMaxValue)
     // DESIGN MISGUIDANCE: The design shows that the values for the Area size is 50000 for all the inputs
@@ -47,16 +49,13 @@ const RangePicker = memo(
 
     let postfix
 
+    // for future use of different postfixes
     switch (postFixType) {
       case PostFixTypesEnum.GEL:
         postfix = '₾'
         break
       case PostFixTypesEnum.areaSize:
-        postfix = (
-          <>
-            მ<sup>2</sup>
-          </>
-        )
+        postfix = 'მ²'
         break
       default:
         postfix = ''
@@ -124,6 +123,7 @@ const RangePicker = memo(
                 strokeLinejoin="round"
               />
             </svg>
+            {/* DESIGN MISGUIDANCE: the design does not show feedback but it is required by the documentation */}
             <p className="main-text-sm-40-400-customCLR text-invalid-red">
               გთხოვთ შეიყვანოთ ვალიდური რიცხვები
             </p>
@@ -165,6 +165,7 @@ const RangePicker = memo(
         </div>
         <FilterConfirmButton
           onConfirm={() => {
+            // Check if the values are valid
             if (localMaxValue !== '' && localMinValue !== '') {
               if (parseInt(localMinValue) > parseInt(localMaxValue)) {
                 setInvalidInput(true)
@@ -174,16 +175,9 @@ const RangePicker = memo(
                 setParentMaxValue(localMaxValue)
               }
             } else {
-              if (localMinValue !== '') {
-                setParentMinValue(localMinValue)
-              } else {
-                setParentMinValue('')
-              }
-              if (localMaxValue !== '') {
-                setParentMaxValue(localMaxValue)
-              } else {
-                setParentMaxValue('')
-              }
+              setInvalidInput(false)
+              setParentMaxValue(localMinValue !== '' ? localMinValue : '')
+              setParentMinValue(localMaxValue !== '' ? localMaxValue : '')
             }
           }}
         />

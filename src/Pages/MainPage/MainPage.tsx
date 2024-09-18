@@ -47,18 +47,20 @@ const MainPage = () => {
     numberOfBedrooms: '0',
   })
 
+  // Clear Filter
   const handleClear = () => {
     invokeFilterListingsRef.current?.filterListings()
   }
 
+  // When the user confirms the filter
   const handleOnConfirm = () => {
     invokeFilterListingsRef.current?.filterListings()
     rerenderFilets.current?.rerenderFilterDisplay()
   }
 
+  // Saving the data to the local storage when page is unloaded
   useBeforeUnload(
     useCallback(() => {
-      // Saving the data to the local storage when page is unloaded
       localStorage.filterInputs = JSON.stringify({
         minPrice: FilterRef.current.minPrice,
         maxPrice: FilterRef.current.maxPrice,
@@ -78,6 +80,8 @@ const MainPage = () => {
         // Get Listings
         const AllListings: realEstateMany[] = await getAllListings()
         setListings(AllListings)
+
+        // Get Filter Data from local storage
         const savedData = localStorage.filterInputs
         const savedRegions = localStorage.selectedRegions
         if (savedData) {
@@ -90,6 +94,8 @@ const MainPage = () => {
         if (savedRegions) {
           FilterRef.current.selectedRegions = JSON.parse(savedRegions)
         }
+
+        // Set loading to false
         setIsLoading(false)
       } catch (error) {
         console.error('Error fetching FilterRef:', error)
@@ -109,8 +115,9 @@ const MainPage = () => {
   return (
     <>
       <div className="flex items-center justify-between">
+        {/* Filter Wrapper to display filter options */}
         <FilterWrapper FiltersRef={FilterRef} onConfirm={handleOnConfirm} />
-
+        {/* Add Listing and Add Agent CTA */}
         <div className="flex items-center justify-center gap-4">
           <CtaL
             ctaText="ლისტინგის დამატება"
@@ -124,20 +131,18 @@ const MainPage = () => {
           />
         </div>
       </div>
-
+      {/* Filter Display to display active filters */}
       <FilterDisplay
         FilterRef={FilterRef}
         onClear={() => handleClear()}
         ref={rerenderFilets}
       />
-
-      {/* Display Listings here */}
+      {/* Display Listings to display Listings Cars*/}
       <DisplayListings
         FilterRef={FilterRef}
         allListings={listings}
         ref={invokeFilterListingsRef}
       />
-
       {/* Invisible component hidden by default until state updated */}
       <AddAgentFullscreenPopup ref={setActiveRef} />
     </>

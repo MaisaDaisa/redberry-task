@@ -1,12 +1,10 @@
-import InputField from '@/components/InputField'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useRef } from 'react'
 import { region, cityGet, agentGetMany } from '@/api/apiTypes'
 import AddListPageSectionWrapper from './AddListPageSectionWrapper'
-import { InputFieldType } from '@/components/InputField'
+import InputField, { InputFieldType } from '@/components/InputField'
 import FileUploader from '@/components/FileUploader'
-import { CtaTypes } from '@/components/Cta'
-import Cta from '@/components/Cta'
+import Cta, { CtaTypes } from '@/components/Cta'
 import InputSectionWrapper from '@/components/InputSectionWrapper'
 import TwoChoice from '@/Pages/AddListingPage/TwoChoice'
 import plus from '@/assets/svg/plus-circle.svg'
@@ -15,22 +13,20 @@ import {
   checkNumbers,
   checkWordCount,
 } from '@/lib/validationChecker'
-import AddAgentFullscreenPopup from '../../components/AddAgentFullscreenPopup'
+import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
-import RegionCityDropDowns from './RegionCityDropDowns'
-import AgentDropdown, { AgentDropdownRef } from './AgentDropdown'
+import RegionCityDropDowns from '@/Pages/AddListingPage/RegionCityDropDowns'
+import AgentDropdown, {
+  AgentDropdownRef,
+} from '@/Pages/AddListingPage/AgentDropdown'
 import { SetAddAgentActiveRef } from '@/components/AddAgentFullscreenPopup'
 
 const AddListingPage = () => {
   // Refs for Invoking functions from child components
   const setAddAgentsPopup = useRef<SetAddAgentActiveRef>(null)
   const reloadAgents = useRef<AgentDropdownRef>(null)
+  // Refs for the input fields
   // 0 for sale, 1 for rent
-  //
-
-  // cities never contribute to the rendering of the component
-  // filteredCities are used to render the dropdown select
-  // filteredCities
   const isRental = useRef<0 | 1>(0)
   const chosenRegion = useRef<region | null>(null)
   const chosenCity = useRef<cityGet | null>(null)
@@ -41,14 +37,10 @@ const AddListingPage = () => {
   const image = useRef<File | null>(null)
   const bedroomsCount = useRef<string>('')
   const description = useRef<string>('')
+  // Ref for the agent dropdown
   const agent = useRef<agentGetMany | null>(null)
 
   const navigate = useNavigate()
-
-  const deleteAndGoHome = useCallback(() => {
-    localStorage.removeItem('listingInputs')
-    navigate('/')
-  }, [])
 
   const handleAddListing = () => {
     if (
@@ -77,7 +69,7 @@ const AddListingPage = () => {
       console.log('Form data:', formData)
 
       postListing(formData).then(() => {
-        deleteAndGoHome()
+        navigate('/')
       })
     }
   }
@@ -197,7 +189,7 @@ const AddListingPage = () => {
           <Cta
             type={CtaTypes.secondary}
             ctaText="გაუქმება"
-            onClickHandler={() => deleteAndGoHome()}
+            onClickHandler={() => navigate('/')}
           />
           <Cta
             type={CtaTypes.primary}
