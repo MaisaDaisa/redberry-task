@@ -34,6 +34,13 @@ const AddAgentFullscreenPopup = (
   ref: Ref<SetAddAgentActiveRef>
 ) => {
   const [isActive, setIsActiveState] = useState(false)
+  const [agentInvalidInputs, setAgentInvalidInputs] = useState({
+    name: false,
+    lastName: false,
+    email: false,
+    phone: false,
+    profile: false,
+  })
   const agentName = useRef<string>('')
   const agentLastName = useRef<string>('')
   const agentEmail = useRef<string>('')
@@ -78,6 +85,14 @@ const AddAgentFullscreenPopup = (
       invokeOnSend && invokeOnSend()
       // Closing the popup
       setIsActiveState(false)
+    } else {
+      setAgentInvalidInputs({
+        name: !minimumSymbols(agentName.current),
+        lastName: !minimumSymbols(agentLastName.current),
+        email: !checkEmail(agentEmail.current),
+        phone: !checkPhoneNumbers(agentPhone.current),
+        profile: agentProfile.current === null,
+      })
     }
   }
 
@@ -91,6 +106,7 @@ const AddAgentFullscreenPopup = (
         <InputSectionWrapper>
           <AddListPageSectionWrapper>
             <InputField
+              initialCheckerStateIsInvalid={agentInvalidInputs.name}
               title="სახელი"
               valueRef={agentName}
               required={true}
@@ -103,6 +119,7 @@ const AddAgentFullscreenPopup = (
             />
             {/*DESIGN MISGUIDANCE:  Keep in mind by documentation this field is required but it is not required by the design */}
             <InputField
+              initialCheckerStateIsInvalid={agentInvalidInputs.lastName}
               title="გვარი"
               required={true}
               valueRef={agentLastName}
@@ -114,6 +131,7 @@ const AddAgentFullscreenPopup = (
               }}
             />
             <InputField
+              initialCheckerStateIsInvalid={agentInvalidInputs.email}
               title="ელ-ფოსტა"
               required={true}
               valueRef={agentEmail}
@@ -126,6 +144,7 @@ const AddAgentFullscreenPopup = (
             />
             {/*DESIGN MISGUIDANCE:  Keep in mind by documentation this field is required but it is not required by the design */}
             <InputField
+              initialCheckerStateIsInvalid={agentInvalidInputs.phone}
               title="ტელეფონის ნომერი"
               required={true}
               valueRef={agentPhone}
@@ -137,6 +156,7 @@ const AddAgentFullscreenPopup = (
               }}
             />
             <FileUploader
+              initialStateInvalid={agentInvalidInputs.profile}
               fileRef={agentProfile}
               title="ატვირთეთ ფოტო"
               customStyles="col-span-2"
