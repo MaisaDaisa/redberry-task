@@ -9,8 +9,8 @@ import ListingPage from '@/Pages/ListingPage/ListingPage'
 const router = createBrowserRouter([
   {
     // Main Page
-    path: '/',
-    element: <MainPage />,
+    // path: '/',
+    // element: <MainPage />,
   },
   {
     // Page for adding a listing

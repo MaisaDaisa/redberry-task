@@ -1,5 +1,5 @@
 import TitleH4Component from '@/components/TitleH4Component'
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, MutableRefObject } from 'react'
 import plusCircle from '@/assets/svg/plus-circle.svg'
 import trashCan from '@/assets/svg/trashCan.svg'
 
@@ -7,13 +7,13 @@ interface FileUploaderProps {
   title: string
   customStyles?: string
   required: boolean
-  setFileState: (file: File | null) => void
+  fileRef: MutableRefObject<File | null>
 }
 
 const FileUploader = ({
   title = '',
   customStyles = '',
-  setFileState,
+  fileRef,
   required = false,
 }: FileUploaderProps) => {
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
@@ -31,7 +31,7 @@ const FileUploader = ({
     if (file && file.size <= 1048576) {
       // 1MB
       setDropRejected(false)
-      setFileState(file)
+      fileRef.current = file
 
       const reader = new FileReader()
       reader.onload = () => {
@@ -60,7 +60,7 @@ const FileUploader = ({
 
   const handleDelete = useCallback(() => {
     setPreview(null)
-    setFileState(null)
+    fileRef.current = null
     inputRef.current!.value = ''
   }, [])
 

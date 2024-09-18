@@ -23,7 +23,7 @@ const DropDownSelect = ({
   parentStateSetter,
 }: DropDownSelectProps) => {
   const [selected, setSelected] = useState<agentGetMany | cityGet | region>(
-    selectedValue! || items[0]
+    selectedValue || items[0]
   )
   // State to toggle the dropdown to active or inactive
   const [toggleCombo, setToggleCombo] = useState(false)
@@ -44,7 +44,7 @@ const DropDownSelect = ({
           }`}
         >
           <span className="main-text-sm-100-400">
-            {'surname' in selected && isAgents
+            {isAgents && 'surname' in selected
               ? `${selected.name} ${selected.surname}`
               : selected.name}
           </span>

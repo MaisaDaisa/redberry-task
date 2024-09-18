@@ -1,8 +1,6 @@
 import InputField from '@/components/InputField'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState, useCallback } from 'react'
-import DropDownSelect from '../../components/DropDownSelect'
-import { getRegions, getCities, getAgents } from '@/api/getRequests'
 import { region, cityGet, agentGetMany } from '@/api/apiTypes'
 import AddListPageSectionWrapper from './AddListPageSectionWrapper'
 import { InputFieldType } from '@/components/InputField'
@@ -20,28 +18,32 @@ import {
 import AddAgentFullscreenPopup from '../../components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
 import { useBeforeUnload } from 'react-router-dom'
+import RegionCityDropDowns from './RegionCityDropDowns'
+import AgentDropdown from './AgentDropdown'
 
 const AddListingPage = () => {
-  const [addAgentPopupActive, setAddAgentPopupActive] = useState(false)
-  const [towChoiceNumber, setTwoChoiceNumber] = useState<0 | 1>(0)
-  // cities never contribute to the rendering of the component
-  const cities = useRef<cityGet[] | null>(null)
-  // filteredCities are used to render the dropdown select
-  const [filteredCities, setFilteredCities] = useState<cityGet[] | null>(null)
-  // filteredCities
-  const regions = useRef<region[] | null>(null)
-  const [chosenRegion, setChosenRegion] = useState<region | null>(null)
-  const [chosenCity, setChosenCity] = useState<cityGet | null>(null)
+  const setAddAgentsPopup = useRef<{
+    setActive: (value: boolean) => void
+  } | null>(null)
+  // 0 for sale, 1 for rent
   const [isLoading, setIsLoading] = useState(true)
-  const [address, setAddress] = useState('')
-  const [zipCode, setZipCode] = useState('')
-  const [price, setPrice] = useState('')
-  const [area, setArea] = useState('')
-  const [image, setImage] = useState<File | null>(null)
-  const [bedroomsCount, setBedroomsCount] = useState<string>('')
-  const [description, setDescription] = useState('')
-  const [agents, setAgents] = useState<agentGetMany[] | null>(null)
-  const [agent, setAgent] = useState<agentGetMany | null>(null)
+  //
+
+  // cities never contribute to the rendering of the component
+  // filteredCities are used to render the dropdown select
+  // filteredCities
+  const reloadAgents = useRef<{ fetchAgents: () => void } | null>(null)
+  const isRental = useRef<0 | 1>(0)
+  const chosenRegion = useRef<region | null>(null)
+  const chosenCity = useRef<cityGet | null>(null)
+  const address = useRef<string>('')
+  const zipCode = useRef<string>('')
+  const price = useRef<string>('')
+  const area = useRef<string>('')
+  const image = useRef<File | null>(null)
+  const bedroomsCount = useRef<string>('')
+  const description = useRef<string>('')
+  const agent = useRef<agentGetMany | null>(null)
 
   const navigate = useNavigate()
 
@@ -52,25 +54,28 @@ const AddListingPage = () => {
 
   const handleAddListing = () => {
     if (
-      checkWordCount(description) &&
-      checkNumbers(price) &&
-      checkNumbers(area) &&
-      checkNumbers(bedroomsCount) &&
-      minimumSymbols(address) &&
-      checkNumbers(zipCode)
+      checkWordCount(description.current) &&
+      checkNumbers(price.current) &&
+      checkNumbers(area.current) &&
+      checkNumbers(bedroomsCount.current) &&
+      minimumSymbols(address.current) &&
+      checkNumbers(zipCode.current)
     ) {
       const formData = new FormData()
-      formData.append('address', address)
-      if (image) formData.append('image', image)
-      if (chosenRegion) formData.append('region_id', chosenRegion.id.toString())
-      if (chosenCity) formData.append('city_id', chosenCity.id.toString())
-      formData.append('description', description)
-      formData.append('zip_code', zipCode)
-      formData.append('price', price)
-      formData.append('area', area)
-      formData.append('bedrooms', bedroomsCount)
-      formData.append('is_rental', towChoiceNumber.toString())
-      if (agent) formData.append('agent_id', agent.id.toString())
+      formData.append('address', address.current)
+      if (image.current) formData.append('image', image.current)
+      if (chosenRegion.current)
+        formData.append('region_id', chosenRegion.current.id.toString())
+      if (chosenCity.current)
+        formData.append('city_id', chosenCity.current.id.toString())
+      formData.append('description', description.current)
+      formData.append('zip_code', zipCode.current)
+      formData.append('price', price.current)
+      formData.append('area', area.current)
+      formData.append('bedrooms', bedroomsCount.current)
+      formData.append('is_rental', isRental.current.toString())
+      if (agent.current)
+        formData.append('agent_id', agent.current.id.toString())
 
       postListing(formData).then(() => {
         deleteAndGoHome()
@@ -83,16 +88,16 @@ const AddListingPage = () => {
       // Saving the data to the local storage
       // Not saving the profile picture
       localStorage.listingInputs = JSON.stringify({
-        address: address,
-        zipCode: zipCode,
-        price: price,
-        area: area,
-        bedroomsCount: bedroomsCount,
-        description: description,
-        agent: agent,
-        towChoiceNumber: towChoiceNumber,
-        chosenRegion: chosenRegion,
-        chosenCity: chosenCity,
+        address: address.current,
+        zipCode: zipCode.current,
+        price: price.current,
+        area: area.current,
+        bedroomsCount: bedroomsCount.current,
+        description: description.current,
+        agent: agent.current,
+        towChoiceNumber: isRental.current,
+        chosenRegion: chosenRegion.current,
+        chosenCity: chosenCity.current,
       })
     }, [
       address,
@@ -102,50 +107,31 @@ const AddListingPage = () => {
       bedroomsCount,
       description,
       agent,
-      towChoiceNumber,
+      isRental,
       chosenRegion,
       chosenCity,
     ])
   )
 
-  const fetchAgents = async () => {
-    console.log('Fetching agents')
-    try {
-      const agentsResponse = await getAgents()
-      setAgents(agentsResponse)
-    } catch (error) {
-      console.error('Failed to fetch agents:', error)
-    }
-  }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const regionResponse = await getRegions()
-        const cityResponse = await getCities()
-        regions.current = regionResponse
-        cities.current = cityResponse
-
         const savedData = localStorage.listingInputs
         if (savedData) {
           const parsedData = JSON.parse(savedData)
           console.log('parsedData', parsedData)
-          setChosenRegion(parsedData.chosenRegion)
-          setChosenCity(parsedData.chosenCity)
-          setAddress(parsedData.address)
-          setZipCode(parsedData.zipCode)
-          setPrice(parsedData.price)
-          setArea(parsedData.area)
-          setBedroomsCount(parsedData.bedroomsCount)
-          setDescription(parsedData.description)
-          setAgent(parsedData.agent)
-          setTwoChoiceNumber(parsedData.towChoiceNumber)
-        } else {
-          setChosenRegion(regionResponse[0])
+          isRental.current = parsedData.towChoiceNumber
+          chosenRegion.current = parsedData.chosenRegion
+          address.current = parsedData.address
+          zipCode.current = parsedData.zipCode
+          price.current = parsedData.price
+          area.current = parsedData.area
+          bedroomsCount.current = parsedData.bedroomsCount
+          description.current = parsedData.description
+          agent.current = parsedData.agent
+          chosenCity.current = parsedData.chosenCity
         }
-
         setIsLoading(false)
-        fetchAgents()
       } catch (error) {
         console.error('Failed to fetch regions or cities:', error)
       }
@@ -154,23 +140,12 @@ const AddListingPage = () => {
   }, [])
 
   // Filtering cities based on the chosen region
-  useEffect(() => {
-    if (chosenRegion !== null) {
-      if (cities.current !== null) {
-        // Access cities.current here
-        const filtered = cities.current.filter(
-          (city) => city.region_id === chosenRegion.id
-        )
-        setFilteredCities(filtered)
-      }
-    }
-  }, [chosenRegion])
 
   // This component is used to add agents to the dropdown select
   const addAgentsButton = (
     <li
       key={0}
-      onClick={() => setAddAgentPopupActive(true)}
+      onClick={() => setAddAgentsPopup.current?.setActive(true)}
       className="main-text-sm-100-400 flex cursor-pointer flex-row items-center justify-start gap-2 border-b-[1px] border-primary-gray-border bg-primary-white p-[10px] hover:bg-blue-100"
     >
       <img src={plus} alt="add-button" width={20} height={20} />{' '}
@@ -186,17 +161,13 @@ const AddListingPage = () => {
       <InputSectionWrapper>
         <div className="flex flex-col flex-wrap gap-y-2 self-start">
           <h3 className="secondary-text">გარიგების ტიპი</h3>
-          <TwoChoice
-            selected={towChoiceNumber}
-            setSelected={setTwoChoiceNumber}
-          />
+          <TwoChoice isRentalRef={isRental} />
         </div>
         <AddListPageSectionWrapper title="მდებარეობა">
           <InputField
             title="მისამართი"
-            value={address}
+            valueRef={address}
             required={true}
-            stateSetter={setAddress}
             checker={{
               checkerTime: 1000,
               validationFunction: minimumSymbols,
@@ -207,8 +178,7 @@ const AddListingPage = () => {
           <InputField
             title="საფოსტო ინდექსი"
             required={true}
-            value={zipCode}
-            stateSetter={setZipCode}
+            valueRef={zipCode}
             checker={{
               checkerTime: 2000,
               validationFunction: checkNumbers,
@@ -216,33 +186,17 @@ const AddListingPage = () => {
               checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
             }}
           />
-          {chosenRegion && (
-            <DropDownSelect
-              selectedValue={chosenRegion}
-              items={regions.current as region[]}
-              title="რეგიონი"
-              required={true}
-              parentStateSetter={setChosenRegion}
-            />
-          )}
-          {filteredCities && (
-            <DropDownSelect
-              // we pass in the key of the first city in the filteredCities array
-              // because the region_id is always unique and forces the component to rerender
-              key={filteredCities[0].region_id}
-              items={filteredCities}
-              title="ქალაქი"
-              required={true}
-              parentStateSetter={setChosenCity}
-            />
-          )}
+          {/* Region and city dropdowns */}
+          <RegionCityDropDowns
+            chosenCityRef={chosenCity}
+            chosenRegionRef={chosenRegion}
+          />
         </AddListPageSectionWrapper>
         <AddListPageSectionWrapper title="მიწოდება">
           <InputField
             title="ფასი"
-            value={price}
+            valueRef={price}
             required={true}
-            stateSetter={setPrice}
             checker={{
               checkerTime: 2000,
               validationFunction: checkNumbers,
@@ -253,8 +207,7 @@ const AddListingPage = () => {
           <InputField
             title="ფართობი"
             required={true}
-            value={area}
-            stateSetter={setArea}
+            valueRef={area}
             checker={{
               validationFunction: checkNumbers,
               checkerText: 'მხოლოდ რიცხვები',
@@ -264,8 +217,7 @@ const AddListingPage = () => {
           <InputField
             title="საძინებლის რაოდენობა"
             required={true}
-            value={bedroomsCount}
-            stateSetter={setBedroomsCount}
+            valueRef={bedroomsCount}
             checker={{
               checkerTime: 100,
               validationFunction: checkNumbers,
@@ -276,8 +228,7 @@ const AddListingPage = () => {
           <InputField
             title="აღწერა"
             required={true}
-            value={description}
-            stateSetter={setDescription}
+            valueRef={description}
             type={InputFieldType.TEXTAREA}
             customStyles="col-span-2"
             checker={{
@@ -288,24 +239,18 @@ const AddListingPage = () => {
             }}
           />
           <FileUploader
-            setFileState={setImage}
+            fileRef={image}
             title="ატვირთეთ ფოტო"
             customStyles="col-span-2"
             required={true}
           />
         </AddListPageSectionWrapper>
         <AddListPageSectionWrapper title="აგენტი">
-          {agents && (
-            <DropDownSelect
-              selectedValue={agent}
-              title="აირჩიე"
-              required={true}
-              isAgents={true}
-              items={agents}
-              additionalComponent={addAgentsButton}
-              parentStateSetter={setAgent}
-            />
-          )}
+          <AgentDropdown
+            reloadAgents={reloadAgents}
+            chosenAgentsRef={agent}
+            addAgentsButton={addAgentsButton}
+          />
         </AddListPageSectionWrapper>
         <div className="mt-[90px] flex w-full flex-row justify-end gap-[15px]">
           <Cta
@@ -320,9 +265,8 @@ const AddListingPage = () => {
           />
         </div>
         <AddAgentFullscreenPopup
-          isActive={addAgentPopupActive}
-          setIsActiveState={setAddAgentPopupActive}
-          invokeOnSend={() => fetchAgents()}
+          setActiveRef={setAddAgentsPopup}
+          invokeOnSend={() => reloadAgents.current?.fetchAgents()}
         />
       </InputSectionWrapper>
     </div>

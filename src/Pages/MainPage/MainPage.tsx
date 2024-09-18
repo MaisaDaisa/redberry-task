@@ -11,17 +11,19 @@ import FilterDropDownRegion from '@/Pages/MainPage/Filter/FilterDropDownSections
 import FilterDropDownBedrooms from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownBedrooms'
 import DisplayListings from '@/Pages/MainPage/DisplayListings'
 import FilterDisplayText from '@/Pages/MainPage/Filter/FilterDisplayText'
+import FilterWrapper from './Filter/Filter'
 
 const ListingPage = () => {
   const navigate = useNavigate()
   // Agent Popup Control
-  const [isAgentPopupActive, setIsAgentPopupActive] = useState(false)
+  const setActiveRef = useRef<{ setActive: (value: boolean) => void } | null>(
+    null
+  )
   // Listing Control
   const listings = useRef<realEstateMany[]>([])
   const [filteredListings, setFilteredListings] = useState<realEstateMany[]>([])
 
   // Regions
-  const regionsData = useRef<region[]>([])
   const [selectedRegions, setSelectedRegions] = useState<region[]>([])
   // Dropdown Filters State, 0 means no filter is active
   const [activeFilters, setActiveFilters] = useState<number>(0)
@@ -53,7 +55,9 @@ const ListingPage = () => {
   }, [])
 
   const handleActivateAgentPopup = useCallback(() => {
-    setIsAgentPopupActive(true)
+    if (setActiveRef.current) {
+      setActiveRef.current.setActive(true)
+    }
   }, [])
 
   const handleSetActiveFilter = useCallback(
@@ -144,61 +148,7 @@ const ListingPage = () => {
             NOTE: This Logic can be improved by having a state for each filter and then toggling the state
             But it is not heavy on the Device to render this simple Element    
 		    */}
-          <>
-            <FilterDropDownButtons
-              filterText="რეგიონი"
-              dropDownTitle="რეგიონის მიხედვით"
-              isActive={activeFilters === 1}
-              handleSetActive={() => handleSetActiveFilter(1)}
-            >
-              <FilterDropDownRegion
-                selectedRegions={selectedRegions}
-                regionsData={regionsData.current}
-                setParentRegions={setSelectedRegions}
-              />
-            </FilterDropDownButtons>
-            <FilterDropDownButtons
-              filterText="საფასო კატეგორია"
-              dropDownTitle="ფასის მიხედვით"
-              isActive={activeFilters === 2}
-              handleSetActive={() => handleSetActiveFilter(2)}
-            >
-              <RangePicker
-                maxValueState={maxPrice}
-                minValueState={minPrice}
-                setMaxValue={setMaxPrice}
-                setMinValue={setMinPrice}
-                postFixType={PostFixTypesEnum.GEL}
-                key={'price-picker'}
-              />
-            </FilterDropDownButtons>
-            <FilterDropDownButtons
-              filterText="ფართობი"
-              dropDownTitle="ფართობის მიხედვით"
-              isActive={activeFilters === 3}
-              handleSetActive={() => handleSetActiveFilter(3)}
-            >
-              <RangePicker
-                postFixType={PostFixTypesEnum.areaSize}
-                key={'area-picker'}
-                maxValueState={maxArea}
-                minValueState={minArea}
-                setMaxValue={setMaxArea}
-                setMinValue={setMinArea}
-              />
-            </FilterDropDownButtons>
-            <FilterDropDownButtons
-              filterText="საძინებლების რაოდენობა"
-              dropDownTitle="საძინებლების რაოდენობა"
-              isActive={activeFilters === 4}
-              handleSetActive={() => handleSetActiveFilter(4)}
-            >
-              <FilterDropDownBedrooms
-                valueState={numberOfBedrooms.toString()}
-                setValueState={setNumberOfBedrooms}
-              />
-            </FilterDropDownButtons>
-          </>
+         <FilterWrapper
         </div>
         <div className="flex items-center justify-center gap-4">
           <CtaL
@@ -287,10 +237,7 @@ const ListingPage = () => {
       <DisplayListings filteredListings={filteredListings} />
 
       {/* Invisible component hidden by default until state updated */}
-      <AddAgentFullscreenPopup
-        isActive={isAgentPopupActive}
-        setIsActiveState={setIsAgentPopupActive}
-      />
+      <AddAgentFullscreenPopup setActiveRef={setActiveRef} />
     </>
   )
 }
