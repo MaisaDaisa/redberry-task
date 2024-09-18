@@ -37,13 +37,14 @@ const DisplayListings = (
       setFilteredListings(allListings)
     } else {
       const filteredData = allListings.filter((listing) => {
+        // NORMAL LOGIC
+        /*
         // Filter by regions
         const regionMatch =
           FilterRef.current.selectedRegions.length === 0 ||
           FilterRef.current.selectedRegions.some(
             (region: region) => region.id === listing.city.region.id
           )
-
         // Filter by bedrooms
         const bedroomMatch =
           FilterRef.current.numberOfBedrooms === '0' ||
@@ -67,8 +68,43 @@ const DisplayListings = (
           listing.area <= parseInt(FilterRef.current.maxArea)
         const areaMatch = minAreaMatch && maxAreaMatch
 
-        // Return listings that match all the applied filters
-        return regionMatch && bedroomMatch && priceMatch && areaMatch
+        return regionMatch && bedroomMatch && priceMatch && !areaMatch
+        */
+
+        // OR LOGIC
+        // გაფილტვრის შედეგად დაბრუნდება მხოლოდ
+        // ის ლისტინგები, რომლებიც დააკმაყოფილებს ერთ-ერთ კრიტერიუმს მაინც.
+
+        // Filter by regions
+        const regionMatch =
+          FilterRef.current.selectedRegions.length !== 0 &&
+          FilterRef.current.selectedRegions.some(
+            (region: region) => region.id === listing.city.region.id
+          )
+        // Filter by bedrooms
+        const bedroomMatch =
+          FilterRef.current.numberOfBedrooms !== '0' &&
+          listing.bedrooms === parseInt(FilterRef.current.numberOfBedrooms)
+
+        // Filter by price
+        const minPriceMatch =
+          FilterRef.current.minPrice !== '' &&
+          listing.price >= parseInt(FilterRef.current.minPrice)
+        const maxPriceMatch =
+          FilterRef.current.maxPrice !== '' &&
+          listing.price <= parseInt(FilterRef.current.maxPrice)
+        const priceMatch = minPriceMatch || maxPriceMatch
+
+        // Filter by area
+        const minAreaMatch =
+          FilterRef.current.minArea !== '' &&
+          listing.area >= parseInt(FilterRef.current.minArea)
+        const maxAreaMatch =
+          FilterRef.current.maxArea !== '' &&
+          listing.area <= parseInt(FilterRef.current.maxArea)
+        const areaMatch = minAreaMatch || maxAreaMatch
+
+        return regionMatch || bedroomMatch || priceMatch || areaMatch
       })
 
       setFilteredListings(filteredData)

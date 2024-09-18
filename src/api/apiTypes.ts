@@ -1,3 +1,4 @@
+// Agents
 export type agentGetMany = {
   id: number
   name: string
@@ -13,10 +14,13 @@ export type agentPost = {
   avatar: string
 }
 
+// Regions
 export type region = {
   id: number
   name: string
 }
+
+// Cities
 export type cityPost = {
   id: number
   name: string
@@ -33,6 +37,7 @@ export type cityGet = {
   }
 }
 
+// Real Estate
 export type realEstateMany = {
   id: number
   address: string

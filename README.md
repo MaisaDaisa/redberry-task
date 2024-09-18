@@ -1,50 +1,121 @@
-# React + TypeScript + Vite
+# RedBerry Real-Estate
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is for real estate management application built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [Installation](#installation)
+- [Development](#development)
+- [Build](#build)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Environment Variables](#environment-variables)
+- [License](#license)
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-username/redberry-task.git
+   cd redberry-task
+   ```
+2. install dependencies:
+   ```sh
+   npm install
+   ```
 
-- Configure the top-level `parserOptions` property like this:
+## Development
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+To start the development server, run:
+
+```sh
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Build
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+To build the project for production, run:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```sh
+npm run build
+```
+
+This will generate the production build in the dist directory
+
+## Project Structure
+
+```sh
+.env
+.gitignore
+.prettierrc.json
+.vscode/
+    launch.json
+eslint.config.js
+index.html
+package.json
+postcss.config.js
+public/
+README.md
+src/
+    api/
+        apiConstants.ts
+        apiTypes.ts
+        deleteRequests.ts
+        getRequests.ts
+        postRequests.ts
+    App.css
+    App.tsx
+    assets/
+        fonts/
+        img/
+        svg/
+    components/
+        AddAgentFullscreenPopup.tsx
+        ...
+    fontFamily.css
+    fonts.css
+    index.css
+    lib/
+        ...
+    main.tsx
+    Pages/
+    vite-env.d.ts
+tailwind.config.js
+tsconfig.app.json
+tsconfig.json
+tsconfig.node.json
+vite.config.ts
+```
+
+## Key Files and Directories
+
+- [src/](./src/): Contains the source code of the application
+  - [api/](./src/api/): Contains API-related files such as constants, types, and request functions.
+  - [components/](./src/components/) Contains React components.
+  - [Pages/](./src/Pages/): Contains different pages of the application.
+  - [assets/](./src/assets/): Contains static assets like fonts and images.
+  - [lib/:](./src/lib/) Contains utility libraries.
+  - [App.tsx](./src/App.tsx): The main application component.
+  - [main.tsx](./src/main.tsx): The entry point of the application.
+- [index.html](./index.html): The main HTML file.
+- [tailwind.config.js](./tailwind.config.js): Tailwind CSS configuration.
+- [.prettierrc.json](./.prettier.json): Prettier configuration.
+- [vite.config.ts](./vite.config.ts): Vite configuration.
+
+## Technologies Used
+
+- React: A JavaScript library for building user interfaces.
+- TypeScript: A typed superset of JavaScript that compiles to plain JavaScript.
+- Vite: A fast build tool and development server.
+- Tailwind CSS: A utility-first CSS framework.
+- Axios: A promise-based HTTP client for the browser and Node.js.
+- ESLint: A tool for identifying and reporting on patterns in JavaScript.
+- Prettier: An opinionated code formatter.
+
+## Environment Variables
+
+The project uses environment variables for configuration. Create a [.env](./.env) file in the root directory and add the following variables:
+
+```sh
+VITE_TOKEN=your_api_token
 ```

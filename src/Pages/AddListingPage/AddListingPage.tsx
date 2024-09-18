@@ -12,6 +12,7 @@ import {
   minimumSymbols,
   checkNumbers,
   checkWordCount,
+  checkOneNumber,
 } from '@/lib/validationChecker'
 import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
@@ -47,7 +48,7 @@ const AddListingPage = () => {
       checkWordCount(description.current) &&
       checkNumbers(price.current) &&
       checkNumbers(area.current) &&
-      checkNumbers(bedroomsCount.current) &&
+      checkOneNumber(bedroomsCount.current) &&
       minimumSymbols(address.current) &&
       checkNumbers(zipCode.current)
     ) {
@@ -153,7 +154,7 @@ const AddListingPage = () => {
             valueRef={bedroomsCount}
             checker={{
               checkerTime: 100,
-              validationFunction: checkNumbers,
+              validationFunction: checkOneNumber,
               checkerText: 'მხოლოდ რიცხვები',
               checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
             }}

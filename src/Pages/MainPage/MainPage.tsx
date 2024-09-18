@@ -90,6 +90,7 @@ const MainPage = () => {
           FilterRef.current.maxPrice = parsedData.maxPrice
           FilterRef.current.minArea = parsedData.minArea
           FilterRef.current.maxArea = parsedData.maxArea
+          FilterRef.current.numberOfBedrooms = parsedData.numberOfBedrooms
         }
         if (savedRegions) {
           FilterRef.current.selectedRegions = JSON.parse(savedRegions)

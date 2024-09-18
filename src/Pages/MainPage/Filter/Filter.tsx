@@ -1,4 +1,4 @@
-import { MutableRefObject, useCallback, useEffect } from 'react'
+import { MutableRefObject, useEffect } from 'react'
 import FilterDropDownButtons from '@/Pages/MainPage/Filter/FilterDropDownButtons'
 import FilterDropDownBedrooms from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownBedrooms'
 import FilterDropDownRegion from '@/Pages/MainPage/Filter/FilterDropDownSections/FilterDropDownRegion'
@@ -6,7 +6,6 @@ import { useState, useRef } from 'react'
 import { region } from '@/api/apiTypes'
 import { getRegions } from '@/api/getRequests'
 import RangePicker, { PostFixTypesEnum } from '@/components/RangePicker'
-import { useBeforeUnload } from 'react-router-dom'
 import { FilterType } from '@/Pages/MainPage/MainPage'
 
 interface FilterProps {
