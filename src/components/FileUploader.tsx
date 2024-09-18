@@ -1,5 +1,11 @@
 import TitleH4Component from '@/components/TitleH4Component'
-import { useState, useRef, useCallback, MutableRefObject } from 'react'
+import {
+  useState,
+  useRef,
+  useCallback,
+  MutableRefObject,
+  useEffect,
+} from 'react'
 import plusCircle from '@/assets/svg/plus-circle.svg'
 import trashCan from '@/assets/svg/trashCan.svg'
 
@@ -8,9 +14,11 @@ interface FileUploaderProps {
   customStyles?: string
   required: boolean
   fileRef: MutableRefObject<File | null>
+  initialStateInvalid?: boolean
 }
 
 const FileUploader = ({
+  initialStateInvalid = false,
   title = '',
   customStyles = '',
   fileRef,
@@ -18,9 +26,15 @@ const FileUploader = ({
 }: FileUploaderProps) => {
   // State for the preview of the image
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null)
-  const [dropRejected, setDropRejected] = useState(false)
+  const [dropRejected, setDropRejected] = useState(initialStateInvalid)
   // Ref for the input element
   const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    if (initialStateInvalid) {
+      setDropRejected(true)
+    }
+  }, [initialStateInvalid])
 
   // Function to handle the drag over div Element
   const handleDragOver = useCallback(

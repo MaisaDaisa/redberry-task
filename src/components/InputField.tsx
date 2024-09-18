@@ -26,9 +26,11 @@ interface InputFieldProps {
   required?: boolean
   customStyles?: string
   checker?: false | CheckerType
+  initialCheckerStateIsInvalid?: boolean
 }
 
 const InputField = ({
+  initialCheckerStateIsInvalid,
   type = InputFieldType.TEXT,
   title,
   valueRef,
@@ -38,11 +40,20 @@ const InputField = ({
 }: InputFieldProps) => {
   // State for input visual feedback
   const [checkerState, setCheckerState] = useState<CheckerStateTypes>(
-    CheckerStateTypes.NORMAL
+    initialCheckerStateIsInvalid
+      ? CheckerStateTypes.INVALID
+      : CheckerStateTypes.NORMAL
   )
+
   // State for the input value
   const [value, setValue] = useState(valueRef.current)
   const [hasInteracted, setHasInteracted] = useState(value !== '')
+
+  useEffect(() => {
+    if (initialCheckerStateIsInvalid) {
+      setCheckerState(CheckerStateTypes.INVALID)
+    }
+  }, [initialCheckerStateIsInvalid])
 
   // UseRef because each reusable component should have their own timeout or else they will interfere with each other
   // P.S Spent 3 hours debugging this issue

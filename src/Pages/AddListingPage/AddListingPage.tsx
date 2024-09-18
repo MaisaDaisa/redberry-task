@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 import { useRef } from 'react'
 import { region, cityGet, agentGetMany } from '@/api/apiTypes'
 import AddListPageSectionWrapper from './AddListPageSectionWrapper'
-import InputField, { InputFieldType } from '@/components/InputField'
-import FileUploader from '@/components/FileUploader'
 import Cta, { CtaTypes } from '@/components/Cta'
 import InputSectionWrapper from '@/components/InputSectionWrapper'
 import TwoChoice from '@/Pages/AddListingPage/TwoChoice'
@@ -16,16 +14,19 @@ import {
 } from '@/lib/validationChecker'
 import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
-import RegionCityDropDowns from '@/Pages/AddListingPage/RegionCityDropDowns'
 import AgentDropdown, {
   AgentDropdownRef,
 } from '@/Pages/AddListingPage/AgentDropdown'
 import { SetAddAgentActiveRef } from '@/components/AddAgentFullscreenPopup'
+import AddListingInputsSections, {
+  ValidationCheckerRef,
+} from '@/Pages/AddListingPage/AddListingInputsSections'
 
 const AddListingPage = () => {
   // Refs for Invoking functions from child components
   const setAddAgentsPopup = useRef<SetAddAgentActiveRef>(null)
   const reloadAgents = useRef<AgentDropdownRef>(null)
+  const setValidationChecker = useRef<ValidationCheckerRef>(null)
   // Refs for the input fields
   // 0 for sale, 1 for rent
   const isRental = useRef<0 | 1>(0)
@@ -69,9 +70,14 @@ const AddListingPage = () => {
         formData.append('agent_id', agent.current.id.toString())
       console.log('Form data:', formData)
 
-      postListing(formData).then(() => {
+      try {
+        postListing(formData)
         navigate('/')
-      })
+      } catch (error) {
+        console.error(error)
+      }
+    } else {
+      setValidationChecker.current?.validationChecker()
     }
   }
 
@@ -97,88 +103,18 @@ const AddListingPage = () => {
           <h3 className="secondary-text">გარიგების ტიპი</h3>
           <TwoChoice isRentalRef={isRental} />
         </div>
-        <AddListPageSectionWrapper title="მდებარეობა">
-          <InputField
-            title="მისამართი"
-            valueRef={address}
-            required={true}
-            checker={{
-              checkerTime: 1000,
-              validationFunction: minimumSymbols,
-              checkerText: 'მინიმუმ ორი სიმბოლო',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          <InputField
-            title="საფოსტო ინდექსი"
-            required={true}
-            valueRef={zipCode}
-            checker={{
-              checkerTime: 2000,
-              validationFunction: checkNumbers,
-              checkerText: 'მხოლოდ რიცხვები',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          {/* Region and city dropdowns */}
-          <RegionCityDropDowns
-            chosenCityRef={chosenCity}
-            chosenRegionRef={chosenRegion}
-          />
-        </AddListPageSectionWrapper>
-        <AddListPageSectionWrapper title="მიწოდება">
-          <InputField
-            title="ფასი"
-            valueRef={price}
-            required={true}
-            checker={{
-              checkerTime: 2000,
-              validationFunction: checkNumbers,
-              checkerText: 'მხოლოდ რიცხვები',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          <InputField
-            title="ფართობი"
-            required={true}
-            valueRef={area}
-            checker={{
-              validationFunction: checkNumbers,
-              checkerText: 'მხოლოდ რიცხვები',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          <InputField
-            title="საძინებლის რაოდენობა"
-            required={true}
-            valueRef={bedroomsCount}
-            checker={{
-              checkerTime: 1000,
-              validationFunction: checkOneNumber,
-              checkerText: 'მხოლოდ რიცხვები',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          <InputField
-            title="აღწერა"
-            required={true}
-            valueRef={description}
-            type={InputFieldType.TEXTAREA}
-            customStyles="col-span-2"
-            checker={{
-              checkerTime: 1000,
-              validationFunction: checkWordCount,
-              checkerText: 'მინიმუმ ხუთი სიტყვა',
-              checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
-            }}
-          />
-          <FileUploader
-            fileRef={image}
-            title="ატვირთეთ ფოტო"
-            customStyles="col-span-2"
-            required={true}
-          />
-        </AddListPageSectionWrapper>
+        <AddListingInputsSections
+          address={address}
+          area={area}
+          bedroomsCount={bedroomsCount}
+          description={description}
+          image={image}
+          price={price}
+          zipCode={zipCode}
+          chosenCity={chosenCity}
+          chosenRegion={chosenRegion}
+          ref={setValidationChecker}
+        />
         <AddListPageSectionWrapper title="აგენტი">
           <AgentDropdown
             ref={reloadAgents}
