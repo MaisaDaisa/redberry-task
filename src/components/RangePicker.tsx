@@ -176,8 +176,8 @@ const RangePicker = memo(
               }
             } else {
               setInvalidInput(false)
-              setParentMaxValue(localMinValue !== '' ? localMinValue : '')
-              setParentMinValue(localMaxValue !== '' ? localMaxValue : '')
+              setParentMinValue(localMinValue !== '' ? localMinValue : '')
+              setParentMaxValue(localMaxValue !== '' ? localMaxValue : '')
             }
           }}
         />
