@@ -13,11 +13,14 @@ import { realEstateMany, realEstateOne } from '@/api/apiTypes'
 import { checkNumbers } from '@/lib/validationChecker'
 import { formatDate, formatPriceWithCommas } from '@/lib/formatData'
 import Carousel from './Carousel'
-import DeleteListing from './DeleteListing'
+import DeleteListing, { DeleteListingRef } from './DeleteListing'
 
 const ListingPage = () => {
   // Fetching the id from the URL
   const { idParam } = useParams()
+
+  // Ref for invoking the delete listing popup
+  const activateDeleteListing = useRef<DeleteListingRef>(null)
 
   // State management
   const [isLoading, setIsLoading] = useState(true)
@@ -27,9 +30,6 @@ const ListingPage = () => {
   // the specific listing will not change
   const specificListing = useRef<realEstateOne | null>(null)
   // Ref for the delete listing popup
-  const activateDeleteListing = useRef({
-    activateDeleteListing: () => {},
-  })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -201,7 +201,7 @@ const ListingPage = () => {
                   ctaText="ლისტინგის წაშლა"
                   type={CtaTypes.gray}
                   onClickHandler={() =>
-                    activateDeleteListing.current.activateDeleteListing()
+                    activateDeleteListing.current?.activateDeleteListing()
                   }
                 />
               </div>
@@ -215,12 +215,7 @@ const ListingPage = () => {
 
       {/* Hidden Section of the page that will be displayed as a popup */}
 
-      {idParam && (
-        <DeleteListing
-          id={idParam}
-          activateDeleteListingRef={activateDeleteListing}
-        />
-      )}
+      {idParam && <DeleteListing id={idParam} ref={activateDeleteListing} />}
     </div>
   )
 }

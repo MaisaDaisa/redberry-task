@@ -18,19 +18,19 @@ import {
 import AddAgentFullscreenPopup from '../../components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
 import RegionCityDropDowns from './RegionCityDropDowns'
-import AgentDropdown from './AgentDropdown'
+import AgentDropdown, { AgentDropdownRef } from './AgentDropdown'
+import { SetAddAgentActiveRef } from '@/components/AddAgentFullscreenPopup'
 
 const AddListingPage = () => {
-  const setAddAgentsPopup = useRef<{
-    setActive: (value: boolean) => void
-  } | null>(null)
+  // Refs for Invoking functions from child components
+  const setAddAgentsPopup = useRef<SetAddAgentActiveRef>(null)
+  const reloadAgents = useRef<AgentDropdownRef>(null)
   // 0 for sale, 1 for rent
   //
 
   // cities never contribute to the rendering of the component
   // filteredCities are used to render the dropdown select
   // filteredCities
-  const reloadAgents = useRef<{ fetchAgents: () => void } | null>(null)
   const isRental = useRef<0 | 1>(0)
   const chosenRegion = useRef<region | null>(null)
   const chosenCity = useRef<cityGet | null>(null)
@@ -51,19 +51,6 @@ const AddListingPage = () => {
   }, [])
 
   const handleAddListing = () => {
-    console.log('Adding listing')
-    console.log('Region:', chosenRegion.current)
-    console.log('City:', chosenCity.current)
-    console.log('Address:', address.current)
-    console.log('Zip code:', zipCode.current)
-    console.log('Price:', price.current)
-    console.log('Area:', area.current)
-    console.log('Bedrooms:', bedroomsCount.current)
-    console.log('Description:', description.current)
-    console.log('Agent:', agent.current)
-    console.log('Is rental:', isRental.current)
-    console.log('Image:', image.current)
-
     if (
       checkWordCount(description.current) &&
       checkNumbers(price.current) &&
@@ -201,7 +188,7 @@ const AddListingPage = () => {
         </AddListPageSectionWrapper>
         <AddListPageSectionWrapper title="აგენტი">
           <AgentDropdown
-            reloadAgents={reloadAgents}
+            ref={reloadAgents}
             chosenAgentsRef={agent}
             addAgentsButton={addAgentsButton}
           />
@@ -219,7 +206,7 @@ const AddListingPage = () => {
           />
         </div>
         <AddAgentFullscreenPopup
-          setActiveRef={setAddAgentsPopup}
+          ref={setAddAgentsPopup}
           invokeOnSend={() => reloadAgents.current?.fetchAgents()}
         />
       </InputSectionWrapper>

@@ -2,12 +2,16 @@ import CtaL from '@/components/CtaL'
 import { CtaTypes } from '@/components/Cta'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useBeforeUnload, useNavigate } from 'react-router-dom'
-import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
+import AddAgentFullscreenPopup, {
+  SetAddAgentActiveRef,
+} from '@/components/AddAgentFullscreenPopup'
 import { realEstateMany, region } from '@/api/apiTypes'
 import { getAllListings } from '@/api/getRequests'
 import DisplayListings from '@/Pages/MainPage/DisplayListings'
 import FilterWrapper from './Filter/Filter'
-import FilterDisplay from './Filter/FilterDisplay/FilterDisplay'
+import FilterDisplay, {
+  FilterDisplayRef,
+} from './Filter/FilterDisplay/FilterDisplay'
 
 export type FilterType = {
   selectedRegions: region[]
@@ -18,23 +22,21 @@ export type FilterType = {
   numberOfBedrooms: string
 }
 
-export type rerenderFiltersType = {
-  rerenderFilterDisplay: () => void
-} | null
-
 const MainPage = () => {
+  // Navigation Control
   const navigate = useNavigate()
-  // Agent Popup Control
-  const setActiveRef = useRef<{ setActive: (value: boolean) => void } | null>(
-    null
-  )
+
+  // Refs for invoking functions from child components
+  const setActiveRef = useRef<SetAddAgentActiveRef>(null)
+  const rerenderFilets = useRef<FilterDisplayRef>(null)
+
   // Listing Control
   const [listings, setListings] = useState<realEstateMany[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const invokeFilterListingsRef = useRef<{ filterListings: () => void } | null>(
     null
   )
-  const rerenderFilets = useRef<rerenderFiltersType>(null)
+
   // Filter Control
   const FilterRef = useRef<FilterType>({
     selectedRegions: [],
@@ -126,18 +128,18 @@ const MainPage = () => {
       <FilterDisplay
         FilterRef={FilterRef}
         onClear={() => handleClear()}
-        rerenderFilters={rerenderFilets}
+        ref={rerenderFilets}
       />
 
       {/* Display Listings here */}
       <DisplayListings
         FilterRef={FilterRef}
         allListings={listings}
-        invokeFilterListingsRef={invokeFilterListingsRef}
+        ref={invokeFilterListingsRef}
       />
 
       {/* Invisible component hidden by default until state updated */}
-      <AddAgentFullscreenPopup setActiveRef={setActiveRef} />
+      <AddAgentFullscreenPopup ref={setActiveRef} />
     </>
   )
 }
