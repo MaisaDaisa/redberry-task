@@ -2,6 +2,10 @@
 
 This project is for real estate management application built with React, TypeScript, and Vite.
 
+# <span style="color: red">ATTENTION! FOR REDBERRY TEAM<span>
+
+due to few issues with design i have commented sections with issues with <span style="color: blue">"DESIGN MISGUIDANCE"</span> so please look over the issues first before assessing the work
+
 ## Table of Contents
 
 - [Installation](#installation)
