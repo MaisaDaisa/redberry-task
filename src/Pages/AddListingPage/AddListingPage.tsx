@@ -10,7 +10,7 @@ import {
   minimumSymbols,
   checkNumbers,
   checkWordCount,
-  checkOneNumber,
+  smallIntChecker,
 } from '@/lib/validationChecker'
 import AddAgentFullscreenPopup from '@/components/AddAgentFullscreenPopup'
 import { postListing } from '@/api/postRequests'
@@ -49,7 +49,7 @@ const AddListingPage = () => {
       checkWordCount(description.current) &&
       checkNumbers(price.current) &&
       checkNumbers(area.current) &&
-      checkOneNumber(bedroomsCount.current) &&
+      smallIntChecker(bedroomsCount.current) &&
       minimumSymbols(address.current) &&
       checkNumbers(zipCode.current)
     ) {
@@ -70,12 +70,13 @@ const AddListingPage = () => {
         formData.append('agent_id', agent.current.id.toString())
       console.log('Form data:', formData)
 
-      try {
-        postListing(formData)
-        navigate('/')
-      } catch (error) {
-        console.error(error)
-      }
+      postListing(formData)
+        .then(() => {
+          navigate('/')
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     } else {
       setValidationChecker.current?.validationChecker()
     }

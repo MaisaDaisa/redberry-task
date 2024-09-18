@@ -11,8 +11,7 @@ export const checkEmail = (
 }
 
 export const checkNumbers = (value: string) => {
-  // Check if the value is a number
-  return !isNaN(Number(value)) && value !== ''
+  return !isNaN(Number(value)) && Number(value) >= 1 && value !== ''
 }
 
 export const checkOneNumber = (value: string) => {
@@ -20,6 +19,11 @@ export const checkOneNumber = (value: string) => {
   return checkNumbers(value) && value.length === 1
 }
 
+export const smallIntChecker = (value: string) => {
+  // Check if the value is a number, is a whole number, and is between 0 and 255
+  const numberValue = Number(value)
+  return checkNumbers(value) && numberValue <= 255 && numberValue % 1 === 0
+}
 export const checkPhoneNumbers = (value: string) => {
   // Check if the number starts with 5 and has 9 digits
   return checkNumbers(value) && value.length === 9 && value.startsWith('5')

@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import FilterConfirmButton from '@/Pages/MainPage/Filter/FilterConfirmButton'
-import { checkOneNumber } from '@/lib/validationChecker'
+import { smallIntChecker } from '@/lib/validationChecker'
 
 interface FilterDropDownBedroomsProps {
   firstValue: string
@@ -13,9 +13,9 @@ const FilterDropDownBedrooms = memo(
 
     const handleSetNumberOfBedrooms = (value: string) => {
       // Get last character of the input
-      const lastChar = value.slice(-1)
-      if (checkOneNumber(lastChar) || value !== '') {
-        setLocalValue(lastChar)
+      if (value !== '') {
+        const valueToSet = value.startsWith('0') ? value.slice(1) : value
+        smallIntChecker(valueToSet) && setLocalValue(valueToSet)
       } else {
         setLocalValue('0')
       }

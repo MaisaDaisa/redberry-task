@@ -7,7 +7,7 @@ import {
   minimumSymbols,
   checkNumbers,
   checkWordCount,
-  checkOneNumber,
+  smallIntChecker,
 } from '@/lib/validationChecker'
 import { cityGet, region } from '@/api/apiTypes'
 
@@ -63,13 +63,12 @@ const AddListingInputsSections = forwardRef<
       setInvalidInput({
         address: !minimumSymbols(address.current),
         area: !checkNumbers(area.current),
-        bedroomsCount: !checkOneNumber(bedroomsCount.current),
+        bedroomsCount: !smallIntChecker(bedroomsCount.current),
         description: !checkWordCount(description.current),
         image: !image.current, // Check if the image exists
         price: !checkNumbers(price.current),
         zipCode: !checkNumbers(zipCode.current),
       })
-      console.log(invalidInput)
     }
 
     // Use imperatively handled ref to expose the validationChecker method
@@ -137,6 +136,9 @@ const AddListingInputsSections = forwardRef<
               checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
             }}
           />
+          {/* // DESIGN MISGUIDANCE: The design says 'მხოლოდ რიცხვები' but the
+          documentation says 'მთელი რიცხვი' and api does not say it must not be over 255 
+          but the error does, so it is TinyInt type*/}
           <InputField
             initialCheckerStateIsInvalid={invalidInput.bedroomsCount}
             title="საძინებლის რაოდენობა"
@@ -144,7 +146,7 @@ const AddListingInputsSections = forwardRef<
             valueRef={bedroomsCount}
             checker={{
               checkerTime: 1000,
-              validationFunction: checkOneNumber,
+              validationFunction: smallIntChecker,
               checkerText: 'მხოლოდ რიცხვები',
               checkerTextOnError: 'ჩაწერეთ ვალიდური მონაცემები',
             }}

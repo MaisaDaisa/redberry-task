@@ -13,6 +13,7 @@ interface ListingCardProps {
 // ListingCard component
 
 const ListingCard = ({ listing }: ListingCardProps) => {
+  console.log(listing)
   const navigate = useNavigate()
   return (
     <article
