@@ -79,6 +79,7 @@ const AddListingPage = () => {
         })
     } else {
       setValidationChecker.current?.validationChecker()
+      reloadAgents.current?.checkAgentValid()
     }
   }
 
@@ -122,6 +123,11 @@ const AddListingPage = () => {
       // Because that is not a good practice
     }
     setIsLoading(false)
+  }, [])
+
+  const handleOnCancel = useCallback(() => {
+    localStorage.removeItem('addListingInputs')
+    navigate('/')
   }, [])
 
   // Filtering cities based on the chosen region
@@ -178,7 +184,7 @@ const AddListingPage = () => {
           <Cta
             type={CtaTypes.secondary}
             ctaText="გაუქმება"
-            onClickHandler={() => navigate('/')}
+            onClickHandler={() => handleOnCancel()}
           />
           <Cta
             type={CtaTypes.primary}

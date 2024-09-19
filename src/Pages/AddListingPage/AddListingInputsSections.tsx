@@ -56,6 +56,8 @@ const AddListingInputsSections = forwardRef<
       image: false,
       price: false,
       zipCode: false,
+      region: false,
+      city: false,
     })
 
     // Validation function for form inputs
@@ -68,6 +70,8 @@ const AddListingInputsSections = forwardRef<
         image: !image.current, // Check if the image exists
         price: !checkNumbers(price.current),
         zipCode: !checkNumbers(zipCode.current),
+        region: !chosenRegion.current,
+        city: !chosenCity.current,
       })
     }
 
@@ -106,8 +110,12 @@ const AddListingInputsSections = forwardRef<
           />
           {/* Region and city dropdowns */}
           <RegionCityDropDowns
+            isCityRejected={invalidInput.city}
+            isRegionRejected={invalidInput.region}
             chosenCityRef={chosenCity}
             chosenRegionRef={chosenRegion}
+            initialChosenRegion={chosenRegion.current}
+            initialChosenCity={chosenCity.current}
           />
         </AddListPageSectionWrapper>
 

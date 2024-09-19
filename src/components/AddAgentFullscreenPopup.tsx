@@ -34,7 +34,6 @@ const AddAgentFullscreenPopup = (
   ref: Ref<SetAddAgentActiveRef>
 ) => {
   const [isActive, setIsActiveState] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
   const [agentInvalidInputs, setAgentInvalidInputs] = useState({
     name: false,
     lastName: false,
@@ -63,6 +62,9 @@ const AddAgentFullscreenPopup = (
   // and set IsLoading state to false
   // დარეფრეშებისას არსად ინფორმაცია არ უნდა იკარგებოდეს!
   // (აგენტის დამატების მოდალის გარდა)
+
+  // Already Made the local storage feature before leading the documentation properly
+  // use IsLoading state for this feature
 
   // useEffect(() => {
   //   const localStorageInput = localStorage.getItem('agentInputs')
@@ -131,10 +133,6 @@ const AddAgentFullscreenPopup = (
         profile: agentProfile.current === null,
       })
     }
-  }
-
-  if (isLoading) {
-    return null
   }
 
   return (

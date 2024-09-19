@@ -12,6 +12,7 @@ import { getAgents } from '@/api/getRequests'
 
 export type AgentDropdownRef = {
   fetchAgents: () => void
+  checkAgentValid: () => void
 }
 
 interface AgentDropdownProps {
@@ -25,6 +26,7 @@ const AgentDropdown = (
   ref: Ref<AgentDropdownRef>
 ) => {
   // Agents State may change when the user adds a new agent
+  const [agentInvalid, setAgentInvalid] = useState<boolean>(false)
   const [agents, setAgents] = useState<agentGetMany[] | null>(null)
   const [selectedAgent, setSelectedAgent] = useState<agentGetMany | null>(
     selectedAgentProp
@@ -34,7 +36,6 @@ const AgentDropdown = (
     try {
       const agentsResponse = await getAgents()
       setAgents(agentsResponse)
-      chosenAgentsRef.current = agentsResponse[0]
     } catch (error) {
       console.error('Failed to fetch agents:', error)
     }
@@ -48,10 +49,14 @@ const AgentDropdown = (
     [chosenAgentsRef]
   )
 
+  const handleCheckAgentValid = () => {
+    setAgentInvalid(true)
+  }
+
   // Expose the fetchAgents function to the parent component
   // So when the user adds a new agent, the dropdown will be updated
   useImperativeHandle(ref, () => {
-    return { fetchAgents: fetchAgents }
+    return { fetchAgents: fetchAgents, checkAgentValid: handleCheckAgentValid }
   })
 
   useEffect(() => {
@@ -61,6 +66,8 @@ const AgentDropdown = (
   return (
     agents && (
       <DropDownSelect
+        isRejected={agentInvalid}
+        placeHolderText="აირჩიე აგენტი"
         selectedValue={selectedAgent}
         items={agents as agentGetMany[]}
         parentStateSetter={handleAgentChange}
