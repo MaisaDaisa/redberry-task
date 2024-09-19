@@ -34,6 +34,7 @@ const AddAgentFullscreenPopup = (
   ref: Ref<SetAddAgentActiveRef>
 ) => {
   const [isActive, setIsActiveState] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [agentInvalidInputs, setAgentInvalidInputs] = useState({
     name: false,
     lastName: false,
@@ -56,6 +57,42 @@ const AddAgentFullscreenPopup = (
   useImperativeHandle(ref, () => {
     return { setActive: setActive }
   })
+
+  // Fill the inputs if they are saved in the local storage
+  // Uncomment if you want to use local storage feature
+  // and set IsLoading state to false
+  // დარეფრეშებისას არსად ინფორმაცია არ უნდა იკარგებოდეს!
+  // (აგენტის დამატების მოდალის გარდა)
+
+  // useEffect(() => {
+  //   const localStorageInput = localStorage.getItem('agentInputs')
+  //   if (localStorageInput) {
+  //     const agentInputs = JSON.parse(localStorageInput)
+  //     agentName.current = agentInputs.name
+  //     agentLastName.current = agentInputs.lastName
+  //     agentEmail.current = agentInputs.email
+  //     agentPhone.current = agentInputs.phone
+  //     //We are not saving the profile image in the local storage
+  //     // Because that is not a good practice
+  //     setIsLoading(false)
+  //   } else {
+  //     setIsLoading(false)
+  //   }
+  // }, [])
+
+  // useBeforeUnload(
+  //   useCallback(() => {
+  //     localStorage.setItem(
+  //       'agentInputs',
+  //       JSON.stringify({
+  //         name: agentName.current,
+  //         lastName: agentLastName.current,
+  //         email: agentEmail.current,
+  //         phone: agentPhone.current,
+  //       })
+  //     )
+  //   }, [])
+  // )
 
   // Function to handle the adding of the agent
   const handleAddAgent = async () => {
@@ -94,6 +131,10 @@ const AddAgentFullscreenPopup = (
         profile: agentProfile.current === null,
       })
     }
+  }
+
+  if (isLoading) {
+    return null
   }
 
   return (

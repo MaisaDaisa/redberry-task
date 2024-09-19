@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import arrowIcon from '@/assets/svg/filterarrow.svg'
 import TitleH4Component from '@/components/TitleH4Component'
 import { agentGetMany, cityGet, region } from '@/api/apiTypes'
@@ -23,11 +23,18 @@ const DropDownSelect = ({
   parentStateSetter,
 }: DropDownSelectProps) => {
   // State to store the selected item
-  const [selected, setSelected] = useState<agentGetMany | cityGet | region>(
-    selectedValue || items[0]
-  )
+  const [selected, setSelected] = useState<
+    agentGetMany | cityGet | region | null
+  >(selectedValue)
   // State to toggle the dropdown to active or inactive
   const [toggleCombo, setToggleCombo] = useState(false)
+
+  useEffect(() => {
+    // Automatically select the first item from the updated items list if no item is currently selected
+    if (!selected || !items.find((item) => item.id === selected.id)) {
+      setSelected(items.length > 0 ? items[0] : null)
+    }
+  }, [items, selected])
 
   const handleSelectedItem = (item: agentGetMany | cityGet | region) => {
     setSelected(item)
@@ -45,9 +52,11 @@ const DropDownSelect = ({
           }`}
         >
           <span className="main-text-sm-100-400">
-            {isAgents && 'surname' in selected
-              ? `${selected.name} ${selected.surname}`
-              : selected.name}
+            {selected
+              ? isAgents && 'surname' in selected
+                ? `${selected.name} ${selected.surname}`
+                : selected.name
+              : 'Select an item'}
           </span>
           <img
             src={arrowIcon}
@@ -72,7 +81,7 @@ const DropDownSelect = ({
           </ul>
         )}
       </div>
-      <input type="hidden" value={selected.name} />
+      <input type="hidden" value={selected ? selected.name : ''} />
     </TitleH4Component>
   )
 }

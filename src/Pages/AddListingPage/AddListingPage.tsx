@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom'
-import { useRef } from 'react'
+import { useBeforeUnload, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { region, cityGet, agentGetMany } from '@/api/apiTypes'
 import AddListPageSectionWrapper from './AddListPageSectionWrapper'
 import Cta, { CtaTypes } from '@/components/Cta'
@@ -24,6 +24,7 @@ import AddListingInputsSections, {
 
 const AddListingPage = () => {
   // Refs for Invoking functions from child components
+  const [isLoading, setIsLoading] = useState(true)
   const setAddAgentsPopup = useRef<SetAddAgentActiveRef>(null)
   const reloadAgents = useRef<AgentDropdownRef>(null)
   const setValidationChecker = useRef<ValidationCheckerRef>(null)
@@ -81,6 +82,48 @@ const AddListingPage = () => {
     }
   }
 
+  useBeforeUnload(
+    useCallback(() => {
+      localStorage.setItem(
+        'addListingInputs',
+        JSON.stringify({
+          isRental: isRental.current,
+          chosenRegion: chosenRegion.current,
+          chosenCity: chosenCity.current,
+          address: address.current,
+          zipCode: zipCode.current,
+          price: price.current,
+          area: area.current,
+          image: image.current,
+          bedroomsCount: bedroomsCount.current,
+          description: description.current,
+          agent: agent.current,
+        })
+      )
+    }, [])
+  )
+
+  useEffect(() => {
+    const localStorageInput = localStorage.getItem('addListingInputs')
+    if (localStorageInput) {
+      const listingInputs = JSON.parse(localStorageInput)
+      isRental.current = listingInputs.isRental
+      chosenRegion.current = listingInputs.chosenRegion
+      chosenCity.current = listingInputs.chosenCity
+      address.current = listingInputs.address
+      zipCode.current = listingInputs.zipCode
+      price.current = listingInputs.price
+      area.current = listingInputs.area
+      image.current = listingInputs.image
+      bedroomsCount.current = listingInputs.bedroomsCount
+      description.current = listingInputs.description
+      agent.current = listingInputs.agent
+      //We are not saving the profile image in the local storage
+      // Because that is not a good practice
+    }
+    setIsLoading(false)
+  }, [])
+
   // Filtering cities based on the chosen region
 
   // This component is used to add agents to the dropdown select
@@ -94,6 +137,14 @@ const AddListingPage = () => {
       <p>დაამატე აგენტი</p>
     </li>
   )
+
+  if (isLoading) {
+    return null
+  }
+
+  // DESIGN MISGUIDANCE: Price, AreaSize is required by the documentation
+  // but by design does not have a required asterisk
+  // NOTE: Agent, Region, City, automatically gets chosen on Load
 
   return (
     <div className="flex flex-col items-center">
@@ -117,6 +168,7 @@ const AddListingPage = () => {
         />
         <AddListPageSectionWrapper title="აგენტი">
           <AgentDropdown
+            selectedAgentProp={agent.current}
             ref={reloadAgents}
             chosenAgentsRef={agent}
             addAgentsButton={addAgentsButton}

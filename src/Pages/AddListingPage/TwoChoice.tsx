@@ -6,7 +6,7 @@ interface TwoChoiceProps {
 }
 
 const TwoChoice = ({ isRentalRef }: TwoChoiceProps) => {
-  const [selected, setSelected] = useState<0 | 1>(0)
+  const [selected, setSelected] = useState<0 | 1>(isRentalRef.current || 0)
 
   useEffect(() => {
     isRentalRef.current = selected

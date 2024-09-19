@@ -17,15 +17,18 @@ export type AgentDropdownRef = {
 interface AgentDropdownProps {
   chosenAgentsRef: React.MutableRefObject<agentGetMany | null>
   addAgentsButton: JSX.Element
+  selectedAgentProp: agentGetMany | null
 }
 
 const AgentDropdown = (
-  { chosenAgentsRef, addAgentsButton }: AgentDropdownProps,
+  { chosenAgentsRef, addAgentsButton, selectedAgentProp }: AgentDropdownProps,
   ref: Ref<AgentDropdownRef>
 ) => {
   // Agents State may change when the user adds a new agent
   const [agents, setAgents] = useState<agentGetMany[] | null>(null)
-  const [selectedAgent, setSelectedAgent] = useState<agentGetMany | null>(null)
+  const [selectedAgent, setSelectedAgent] = useState<agentGetMany | null>(
+    selectedAgentProp
+  )
 
   const fetchAgents = useCallback(async () => {
     try {
