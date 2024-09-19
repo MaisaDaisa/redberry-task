@@ -81,7 +81,7 @@
 ✔️ მინიმუმ 2 სიმბოლო [x]
 
 გვარი - ტექსტური ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 ✔️ მინიმუმ 2 სიმბოლო [x]
 
 ელ-ფოსტა - ტექსტური ველი [x]
@@ -92,7 +92,7 @@
 ✔️ სავალდებულო [x] <b style='color:red'>LACK OF CONSTRAINS</b>
 
 ტელ-ნომერი - ტექსტური ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 ✔️ ნუმერული სიმბოლოები [x]
 ✔️ უნდა იყოს ფორმატის 5XXXXXXXX [x]
 
@@ -111,10 +111,10 @@
 ✔️ არ უნდა აღებმატებოდეს 1mb-ის ზომაში [x]
 
 რეგიონი - შესარჩევი ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 
 ქალაქი - შესარჩევი ველი [x]
-✔️ სავალდებულო <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო <b style='color:red'>DESIGN MISGUIDANCE</b>
 
 რეგიონების სია უნდა წამოვიღოთ ბექიდან. [x]
 
@@ -126,15 +126,15 @@
 ✔️ რიცხობრივი [x] <b style='color:red'> LACK OF CONSTRAINS </b>
 
 ფასი - ტექსტური ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 ✔️ რიცხობრივი [x]
 
 ფართობი - ტექსტური ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 ✔️ რიცხობრივი [x]
 
 საძინებლების რაოდენობა - ტექსტური ველი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 ✔️ რიცხობრივი [x]
 ✔️ მთელი რიცხვი [x] <b style='color:red'>UPTO 255 AND MIN 1</b>
 
@@ -143,7 +143,7 @@
 ✔️ მინიმუმ 5 სიტყვა [x]
 
 იყიდება/ქირავდება თეგი - რადიო ინპუტი [x]
-✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISSMATCH</b>
+✔️ სავალდებულო [x] <b style='color:red'>DESIGN MISGUIDANCE</b>
 
 აგენტი - დროფდაუნი [x]
 ✔️ სავალდებულო [x]
