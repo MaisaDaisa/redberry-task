@@ -167,7 +167,7 @@ const RangePicker = memo(
           onConfirm={() => {
             // Check if the values are valid
             if (localMaxValue !== '' && localMinValue !== '') {
-              if (parseInt(localMinValue) > parseInt(localMaxValue)) {
+              if (parseInt(localMinValue) >= parseInt(localMaxValue)) {
                 setInvalidInput(true)
               } else {
                 setInvalidInput(false)

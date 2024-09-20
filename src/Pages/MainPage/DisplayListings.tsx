@@ -87,23 +87,35 @@ const DisplayListings = (
           listing.bedrooms === parseInt(FilterRef.current.numberOfBedrooms)
 
         // Filter by price
-        const minPriceMatch =
+        let priceMatch
+        if (
           FilterRef.current.minPrice !== '' &&
-          listing.price >= parseInt(FilterRef.current.minPrice)
-        const maxPriceMatch =
-          FilterRef.current.maxPrice !== '' &&
-          listing.price <= parseInt(FilterRef.current.maxPrice)
-        const priceMatch = minPriceMatch || maxPriceMatch
+          FilterRef.current.maxPrice !== ''
+        ) {
+          priceMatch =
+            listing.price >= parseInt(FilterRef.current.minPrice) &&
+            listing.price <= parseInt(FilterRef.current.maxPrice)
+        } else if (FilterRef.current.minPrice !== '') {
+          priceMatch = listing.price >= parseInt(FilterRef.current.minPrice)
+        } else if (FilterRef.current.maxPrice !== '') {
+          priceMatch = listing.price <= parseInt(FilterRef.current.maxPrice)
+        }
 
         // Filter by area
-        const minAreaMatch =
+        let areaMatch
+        if (
           FilterRef.current.minArea !== '' &&
-          listing.area >= parseInt(FilterRef.current.minArea)
-        const maxAreaMatch =
-          FilterRef.current.maxArea !== '' &&
-          listing.area <= parseInt(FilterRef.current.maxArea)
-        const areaMatch = minAreaMatch || maxAreaMatch
-
+          FilterRef.current.maxArea !== ''
+        ) {
+          areaMatch =
+            listing.area >= parseInt(FilterRef.current.minArea) &&
+            listing.area <= parseInt(FilterRef.current.maxArea)
+        } else if (FilterRef.current.minArea !== '') {
+          areaMatch = listing.area >= parseInt(FilterRef.current.minArea)
+        } else if (FilterRef.current.maxArea !== '') {
+          areaMatch = listing.area <= parseInt(FilterRef.current.maxArea)
+        }
+        // Last return statement
         return regionMatch || bedroomMatch || priceMatch || areaMatch
       })
 
