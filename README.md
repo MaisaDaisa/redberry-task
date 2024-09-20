@@ -46,6 +46,17 @@ npm run build
 
 This will generate the production build in the dist directory
 
+## Demo
+
+This Project is hosted on Netlify: https://redberry-task-maisa.netlify.app/
+
+## Screenshots
+
+![3](https://github.com/user-attachments/assets/d1236eff-a232-47ae-a57e-52d7621a42a6)
+![2](https://github.com/user-attachments/assets/31920003-9a74-48ca-b8f7-46fe8fa7ef2b)
+![1](https://github.com/user-attachments/assets/96e5f5d2-f967-4a20-91df-1438643fc5b3)
+
+
 ## Project Structure
 
 ```sh
