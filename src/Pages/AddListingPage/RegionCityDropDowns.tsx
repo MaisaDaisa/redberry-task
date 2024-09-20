@@ -59,10 +59,10 @@ const RegionCityDropDowns = ({
     chosenRegionRef.current = region
 
     // Filter cities based on the selected region
-    const filteredCitiesData = cities.filter(
+    const filteredCitiesData = cities?.filter(
       (city) => city.region_id === region.id
     )
-    setFilteredCities(filteredCitiesData)
+    setFilteredCities(filteredCitiesData || [])
 
     setChosenCity(null)
     // Reset the chosen city when the region changes
