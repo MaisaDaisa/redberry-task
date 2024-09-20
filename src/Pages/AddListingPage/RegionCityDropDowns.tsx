@@ -20,8 +20,8 @@ const RegionCityDropDowns = ({
   isRegionRejected,
   isCityRejected,
 }: RegionCityDropDownsProps) => {
-  const [regions, setRegions] = useState<region[]>([])
-  const [cities, setCities] = useState<cityGet[]>([])
+  const [regions, setRegions] = useState<region[]>()
+  const [cities, setCities] = useState<cityGet[]>()
   const [chosenRegion, setChosenRegion] = useState<region | null>(
     initialChosenRegion
   ) // Initially null
@@ -40,9 +40,9 @@ const RegionCityDropDowns = ({
         setCities(citiesData)
 
         // Filter cities based on the initial region if initial
-        if (initialChosenCity) {
+        if (initialChosenRegion) {
           const initialFilteredCities = citiesData.filter(
-            (city) => city.region_id === initialChosenCity.id
+            (city) => city.region_id === initialChosenRegion.id
           )
           setFilteredCities(initialFilteredCities)
         }
@@ -76,16 +76,18 @@ const RegionCityDropDowns = ({
 
   return (
     <>
-      <DropDownSelect
-        isRejected={isRegionRejected}
-        parentStateSetter={setRegionHandler}
-        selectedValue={chosenRegion}
-        items={regions}
-        title="რეგიონი"
-        required={false}
-        placeHolderText="აირჩიე რეგიონი"
-      />
-      {filteredCities && (
+      {regions && (
+        <DropDownSelect
+          isRejected={isRegionRejected}
+          parentStateSetter={setRegionHandler}
+          selectedValue={chosenRegion}
+          items={regions}
+          title="რეგიონი"
+          required={false}
+          placeHolderText="აირჩიე რეგიონი"
+        />
+      )}
+      {filteredCities && cities && (
         <DropDownSelect
           isRejected={isCityRejected}
           placeHolderText="აირჩიე ქალაქი"
